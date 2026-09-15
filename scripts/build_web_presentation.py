@@ -292,7 +292,7 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                     </div>
                     <div class="callout teal" style="margin-top: 0;">
                         <h4 style="color: var(--teal);">Applied Sectors</h4>
-                        <p>Public Health Deserts, Malaria Epidemiology, Commercial Geomarketing, WASH Utility Equity, Infrastructure Siting, and Multi-Criteria Planning across 9,308 Wards.</p>
+                        <p>Public Health Deserts, Malaria Epidemiology, Commercial Geomarketing, WASH Utility Equity, Infrastructure Siting, and Multi-Sector Capital Allocation.</p>
                     </div>
                 </div>
             </section>
@@ -1102,65 +1102,33 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                 </table>
             </section>
 
-            <!-- SLIDE 34: EMPIRICAL BENCHMARK TABLE -->
+            <!-- SLIDE 34: OLS ESTIMATION MECHANICS & MARGINAL EFFECTS -->
             <section>
-                <span class="tag teal">Empirical Findings</span>
-                <h2>Empirical Benchmark: Model Comparison Across 9,308 Wards</h2>
-                <table class="slide-table">
-                    <thead>
-                        <tr>
-                            <th>Model Specification</th>
-                            <th>Log-Likelihood</th>
-                            <th>AIC / AICc</th>
-                            <th>Schwarz BIC</th>
-                            <th>$R^2$ / Pseudo $R^2$</th>
-                            <th>Spatial Parameter</th>
-                            <th>Residual Moran's $I$</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>OLS (Classical Baseline)</strong></td>
-                            <td>-5,812.4</td>
-                            <td>11,636.8</td>
-                            <td>11,679.6</td>
-                            <td>0.2841</td>
-                            <td>N/A</td>
-                            <td>$I = 0.482$ ($p \lt 0.0001$)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Spatial Lag Model (SAR)</strong></td>
-                            <td>-3,941.2</td>
-                            <td>7,896.4</td>
-                            <td>7,946.3</td>
-                            <td>0.5318</td>
-                            <td>$\rho = 0.5842$</td>
-                            <td>$I = 0.041$ ($p = 0.082$)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Spatial Error Model (SEM)</strong></td>
-                            <td>-3,884.6</td>
-                            <td>7,781.2</td>
-                            <td>7,824.0</td>
-                            <td>0.5462</td>
-                            <td>$\lambda = 0.6124$</td>
-                            <td>$I = 0.023$ ($p = 0.145$)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>GWR (Adaptive Bisquare)</strong></td>
-                            <td>-3,512.8</td>
-                            <td>7,104.2</td>
-                            <td>7,215.1</td>
-                            <td>0.6840</td>
-                            <td>Bandwidth $k=128$</td>
-                            <td>$I = 0.008$ ($p = 0.412$)</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="callout teal" style="margin-top: 8px;">
-                    <p><strong>Core Empirical Insights:</strong><br/>
-                    &bull; Incorporating spatial autoregression (SAR/SEM) drops AIC by over <strong>3,740 points</strong>.<br/>
-                    &bull; Moving from global models to local GWR boosts explained variance to <strong>68.4%</strong> and eliminates residual spatial clustering ($I \to 0.008$).</p>
+                <span class="tag blue">Classical Estimation</span>
+                <h2>Ordinary Least Squares (OLS): Mechanics &amp; Marginal Effects</h2>
+                <p>How does OLS mathematically solve for parameter vector $\hat{\beta}$, and how do we interpret its outputs?</p>
+                <div class="formula">
+                    $$X'(y - X\hat{\beta}) = 0 \implies X'X\hat{\beta} = X'y \implies \hat{\beta}_{\text{OLS}} = (X'X)^{-1}X'y$$
+                </div>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div>
+                        <h4>Coefficient Variance &amp; Hypothesis Testing</h4>
+                        <ul>
+                            <li><strong>Variance-Covariance Matrix:</strong>
+                            $$\text{Var}(\hat{\beta}) = \sigma^2 (X'X)^{-1}, \quad \text{SE}(\hat{\beta}_k) = \sqrt{\sigma^2 [(X'X)^{-1}]_{kk}}$$</li>
+                            <li><strong>$t$-Statistic &amp; $p$-Value:</strong> $t_k = \frac{\hat{\beta}_k}{\text{SE}(\hat{\beta}_k)} \sim t(n - p - 1)$. If $|t_k| \gt 1.96$ ($p \lt 0.05$), predictor effect is statistically significant.</li>
+                            <li><strong>Goodness-of-Fit ($R^2$):</strong> $R^2 = 1 - \frac{\sum e_i^2}{\sum (y_i - \bar{y})^2}$, proportion of variance explained.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Marginal Effects: OLS vs. Spatial Models</h4>
+                        <div class="callout teal" style="margin-top: 0;">
+                            <p><strong>OLS Marginal Effect (Aspatial):</strong>
+                            $$\frac{\partial E[y_i \mid X]}{\partial x_{ik}} = \beta_k, \quad \frac{\partial E[y_i \mid X]}{\partial x_{jk}} = 0 \quad (\text{for } j \neq i)$$
+                            In OLS, changing a variable in Unit $i$ affects <strong>only Unit $i$</strong>; cross-border spillovers are assumed to be strictly zero!</p>
+                            <p style="margin-top: 5px;"><strong>Spatial Models:</strong> In SAR and SDM, $\frac{\partial y_i}{\partial x_{jk}} \neq 0$, generating direct, indirect, and systemic multiplier effects!</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
