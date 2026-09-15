@@ -538,95 +538,236 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                 </div>
             </section>
 
-            <!-- SLIDE 19: WHY OLS FAILS -->
+            <!-- SLIDE 19: OLS FOUNDATIONS & INTERPRETATION -->
             <section>
-                <span class="tag rose">Spatial Modeling</span>
-                <h2>Why OLS Fails: The Gauss-Markov Violation</h2>
-                <p>Ordinary Least Squares assumes uncorrelated error terms:</p>
-                <div class="formula" style="border-color: #fca5a5;">
-                    $$y = X\beta + \epsilon, \quad Cov(\epsilon_i, \epsilon_j) = 0$$
+                <span class="tag blue">Classical Regression</span>
+                <h2>Ordinary Least Squares (OLS): Foundations &amp; How It Works</h2>
+                <p>Ordinary Least Squares estimates the linear relationship between predictors $X$ and dependent variable $y$:</p>
+                <div class="formula">
+                    $$y = X\beta + \epsilon, \quad \hat{\beta} = (X'X)^{-1}X'y$$
                 </div>
-                <p>When spatial dependence is present, this assumption collapses:</p>
-                <ul>
-                    <li><strong>Omitted Spatial Lag:</strong> Parameter estimates $\hat{\beta}$ are <strong>biased and inconsistent</strong>.</li>
-                    <li><strong>Spatial Error Correlation:</strong> Estimates are inefficient, and standard errors are heavily underestimated, creating false statistical significance (Type-I errors).</li>
-                </ul>
-                <div class="callout rose" style="margin-top: 12px;">
-                    <p><strong>Lesson:</strong> You cannot trust standard regression output when spatial autocorrelation exists in the residuals.</p>
-                </div>
-            </section>
-
-            <!-- SLIDE 20: LAGRANGE MULTIPLIER DECISION TREE -->
-            <section>
-                <span class="tag teal">Diagnostics</span>
-                <h2>The Anselin Lagrange Multiplier (LM) Decision Tree</h2>
-                <p>How do we decide which spatial model specification to use?</p>
-                <ol>
-                    <li>Fit the baseline OLS regression.</li>
-                    <li>Compute the <strong>LM-Lag</strong> and <strong>LM-Error</strong> test statistics.</li>
-                    <li>If only one test is statistically significant, choose that model (SAR or SEM).</li>
-                    <li>If both tests are significant, examine the <strong>Robust LM-Lag</strong> and <strong>Robust LM-Error</strong> statistics:
+                <div class="grid-2" style="margin-top: 10px;">
+                    <div>
+                        <h4>Parameter Interpretation &amp; Ranges</h4>
                         <ul>
-                            <li>Higher Robust LM-Lag &rarr; Estimate the <strong>Spatial Lag Model (SAR)</strong>.</li>
-                            <li>Higher Robust LM-Error &rarr; Estimate the <strong>Spatial Error Model (SEM)</strong>.</li>
+                            <li><strong>$\beta_k$ (Marginal Effect):</strong> Holding all other covariates constant, a 1-unit increase in $X_k$ changes $y$ by $\beta_k$ units.</li>
+                            <li><strong>Range $\beta \in (-\infty, +\infty)$:</strong> $\beta > 0$ indicates positive association; $\beta < 0$ indicates protective/inhibiting effect.</li>
+                            <li><strong>Model Fit:</strong> $R^2 \in [0, 1]$ measures proportion of total variance explained.</li>
                         </ul>
-                    </li>
-                </ol>
+                    </div>
+                    <div>
+                        <h4>Core Gauss-Markov Assumptions</h4>
+                        <ul>
+                            <li><strong>Linearity &amp; Strict Exogeneity:</strong> $E[\epsilon | X] = 0$.</li>
+                            <li><strong>No Multicollinearity:</strong> Full rank matrix $X$ ($\text{VIF} < 5.0$).</li>
+                            <li><strong>Homoskedasticity:</strong> $\text{Var}(\epsilon_i) = \sigma^2$.</li>
+                            <li><strong style="color: var(--crimson);">Uncorrelated Errors:</strong> $\text{Cov}(\epsilon_i, \epsilon_j) = 0$ for all $i \neq j$.</li>
+                        </ul>
+                    </div>
+                </div>
             </section>
 
-            <!-- SLIDE 21: SAR MODEL -->
+            <!-- SLIDE 20: WHY OLS FAILS IN SPATIAL DATA -->
             <section>
-                <span class="tag blue">Spatial Models</span>
+                <span class="tag rose">Diagnostic Crisis</span>
+                <h2>The Spatial Breakdown: Why Tobler's Law Violates OLS</h2>
+                <p>Because spatial units share geography, error terms across neighboring units are correlated:</p>
+                <div class="formula" style="border-color: #fca5a5;">
+                    $$\text{Cov}(\epsilon_i, \epsilon_j) \neq 0 \quad \text{for neighboring units } i \sim j$$
+                </div>
+                <p>Testing OLS residuals for spatial autocorrelation yields <strong>Moran's $I = 0.482$ ($p \lt 0.0001$)</strong>, violating Gauss-Markov:</p>
+                <ul>
+                    <li><strong style="color: var(--crimson);">Omitted Spatial Lag:</strong> If neighbors influence each other, OLS parameter estimates $\hat{\beta}$ are <strong>biased and inconsistent</strong> (confounding internal effects with neighborhood spillovers).</li>
+                    <li><strong style="color: var(--amber);">Spatial Error Correlation:</strong> If unobserved shocks cluster spatially, OLS standard errors are <strong>severely underestimated</strong>, inflating $t$-statistics and creating false statistical significance (Type-I errors).</li>
+                </ul>
+            </section>
+
+            <!-- SLIDE 21: LAGRANGE MULTIPLIER DECISION TREE -->
+            <section>
+                <span class="tag teal">Model Selection</span>
+                <h2>Model Selection: The Anselin LM Diagnostic Decision Tree</h2>
+                <p>How do we mathematically decide which spatial model specification to deploy?</p>
+                <div class="grid-2" style="margin-top: 10px;">
+                    <div>
+                        <h4>Diagnostic Step-by-Step</h4>
+                        <ol>
+                            <li>Fit the baseline OLS regression model.</li>
+                            <li>Compute classical <strong>LM-Lag</strong> (tests $\rho = 0$) and <strong>LM-Error</strong> (tests $\lambda = 0$).</li>
+                            <li>If only one test is significant ($p \lt 0.05$), estimate that specific model.</li>
+                            <li>If both are significant, evaluate the <strong>Robust LM-Lag</strong> and <strong>Robust LM-Error</strong> statistics.</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <div class="callout teal" style="margin-top: 5px;">
+                            <p><strong>Decision Rules:</strong><br/>
+                            &bull; Robust LM-Lag &gt; Robust LM-Error &rarr; Select <strong>Spatial Lag Model (SAR)</strong>.<br/>
+                            &bull; Robust LM-Error &gt; Robust LM-Lag &rarr; Select <strong>Spatial Error Model (SEM)</strong>.<br/>
+                            &bull; If both substantive &rarr; Consider <strong>Spatial Durbin Model (SDM)</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 22: SAR MODEL -->
+            <section>
+                <span class="tag blue">Spatial Econometrics</span>
                 <h2>Spatial Lag Model (SAR): Capturing Behavioral Spillovers</h2>
-                <p>Incorporates the spatial lag of the dependent variable directly as a regressor:</p>
+                <p>Incorporates the spatial lag of the dependent variable directly as an endogenous regressor:</p>
                 <div class="formula">
                     $$y = \rho W y + X\beta + \epsilon, \quad \epsilon \sim N(0, \sigma^2 I)$$
                 </div>
-                <div class="callout teal" style="margin: 12px 0;">
-                    <p><strong>Estimated Spatial Autoregressive Parameter:</strong><br/>
-                    $$\rho = 0.5842 \quad (z = 62.4, \; p \lt 0.0001)$$<br/>
-                    Over half of an area's wealth variance is explained by the economic status of its neighbors!</p>
+                <div class="grid-2" style="margin-top: 8px;">
+                    <div>
+                        <h4>Parameter $\rho$ &amp; Value Range</h4>
+                        <ul>
+                            <li><strong>Parameter $\rho$:</strong> Spatial autoregressive coefficient.</li>
+                            <li><strong>Value Range:</strong> $-1 \lt \rho \lt 1$ (typically $0 \lt \rho \lt 1$ in socio-economic data).</li>
+                            <li><strong>Interpretation:</strong> $\rho$ quantifies direct peer spillover and behavioral contagion across borders.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Real-Life Practical Examples</h4>
+                        <ul>
+                            <li><strong>Commercial Retail:</strong> A thriving commercial hub in Ward $A$ spills customer footfall and supplier demand into Ward $B$.</li>
+                            <li><strong>Public Health:</strong> Vaccine uptake in one ward generates herd immunity and adoption spillovers in adjacent wards.</li>
+                        </ul>
+                    </div>
                 </div>
-                <p>Use SAR when there is substantive diffusion, trade, or peer influence across borders.</p>
             </section>
 
-            <!-- SLIDE 22: SPATIAL MULTIPLIER -->
+            <!-- SLIDE 23: SPATIAL MULTIPLIER -->
             <section>
                 <span class="tag teal">Policy Multiplier</span>
-                <h2>The Spatial Multiplier: $2.41\times$ Return on Investment</h2>
-                <p>In a spatial lag model, an investment in Unit $i$ propagates through neighboring feedback loops:</p>
+                <h2>The Spatial Multiplier: Direct, Indirect &amp; Total Effects</h2>
+                <p>In a spatial lag model, an investment in Unit $i$ radiates through neighboring feedback loops:</p>
                 <div class="formula">
-                    $$y = (I - \rho W)^{-1} X\beta + (I - \rho W)^{-1}\epsilon$$
-                    $$\text{Spatial Multiplier} = \frac{1}{1 - \rho} = \frac{1}{1 - 0.5842} \approx 2.405\times$$
+                    $$y = (I - \rho W)^{-1} X\beta + (I - \rho W)^{-1}\epsilon, \quad \text{Multiplier} = \frac{1}{1 - \rho}$$
                 </div>
-                <div class="callout" style="margin-top: 14px;">
-                    <p><strong>Substantive Policy Meaning:</strong><br/>
-                    Every 1.0 unit of economic enhancement injected into a focal area generates an additional <strong>1.405 units of indirect wealth</strong> across neighboring communities through spatial spillovers.</p>
+                <div class="grid-2" style="margin-top: 10px;">
+                    <div>
+                        <h4>Impact Decomposition</h4>
+                        <ul>
+                            <li><strong>Direct Effect:</strong> Internal return on investment inside the focal target ward.</li>
+                            <li><strong>Indirect Effect (Spillover):</strong> Stimulus radiating into neighboring wards through network trade.</li>
+                            <li><strong>Total Effect:</strong> Sum of direct and indirect impacts ($2.41\times$ baseline).</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="callout" style="margin-top: 5px;">
+                            <p><strong>Concrete Real-World Example ($\rho = 0.5842$):</strong><br/>
+                            A <strong>\$1M investment</strong> in central market infrastructure creates \$1.0M in direct local wealth plus <strong>\$1.41M in indirect wealth</strong> across neighboring communities through geographic spillovers!</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- SLIDE 23: SEM MODEL -->
+            <!-- SLIDE 24: SEM MODEL -->
             <section>
-                <span class="tag blue">Spatial Models</span>
-                <h2>Spatial Error Model (SEM): Modeling Spatial Covariates</h2>
-                <p>Captures spatial autocorrelation arising from unobserved regional variables:</p>
+                <span class="tag blue">Spatial Econometrics</span>
+                <h2>Spatial Error Model (SEM): Unobserved Regional Factors</h2>
+                <p>Captures spatial dependence operating through unobserved regional variables and geographic noise:</p>
                 <div class="formula">
-                    $$y = X\beta + u, \quad u = \lambda W u + \epsilon$$
+                    $$y = X\beta + u, \quad u = \lambda W u + \epsilon, \quad \epsilon \sim N(0, \sigma^2 I)$$
                 </div>
-                <div class="callout teal" style="margin: 12px 0;">
-                    <p><strong>Estimated Spatial Error Parameter:</strong><br/>
-                    $$\lambda = 0.6124 \quad (z = 68.9, \; p \lt 0.0001)$$</p>
+                <div class="grid-2" style="margin-top: 8px;">
+                    <div>
+                        <h4>Parameter $\lambda$ &amp; Value Range</h4>
+                        <ul>
+                            <li><strong>Parameter $\lambda$:</strong> Spatial error autoregressive coefficient.</li>
+                            <li><strong>Value Range:</strong> $-1 \lt \lambda \lt 1$.</li>
+                            <li><strong>Interpretation:</strong> Captures spatial clustering in unmeasured variables (environmental shocks, shared topography).</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Real-Life Practical Examples</h4>
+                        <ul>
+                            <li><strong>Agriculture:</strong> Unmeasured regional drought, soil chemistry, or aquifer depth affecting all adjacent farms.</li>
+                            <li><strong>Infrastructure:</strong> Shared regional electric grid outages or state-level regulatory policies affecting contiguous wards.</li>
+                        </ul>
+                    </div>
                 </div>
-                <ul>
-                    <li>Use SEM when spatial clustering is driven by unmeasured ecological factors (climate, terrain, state governance boundaries).</li>
-                    <li>Filters spatial noise to produce efficient, reliable $\beta$ coefficients.</li>
-                </ul>
             </section>
 
-            <!-- SLIDE 24: MODEL COMPARISON TABLE -->
+            <!-- SLIDE 25: SPATIAL DURBIN MODEL (SDM) -->
+            <section>
+                <span class="tag blue">Spatial Econometrics</span>
+                <h2>Spatial Durbin Model (SDM): Endogenous &amp; Contextual Spillovers</h2>
+                <p>Nests both endogenous outcome lag ($Wy$) and exogenous predictor spillovers ($WX$):</p>
+                <div class="formula">
+                    $$y = \rho Wy + X\beta + WX\gamma + \epsilon, \quad \epsilon \sim N(0, \sigma^2 I)$$
+                </div>
+                <div class="grid-2" style="margin-top: 8px;">
+                    <div>
+                        <h4>Dual Parameter Interpretation</h4>
+                        <ul>
+                            <li><strong>$\rho$ (Endogenous Spillover):</strong> Neighboring outcome $y$ spilling over into focal $y$.</li>
+                            <li><strong>$\gamma$ (Contextual Spillover):</strong> Neighboring characteristics $X$ directly impacting focal $y$.</li>
+                            <li><strong>Global Nesting:</strong> Reduces to SAR if $\gamma = 0$; reduces to SEM if $\gamma = -\rho \beta$.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Real-Life Practical Example</h4>
+                        <ul>
+                            <li><strong>Education &amp; Healthcare:</strong> If a neighboring ward builds a new hospital or secondary school ($WX$), its presence directly boosts living standards in your ward ($\gamma$), while their overall rising health status ($Wy$) further stimulates your ward ($\rho$).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 26: COMPARATIVE GUIDE TO REAL-LIFE MODEL USAGE -->
+            <section>
+                <span class="tag teal">Practical Reference</span>
+                <h2>Comparative Guide: Model Usage, Parameter Ranges &amp; Real-Life Cases</h2>
+                <table class="slide-table">
+                    <thead>
+                        <tr>
+                            <th>Model Specification</th>
+                            <th>Mathematical Formulation</th>
+                            <th>Key Parameter &amp; Range</th>
+                            <th>What It Captures</th>
+                            <th>Real-Life Applied Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Ordinary Least Squares (OLS)</strong></td>
+                            <td>$y = X\beta + \epsilon$</td>
+                            <td>$\beta \in (-\infty, +\infty)$</td>
+                            <td>Direct aspatial marginal effects</td>
+                            <td>Benchmark baseline; valid only when residual Moran's $I \approx 0$.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Spatial Lag Model (SAR)</strong></td>
+                            <td>$y = \rho Wy + X\beta + \epsilon$</td>
+                            <td>$\rho \in (-1, 1)$, $\text{Mult} = \frac{1}{1-\rho}$</td>
+                            <td>Endogenous peer contagion &amp; spillovers</td>
+                            <td>Geomarketing retail trade, crime diffusion, epidemic transmission.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Spatial Error Model (SEM)</strong></td>
+                            <td>$y = X\beta + u, \; u = \lambda Wu + \epsilon$</td>
+                            <td>$\lambda \in (-1, 1)$</td>
+                            <td>Spatially clustered unmeasured shocks</td>
+                            <td>Regional climate shocks, soil quality, shared power grids.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Spatial Durbin Model (SDM)</strong></td>
+                            <td>$y = \rho Wy + X\beta + WX\gamma + \epsilon$</td>
+                            <td>$\rho, \gamma \in (-1, 1)$</td>
+                            <td>Endogenous + exogenous neighbor spillovers</td>
+                            <td>Neighboring hospital or school investments boosting focal ward welfare.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="callout teal" style="margin-top: 10px;">
+                    <p><strong>Practical Decision Rule:</strong> Use <strong>SAR</strong> when policy changes in one place directly alter behavior in neighboring areas. Use <strong>SEM</strong> when spatial clustering is driven by unmeasured environmental or administrative boundaries.</p>
+                </div>
+            </section>
+
+            <!-- SLIDE 27: EMPIRICAL FINDINGS TABLE -->
             <section>
                 <span class="tag teal">Empirical Findings</span>
-                <h2>Model Comparison &amp; Diagnostic Performance</h2>
+                <h2>Empirical Benchmark: Model Comparison Across Wards</h2>
                 <table class="slide-table">
                     <thead>
                         <tr>
@@ -671,13 +812,13 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                 </table>
                 <div class="callout teal" style="margin-top: 14px;">
                     <p><strong>Empirical Takeaways:</strong><br/>
-                    &bull; Accounting for spatial coupling drops AIC by over <strong>3,700 points</strong>.<br/>
+                    &bull; Accounting for spatial coupling drops AIC by over <strong>3,740 points</strong>.<br/>
                     &bull; Explained variance jumps from 28.4% to <strong>over 53%</strong>.<br/>
                     &bull; Both hypotheses confirmed: markets and healthcare significantly protect against asset poverty.</p>
                 </div>
             </section>
 
-            <!-- SLIDE 25: COURSE ROADMAP -->
+            <!-- SLIDE 28: COURSE ROADMAP -->
             <section style="padding-top: 35px !important;">
                 <span class="tag blue">Summary</span>
                 <h2>Course Modules &amp; Learning Roadmap</h2>
