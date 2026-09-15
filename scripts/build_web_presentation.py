@@ -1,4 +1,39 @@
-<!DOCTYPE html>
+"""
+Build an expansive, widescreen, pedagogical Reveal.js presentation matching the README masterclass.
+Features:
+- Widescreen 16:9 full fit (width: 1400, height: 800) with minimal margins.
+- Clean, borderless, open layout (no cramped card containers).
+- Follows the exact flow of the README:
+  1. Title & Course Overview
+  2. The Core Problem (The 3 Fallacies: Average, Spillover Blindspot, Misallocation)
+  3. Superpower of Spatial Stats: ESDA & Pattern Discovery vs Traditional EDA (Random Shuffle Test)
+  4. Spatial Weights Matrix W and Spatial Lag (Wy)
+  5. Global Spatial Autocorrelation (Moran's I)
+  6. Local Spatial Association (Anselin LISA Hotspots & Outliers)
+  7. End-to-End Architecture Flowchart
+  8. 10 Strategic Sectoral Decision Engines (Comprehensive Table)
+  9. Sector 1: Public Health & Healthcare Deserts
+  10. Sector 2: Disease Epidemiology (Malaria)
+  11. Sector 3: Commercial Marketing & Retail Expansion
+  12. Sector 4: Clean Water & WASH Inequity (Lorenz & Gini)
+  13. Sector 5: Educational Infrastructure & School-Age Demographics
+  14. Sector 6: Cultural Geography & Religious Diversity (Shannon Entropy)
+  15. Sector 7: Civic Security & Police Station Catchments
+  16. Sector 8: Electoral Demographics & Governance
+  17. Sector 9: National Wealth Inequality & LISA Clusters
+  18. Sector 10: Capital Prioritization (Ward Priority Index MCDA)
+  19. Multicollinearity Diagnostics: Variance Inflation Factor (VIF)
+  20. Spatial Econometrics: Why OLS Fails (Gauss-Markov Violations)
+  21. Anselin Lagrange Multiplier (LM) Decision Tree
+  22. Spatial Lag Model (SAR) & Spatial Multiplier (2.41x)
+  23. Spatial Error Model (SEM)
+  24. Empirical Results & Hypothesis Testing Table
+  25. Class Lab Guide & Hands-on Notebook Roadmap
+"""
+
+import os
+
+PRESENTATION_HTML = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -727,3 +762,16 @@
     </script>
 </body>
 </html>
+"""
+
+def main():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    target_path = os.path.join(base_dir, "docs", "presentation.html")
+    
+    with open(target_path, "w", encoding="utf-8") as f:
+        f.write(PRESENTATION_HTML)
+        
+    print(f"Successfully generated widescreen pedagogical presentation at {target_path} ({len(PRESENTATION_HTML)} bytes)")
+
+if __name__ == "__main__":
+    main()

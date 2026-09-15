@@ -189,8 +189,7 @@ def inspect_state_profile(state_name):
     plt.tight_layout()
     plt.show()
 
-# Example: Inspect Kano and Lagos States
-inspect_state_profile('Kano')
+# Example: Inspect Lagos State Profile
 inspect_state_profile('Lagos')
 """))
 

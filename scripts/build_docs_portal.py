@@ -1,4 +1,17 @@
-<!DOCTYPE html>
+"""
+Build a minimal, clean, all-white Master Course Portal for Spatial Statistics.
+Features:
+- Pure white background (#ffffff) with refined light border (#e2e8f0).
+- No indicator cards, no KPI cards, no corporate badges, no dsn.ai.gis tags.
+- No 'Fullscreen' or 'Pop Out' buttons on the top bar.
+- Lesson-focused curriculum navigation.
+- Lecture Slides as the default first landing view.
+- Expansive full-height iframe viewport.
+"""
+
+import os
+
+PORTAL_HTML = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -392,3 +405,16 @@
     </script>
 </body>
 </html>
+"""
+
+def main():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    target_path = os.path.join(base_dir, "docs", "index.html")
+    
+    with open(target_path, "w", encoding="utf-8") as f:
+        f.write(PORTAL_HTML)
+        
+    print(f"Successfully generated clean minimal white portal at {target_path}")
+
+if __name__ == "__main__":
+    main()
