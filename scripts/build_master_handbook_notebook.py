@@ -261,7 +261,7 @@ cells.append(nbf.v4.new_markdown_cell("""\
 
 To explore each mathematical and methodological domain in comprehensive depth:
 
-| Masterclass Notebook | Pedagogical Domain & Topics |
+| Masterclass Notebook | Learning Domain & Topics |
 | :--- | :--- |
 | **[01_exploratory_spatial_data_analysis.ipynb](01_exploratory_spatial_data_analysis.ipynb)** | Complete ESDA theory, Queen/KNN spatial topology, Global Moran's $I$, Moran Scatterplots, Anselin Local Moran LISA cluster maps, Healthcare Deserts, and Cultural Diversity. |
 | **[02_spatial_statistics_modeling.ipynb](02_spatial_statistics_modeling.ipynb)** | Econometric theory, Gauss-Markov spatial failure, Multicollinearity VIF, OLS residual spatial diagnostics, Lagrange Multiplier decision rules, Maximum Likelihood SAR/SEM estimation, and Spatial Multipliers. |

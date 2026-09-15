@@ -66,8 +66,8 @@ stages = [
 ]
 
 box_width = 0.20
-box_height = 0.65
-box_y = 0.15
+box_height = 0.48   # shorter cards — no dead space below text
+box_y = 0.24        # centred vertically in the figure
 
 for i, s in enumerate(stages):
     # Shadow

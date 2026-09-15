@@ -10,14 +10,14 @@ def create_notebook_1():
     nb = nbf.v4.new_notebook()
     cells = []
 
-    # Cell 1: Markdown Title & Pedagogical Overview
+    # Cell 1: Markdown Title & Overview
     cells.append(nbf.v4.new_markdown_cell("""\
 # Masterclass 1: Multi-Sector Exploratory Spatial Data Analysis (ESDA) & Disease Surveillance
 ### *Evidence-Based Spatial Intelligence Across Public Health, Disease Epidemiology (Malaria), Geomarketing, Cultural Geography, and Infrastructure*
 
 ---
 
-## 1. Pedagogical Introduction & Theoretical Foundations
+## 1. Introduction & Key Concepts
 
 In classical non-spatial data science, observations are assumed to be **independent and identically distributed (i.i.d.)**. When analyzing geographic units—such as Nigeria's **9,308 administrative wards**—this assumption fundamentally collapses due to **Tobler's First Law of Geography**:
 
@@ -548,7 +548,7 @@ def create_notebook_2():
 
 ---
 
-## 1. Pedagogical Overview: Why Classical Econometrics Fails in Spatial Data
+## 1. Why Classical Econometrics Fails in Spatial Data
 
 In cross-sectional geographic regressions, standard Ordinary Least Squares (OLS) violates the Gauss-Markov assumption of uncorrelated disturbances:
 
@@ -870,7 +870,7 @@ def create_notebook_3():
 
 ---
 
-## 1. Pedagogical Overview & The 15 Enterprise Use Cases Taxonomy
+## 1. Overview: 15 Enterprise Use Cases
 
 Spatial statistics transforms raw geographic coordinates and Earth observation data into operational strategy. Below, we operationalize this across **15 distinct real-world enterprise and policy use cases**:
 

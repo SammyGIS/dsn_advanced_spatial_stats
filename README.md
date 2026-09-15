@@ -248,7 +248,7 @@ Estimated on all $N = 9,308$ wards using row-standardized $K$-Nearest Neighbors 
 
 ## Interactive Masterclass Teaching Notebooks
 
-The repository includes four pedagogical Jupyter Notebooks structured with formulas, interpretation rules, code, and pre-rendered figures:
+The repository includes four hands-on Jupyter Notebooks structured with formulas, interpretation rules, code, and pre-rendered figures:
 
 | Notebook | Focus & Methodology | Cells | Primary Deliverables |
 | :--- | :--- | :---: | :--- |
