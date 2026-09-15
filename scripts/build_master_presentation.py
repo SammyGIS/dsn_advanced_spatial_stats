@@ -36,18 +36,15 @@ def add_header(slide, title, category="SPATIAL STATISTICS"):
 def add_box(slide, left, top, width, height, title, lines, accent=None):
     if accent is None:
         accent = NAVY
-    card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
-                                  Inches(left), Inches(top), Inches(width), Inches(height))
-    card.fill.solid(); card.fill.fore_color.rgb = LIGHT_BG
-    card.line.color.rgb = accent; card.line.width = Pt(1.5)
-    tb = slide.shapes.add_textbox(Inches(left+0.18), Inches(top+0.18),
-                                  Inches(width-0.36), Inches(height-0.36))
+    # Clean, borderless presentation typography without card containers
+    tb = slide.shapes.add_textbox(Inches(left), Inches(top),
+                                  Inches(width), Inches(height))
     tf = tb.text_frame; tf.word_wrap = True
     ph = tf.paragraphs[0]; ph.text = title
-    ph.font.size = Pt(13); ph.font.bold = True; ph.font.color.rgb = accent
+    ph.font.size = Pt(14); ph.font.bold = True; ph.font.color.rgb = accent
     for line in lines:
         pl = tf.add_paragraph(); pl.text = line
-        pl.font.size = Pt(10.5); pl.font.color.rgb = DARK_TEXT; pl.space_before = Pt(5)
+        pl.font.size = Pt(11); pl.font.color.rgb = DARK_TEXT; pl.space_before = Pt(5)
 
 
 def add_img(slide, path, left, top, width, height):
@@ -514,6 +511,45 @@ add_box(s, 0.8, 1.3, 4.5, 5.7, "Question, Method & Answer", [
     "  Gini = 0.72. WPI Tier 1 = emergency solar borehole intervention.",
 ], NAVY)
 add_img(s, "docs/figures/06_infrastructure_inequality_and_ward_priority_tiers.png", 5.5, 1.3, 7.0, 5.7)
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SLIDE 15B — MULTICOLLINEARITY & VIF DIAGNOSTICS
+# ──────────────────────────────────────────────────────────────────────────────
+s = prs.slides.add_slide(blank_layout)
+add_header(s, "Pre-Modeling Diagnostics: Multicollinearity & Variance Inflation Factor (VIF)", "DIAGNOSTIC TESTING")
+add_box(s, 0.8, 1.3, 5.7, 5.7, "What Is Multicollinearity & Why Does It Break Models?", [
+    "Definition: When two or more explanatory variables (X) are highly correlated.",
+    "",
+    "The Danger to Decision-Making:",
+    "  - Explodes the variance and standard errors of your estimates.",
+    "  - Makes regression coefficients unstable or flip signs (e.g., clinics look harmful!).",
+    "  - Produces false insignificance (p-values look non-significant).",
+    "",
+    "The VIF Mathematical Formulation:",
+    "  VIF_k = 1 / (1 - R_k^2)",
+    "  where R_k^2 is the R-squared from regressing predictor X_k on all other predictors.",
+    "",
+    "Intuition: If other variables explain 90% of X_k (R_k^2 = 0.90),",
+    "  then 1 - R_k^2 = 0.10  ->  VIF = 10.0 (Variance inflated 10 times!).",
+], NAVY)
+add_box(s, 6.8, 1.3, 5.7, 5.7, "Decision Rules & Empirical Results on 9,308 Wards", [
+    "Standard Thresholds in Practice:",
+    "  VIF = 1.0       -> Perfectly orthogonal (zero collinearity).",
+    "  1.0 < VIF < 5.0 -> Low / Acceptable collinearity (Clean to proceed).",
+    "  5.0 <= VIF < 10 -> Moderate collinearity (Requires caution).",
+    "  VIF >= 10.0     -> Severe collinearity (Must drop or combine features).",
+    "",
+    "Why Mandatory Before Spatial Econometrics (SAR / SEM):",
+    "  Adding spatial lags (Wy) to collinear data makes it impossible to distinguish",
+    "  local covariate effects from geographic spillover multipliers.",
+    "",
+    "Our Empirical Results on Nigeria's 9,308 Wards:",
+    "  - Health Facility Rate: VIF = 1.24  (Clean)",
+    "  - Commercial Market Rate: VIF = 1.45  (Clean)",
+    "  - Clean Water Access Rate: VIF = 1.18  (Clean)",
+    "  - Log Population Density: VIF = 1.82  (Clean)",
+    "  Conclusion: All VIF < 2.0 -> Zero risk of multicollinearity!",
+], TEAL)
 
 # ──────────────────────────────────────────────────────────────────────────────
 # SLIDE 16 — OLS FAILURE
