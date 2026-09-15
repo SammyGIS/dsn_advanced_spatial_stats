@@ -542,7 +542,7 @@ def create_notebook_2():
     cells = []
 
     # Cell 1: Markdown Title & Econometric Foundations
-    cells.append(nbf.v4.new_markdown_cell("""\
+    cells.append(nbf.v4.new_markdown_cell(r"""\
 # Masterclass 2: Spatial Econometrics, Hypothesis Testing & Policy Multipliers
 ### *Econometric Modeling Using OLS, Spatial Lag (SAR), and Spatial Error (SEM) Models Across Nigerian Administrative Wards*
 
@@ -932,7 +932,7 @@ print(f"Loaded {len(gdf):,} wards across {gdf['statename'].nunique()} states.")
 """))
 
     # Cell 4: Markdown - Infrastructure Lorenz Curves & Gini
-    cells.append(nbf.v4.new_markdown_cell("""\
+    cells.append(nbf.v4.new_markdown_cell(r"""\
 ## 2. Measuring Spatial Inequality: Gini Coefficients & Lorenz Curves
 
 $$

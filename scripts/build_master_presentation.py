@@ -275,30 +275,77 @@ add_box(s, 6.8, 1.3, 5.7, 5.7, "Types of Adjacency in Practice", [
 ], TEAL)
 
 # ──────────────────────────────────────────────────────────────────────────────
-# SLIDE 7 — FORMULA 2: SPATIAL LAG
+# SLIDE 7A — FORMULA 2: THE SPATIAL LAG OPERATOR [Wy]
 # ──────────────────────────────────────────────────────────────────────────────
 s = prs.slides.add_slide(blank_layout)
-add_header(s, "Formula 2: The Spatial Lag Operator [Wy]", "MATHEMATICAL TOOLS")
-add_box(s, 0.8, 1.3, 5.7, 5.7, "The Formula & Definition", [
-    "[Wy]_i = sum_j ( w*_ij * y_j )",
+add_header(s, "Formula 2: The Spatial Lag Operator [Wy] — Intuition & Mechanics", "MATHEMATICAL TOOLS")
+add_box(s, 0.8, 1.3, 5.7, 5.7, "What Is a Spatial Lag & Why Is It Called 'Lag'?", [
+    "Definition: [Wy]_i = sum_j ( w*_ij * y_j )",
     "",
-    "Plain words: [Wy]_i = the AVERAGE VALUE of y in the neighbourhood around Ward i.",
+    "Why 'Lag'?",
+    "  In Time Series, y_{t-1} is the TIME LAG (what happened in the past).",
+    "  In Spatial Stats, [Wy]_i is the SPATIAL LAG (what happens in the neighbourhood).",
+    "  It transforms an entire geographic neighborhood into a single scalar value.",
     "",
-    "If y = clinics per 10,000 people:",
-    "  [Wy]_i tells you if SURROUNDING wards have clinics.",
-    "If y = household wealth:",
-    "  [Wy]_i tells you if the broader trade area has purchasing power.",
+    "Step-by-Step Numerical Walkthrough:",
+    "  Suppose Ward A has 3 contiguous neighbours: B, C, and D.",
+    "  Neighbour Wealth: B = 2.0,  C = 4.0,  D = 6.0.",
+    "  Row-Standardised Weights: w*_AB = 1/3, w*_AC = 1/3, w*_AD = 1/3.",
+    "  Spatial Lag: [Wy]_A = (1/3)(2.0) + (1/3)(4.0) + (1/3)(6.0) = 4.0.",
+    "",
+    "Core Insight: [Wy] captures your local geographic context in a single number.",
 ], NAVY)
-add_box(s, 6.8, 1.3, 5.7, 5.7, "Real-World Examples", [
-    "Health Desert Diagnosis:",
-    "  Ward i: 0 clinics, [W*Clinics]=6.0 -> Patients can walk to a neighbour.",
-    "  Ward i: 0 clinics, [W*Clinics]=0.0 -> Severe isolated desert. Emergency.",
+add_box(s, 6.8, 1.3, 5.7, 5.7, "How Spatial Lag Powers Real Decisions", [
+    "Public Health — Isolation vs. Buffer Access:",
+    "  Ward A: 0 clinics, [W*Clinics]=5.2 -> Low risk; patients walk to clinics next door.",
+    "  Ward B: 0 clinics, [W*Clinics]=0.0 -> Extreme Desert! Zero nearby access. Prioritise.",
     "",
-    "Retail Trade Catchment:",
-    "  [W*Wealth]_i is high -> the entire surrounding area is affluent.",
-    "  A supermarket here draws from a wealthy catchment even if the ward",
-    "  itself has mixed incomes.",
+    "Commercial Geomarketing — Catchment Purchasing Power:",
+    "  Ward i: Moderate wealth, but [W*Wealth]=High -> Entire trade area is affluent.",
+    "  A supermarket here captures high revenue from contiguous feeder wards.",
+    "",
+    "Epidemiology — Transmission Pressure:",
+    "  [W*MalariaPrevalence]_i measures infection pressure entering Ward i",
+    "  from its surrounding geographic vectors.",
 ], TEAL)
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SLIDE 7B — SPATIAL LAG (SAR) vs. SPATIAL ERROR (SEM)
+# ──────────────────────────────────────────────────────────────────────────────
+s = prs.slides.add_slide(blank_layout)
+add_header(s, "Spatial Lag vs. Spatial Error — The Fundamental Distinction", "ECONOMETRIC THEORY")
+add_box(s, 0.8, 1.3, 5.7, 5.7, "Spatial Lag (SAR): Endogenous Spillovers", [
+    "Model: y = rho * W * y + X * beta + epsilon",
+    "",
+    "The Mechanism: BEHAVIORAL SPILLOVER & INTERACTION",
+    "  'What my neighbours do DIRECTLY affects what I do.'",
+    "",
+    "Real-World Examples:",
+    "  - Economic Growth: A new market in Ward A creates jobs, boosting retail",
+    "    spending in adjacent Ward B (Economic multiplier effect).",
+    "  - Epidemic Spread: Cholera in Ward A physically infects people in Ward B.",
+    "  - Retail Pricing: Stores in Ward A react to competitors in Ward B.",
+    "",
+    "Diagnostic: Significant rho means investments produce geographic feedback loops.",
+    "Calculated Multiplier = 1 / (1 - rho). If rho = 0.584, Multiplier = 2.4x.",
+], NAVY)
+add_box(s, 6.8, 1.3, 5.7, 5.7, "Spatial Error (SEM): Shared Unobserved Environment", [
+    "Model: y = X * beta + u,   where u = lambda * W * u + epsilon",
+    "",
+    "The Mechanism: SHARED BACKGROUND / OMITTED COVARIATES",
+    "  'My neighbours and I share common unmeasured conditions.'",
+    "",
+    "Real-World Examples:",
+    "  - Climate / Ecology: A shared river basin or rainfall belt affects crop yields",
+    "    across all contiguous wards identically.",
+    "  - State Governance: Shared administrative policies or road network quality.",
+    "  - Geological Terrain: Shared mineral resources or aquifer depth.",
+    "",
+    "Decision Rule (Anselin Lagrange Multiplier):",
+    "  Run OLS -> Test LM-Lag and LM-Error.",
+    "  If LM-Lag is significant -> Run SAR (spillover dynamic).",
+    "  If LM-Error is significant -> Run SEM (shared environment).",
+], CORAL)
 
 # ──────────────────────────────────────────────────────────────────────────────
 # SLIDE 8 — FORMULA 3: GLOBAL MORAN'S I

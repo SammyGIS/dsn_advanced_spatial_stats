@@ -56,16 +56,21 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 8))
 
 gdf.plot(column='rwi_mean', cmap='viridis', legend=True, ax=ax1,
          legend_kwds={'label': "Relative Wealth Index (RWI Mean)", 'orientation': "horizontal", 'shrink': 0.7, 'pad': 0.05})
-ax1.set_title("A. National Relative Wealth Index (RWI)")
+ax1.set_title("A. National Relative Wealth Index (RWI)", fontsize=13, fontweight='bold')
 ax1.axis('off')
 
 import matplotlib.patches as mpatches
 
+# Map 2: Healthcare Deserts with explicit base geometry
+gdf.plot(color='#e0e0e0', edgecolor='#ffffff', linewidth=0.1, ax=ax2)
+gdf[gdf['is_health_desert']].plot(color='#d90429', ax=ax2)
+ax2.set_title(f"B. Critical Healthcare Deserts (n={gdf['is_health_desert'].sum():,})", fontsize=13, fontweight='bold')
+ax2.axis('off')
+
 # Legend for map 2
 desert_patch = mpatches.Patch(color='#d90429', label=f"Healthcare Deserts (n={gdf['is_health_desert'].sum():,})")
-base_patch = mpatches.Patch(color='#ececec', label=f"Wards with Facilities (n={(~gdf['is_health_desert']).sum():,})")
-ax2.legend(handles=[desert_patch, base_patch], loc='lower left', frameon=True, facecolor='white', framealpha=0.9)
-ax2.axis('off')
+base_patch = mpatches.Patch(color='#e0e0e0', label=f"Wards with Facilities (n={(~gdf['is_health_desert']).sum():,})")
+ax2.legend(handles=[desert_patch, base_patch], loc='lower left', frameon=True, facecolor='white', framealpha=0.9, fontsize=10)
 
 plt.tight_layout()
 fig.savefig('docs/figures/01_national_wealth_and_health_deserts.png', bbox_inches='tight', dpi=300)
