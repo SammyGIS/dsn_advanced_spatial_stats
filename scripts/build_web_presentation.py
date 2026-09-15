@@ -1,11 +1,28 @@
 """
-Build a world-class pedagogical slide deck for Advanced Spatial Statistics.
+Build a world-class pedagogical slide deck for Advanced Spatial Statistics: Theory & Practical Application.
 Features:
-- ONE key idea per slide with zero vertical cutoffs.
-- Slide numbering moved from right to LEFT.
-- KaTeX Math plugin integrated for crisp, beautiful formula rendering.
-- Slide 6 embeds the new high-res diagram: figures/08_traditional_vs_spatial_eda.png.
-- Removed '& Econometrics' from titles and repetitive '9,308 wards' text.
+- ONE key idea per slide with rich explanations that fill the slide comfortably.
+- Slide numbering on the bottom LEFT badge (e.g. 1 / 35).
+- KaTeX Math plugin integrated for crisp, beautiful formula rendering without clipping.
+- Slide 6 embeds the high-res diagram: figures/08_traditional_vs_spatial_eda.png.
+- Rigorous progression:
+  Foundations -> Spatial Fallacies -> ESDA vs Spatial EDA -> Outliers ->
+  Spatial Weights (KNN & Contiguity) -> Spatial Lag Operator (Wy) -> Global Moran's I -> LISA ->
+  6 Sectoral Applied Case Studies ->
+  Linear Regression vs OLS (The Essential Distinction) -> The 5 Gauss-Markov Assumptions & BLUE ->
+  Pre-Modeling Diagnostics (Multicollinearity, VIF, Condition Number) ->
+  Econometric Residual Diagnostics (Jarque-Bera & Breusch-Pagan Tests with Value Ranges) ->
+  Spatial Breakdown of OLS -> Anselin LM Decision Tree ->
+  Spatial Lag (SAR) & Behavioral Spillovers -> Spatial Multipliers ->
+  Spatial Error (SEM) & Unobserved Shocks -> Spatial Durbin Model (SDM) ->
+  Spatial Heterogeneity & Why Global Models Miss Local Non-Stationarity ->
+  Geographically Weighted Regression (GWR) & Local WLS ->
+  GWR Kernels & Bandwidth Optimization (Gaussian, Adaptive Bisquare, AICc, CV) ->
+  Multiscale GWR (MGWR) & Process Spatial Scales ->
+  Interpreting GWR & MGWR Outputs (Local R2, Local t-stats, Local Parameter Maps) ->
+  Master Comparative Guide (OLS, SAR, SEM, SDM, GWR, MGWR Table) ->
+  Empirical Benchmark Across Wards ->
+  Course Curriculum & Learning Modules Roadmap.
 - Clean all-white academic theme.
 """
 
@@ -34,6 +51,7 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
             --teal: #0d9488;
             --crimson: #e11d48;
             --amber: #d97706;
+            --purple: #7c3aed;
             --border: #e2e8f0;
             --code-bg: #f8fafc;
         }
@@ -51,7 +69,7 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
 
         .reveal .slides section {
             top: 0 !important;
-            padding: 16px 45px 10px 45px !important;
+            padding: 14px 44px 10px 44px !important;
             box-sizing: border-box;
         }
 
@@ -65,34 +83,34 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
         }
 
         .reveal h1 {
-            font-size: 1.75em;
+            font-size: 1.70em;
             line-height: 1.2;
-            margin-bottom: 0.2em;
+            margin-bottom: 0.15em;
         }
 
         .reveal h2 {
-            font-size: 1.20em;
-            line-height: 1.28;
-            margin-bottom: 0.3em;
-            padding-bottom: 0.15em;
+            font-size: 1.15em;
+            line-height: 1.25;
+            margin-bottom: 0.22em;
+            padding-bottom: 0.10em;
             border-bottom: 1.5px solid var(--border);
             text-align: left;
         }
 
         .reveal h3 {
-            font-size: 0.95em;
+            font-size: 0.90em;
             color: var(--primary);
-            margin-bottom: 0.25em;
+            margin-bottom: 0.2em;
         }
 
         .reveal h4 {
-            font-size: 0.82em;
-            margin-bottom: 5px;
+            font-size: 0.78em;
+            margin-bottom: 4px;
             color: var(--text-dark);
         }
 
         .reveal p, .reveal li {
-            font-size: 0.62em;
+            font-size: 0.58em;
             line-height: 1.45;
             color: var(--text-secondary);
         }
@@ -103,13 +121,13 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
         }
 
         .reveal li {
-            margin-bottom: 0.35em;
+            margin-bottom: 0.30em;
         }
 
         /* Category Tag */
         .tag {
             display: inline-block;
-            font-size: 0.38em;
+            font-size: 0.35em;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -117,119 +135,142 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
             border-radius: 4px;
             background: #f1f5f9;
             color: #475569;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
-        .tag.teal { background: #ccfbf1; color: #0f766e; }
         .tag.blue { background: #e0f2fe; color: #0369a1; }
+        .tag.teal { background: #ccfbf1; color: #0f766e; }
+        .tag.amber { background: #fef3c7; color: #b45309; }
         .tag.rose { background: #ffe4e6; color: #be123c; }
+        .tag.purple { background: #f3e8ff; color: #6b21a8; }
 
-        /* Grids */
-        .grid-split {
-            display: grid;
-            grid-template-columns: 1fr 1.3fr;
-            gap: 24px;
-            align-items: center;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 28px;
-            align-items: start;
-        }
-
-        /* Math & Highlight Boxes */
-        .callout {
+        /* Formula Box with Scaled KaTeX */
+        .formula {
             background: var(--code-bg);
             border-left: 3.5px solid var(--primary);
-            padding: 10px 16px;
-            margin: 10px 0;
+            padding: 7px 14px;
+            margin: 6px 0;
             border-radius: 0 6px 6px 0;
-        }
-        .callout.teal { border-left-color: var(--teal); }
-        .callout.rose { border-left-color: var(--crimson); }
-
-        .callout p {
-            margin: 0;
-            font-size: 0.62em;
-            line-height: 1.45;
-        }
-
-        .formula {
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            padding: 8px 18px;
-            border-radius: 8px;
-            margin: 8px 0;
             text-align: center;
         }
 
-        .reveal .katex {
-            font-size: 0.88em !important;
-        }
-
         .reveal .katex-display {
+            font-size: 0.60em !important;
             margin: 0.2em 0 !important;
-            font-size: 0.62em !important;
+            line-height: 1.2;
+            overflow-x: auto;
+            overflow-y: hidden;
         }
 
-        .reveal .katex-display > .katex {
-            font-size: 1.05em !important;
-            text-align: center !important;
+        .reveal .katex {
+            font-size: 0.86em !important;
         }
 
-        /* Slide Visuals */
-        img.slide-visual {
-            max-height: 400px;
-            width: auto;
-            max-width: 100%;
-            margin: 0 auto;
-            display: block;
-            object-fit: contain;
-            border-radius: 6px;
+        /* Two-Column Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 6px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-top: 6px;
+        }
+
+        /* Visual Callout Cards */
+        .callout {
+            background: #f8fafc;
             border: 1px solid var(--border);
-            background: #ffffff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border-radius: 7px;
+            padding: 9px 12px;
+            margin-top: 6px;
+        }
+        .callout.teal {
+            background: #f0fdfa;
+            border-color: #99f6e4;
+        }
+        .callout.rose {
+            background: #fff1f2;
+            border-color: #fecdd3;
+        }
+        .callout.amber {
+            background: #fffbeb;
+            border-color: #fde68a;
+        }
+        .callout.blue {
+            background: #f0f9ff;
+            border-color: #bae6fd;
+        }
+        .callout.purple {
+            background: #faf5ff;
+            border-color: #e9d5ff;
         }
 
         /* Tables */
-        table.slide-table {
+        .slide-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.52em;
-            margin-top: 8px;
+            margin-top: 6px;
+            font-size: 0.48em;
         }
-
-        table.slide-table th {
-            background: #f8fafc;
+        .slide-table th {
+            background: #f1f5f9;
             color: var(--text-dark);
-            padding: 7px 10px;
             font-weight: 700;
-            border-bottom: 2px solid var(--border);
+            padding: 6px 8px;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+        .slide-table td {
+            padding: 5px 8px;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .slide-table tr:nth-child(even) td {
+            background: #f8fafc;
         }
 
-        table.slide-table td {
-            padding: 6px 10px;
-            border-bottom: 1px solid var(--border);
-            color: #334155;
+        /* Compact Case Study Split */
+        .case-study {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 14px;
+            margin-top: 6px;
+            align-items: start;
         }
 
-        /* Slide Numbering Moved to Bottom-Left */
+        .case-study .stats-panel {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 9px 12px;
+        }
+
+        .stat-badge {
+            display: inline-block;
+            font-size: 0.70em;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 2px;
+        }
+
+        /* Slide Number Placement: Bottom LEFT */
         .reveal .slide-number {
-            position: fixed !important;
-            left: 24px !important;
+            left: 20px !important;
             right: auto !important;
-            bottom: 18px !important;
-            top: auto !important;
-            font-family: 'JetBrains Mono', monospace !important;
+            bottom: 16px !important;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 13px !important;
-            font-weight: 600 !important;
-            color: #64748b !important;
-            background: rgba(248, 250, 252, 0.95) !important;
-            padding: 4px 10px !important;
-            border-radius: 6px !important;
-            border: 1px solid #e2e8f0 !important;
-            z-index: 40 !important;
+            font-weight: 600;
+            background: #f1f5f9 !important;
+            color: #475569 !important;
+            padding: 3px 9px !important;
+            border-radius: 5px !important;
+            border: 1px solid #cbd5e1;
+            z-index: 50 !important;
         }
     </style>
 </head>
@@ -237,378 +278,544 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
     <div class="reveal">
         <div class="slides">
 
-            <!-- SLIDE 1: TITLE -->
-            <section style="padding-top: 40px !important;">
-                <span class="tag blue">Course Curriculum</span>
-                <h1>Advanced Spatial Statistics</h1>
-                <h3 style="margin-top: 8px; font-weight: 600;">Theory, Methods, and Real-World Applications</h3>
-                <p style="margin-top: 20px; font-size: 0.64em; color: var(--text-muted);">
-                    How Location Data and Spatial Coupling Drive Smarter Analysis Across Every Sector.
+            <!-- SLIDE 1: TITLE SLIDE -->
+            <section style="text-align: center; padding-top: 15px !important;">
+                <span class="tag blue">Graduate &amp; Professional Lecture Series</span>
+                <h1 style="margin-top: 6px;">Advanced Spatial Statistics:<br/>Theory &amp; Practical Application</h1>
+                <p style="font-size: 0.76em; color: var(--text-muted); margin-bottom: 12px;">
+                    Spatial Econometrics, Geographically Weighted Regression (GWR/MGWR) &amp; Decision Intelligence
                 </p>
-                <div class="callout teal" style="margin-top: 18px; max-width: 820px;">
-                    <p><strong>Course Focus:</strong> Moving beyond aspatial data science to discover hidden patterns, spatial autocorrelation, regional clustering, and spatial spillovers.</p>
+                <div class="grid-2" style="max-width: 820px; margin: 0 auto; text-align: left;">
+                    <div class="callout blue" style="margin-top: 0;">
+                        <h4 style="color: var(--primary);">Theoretical Foundations</h4>
+                        <p>Tobler's Law, Spatial Weights ($W$), Moran's $I$, LISA, Gauss-Markov assumptions, Spatial Autoregression (SAR/SEM/SDM), and Spatial Heterogeneity (GWR/MGWR).</p>
+                    </div>
+                    <div class="callout teal" style="margin-top: 0;">
+                        <h4 style="color: var(--teal);">Applied Sectors</h4>
+                        <p>Public Health Deserts, Malaria Epidemiology, Commercial Geomarketing, WASH Utility Equity, Infrastructure Siting, and Multi-Criteria Planning across 9,308 Wards.</p>
+                    </div>
                 </div>
             </section>
 
-            <!-- SLIDE 2: WHY WHERE MATTERS -->
+            <!-- SLIDE 2: FOUNDATIONS -->
             <section>
-                <span class="tag rose">Foundations</span>
-                <h2>Why Spatial Statistics in the Real World?</h2>
-                <p>Traditional statistical methods and machine learning pipelines assume observations are <strong>Independent and Identically Distributed (i.i.d.)</strong>—the belief that what happens in one village, ward, or neighborhood has zero bearing on its neighbors.</p>
-                <p>In reality, human settlements, disease transmission, economic trade, and environmental hazards <strong>do not stop at administrative borders</strong>.</p>
-                <div class="callout rose" style="margin-top: 16px;">
-                    <p><strong>The Core Reality:</strong> Treating location data with standard non-spatial statistics creates three major decision fallacies that lead to wasted capital and misdirected interventions.</p>
+                <span class="tag blue">Foundations</span>
+                <h2>Why Spatial Statistics? The Breakdown of Classical Theory</h2>
+                <p>In standard data science and econometrics, observations are assumed to be <strong>independent and identically distributed (i.i.d.)</strong>:</p>
+                <div class="formula">
+                    $$\text{Cov}(y_i, y_j) = 0 \quad \text{for all } i \neq j, \quad \epsilon \sim \text{i.i.d. } N(0, \sigma^2)$$
+                </div>
+                <div class="grid-2">
+                    <div class="callout rose">
+                        <h4 style="color: var(--crimson);">The Geographic Reality</h4>
+                        <p>When analyzing geographic units (e.g. 9,308 administrative wards), this assumption collapses due to <strong>Tobler's First Law of Geography (1970)</strong>:<br/>
+                        <em>"Everything is related to everything else, but near things are more related than distant things."</em></p>
+                    </div>
+                    <div class="callout amber">
+                        <h4 style="color: var(--amber);">Consequences of Aspatial Models</h4>
+                        <p>&bull; <strong>Biased Estimates:</strong> Attribute neighbor spillovers falsely to local features.<br/>
+                        &bull; <strong>Artificially Low Standard Errors:</strong> Inflated $t$-statistics producing widespread <strong>Type-I false discoveries</strong>.<br/>
+                        &bull; <strong>Stationarity Trap:</strong> Forcing a single global parameter across heterogeneous regions.</p>
+                    </div>
                 </div>
             </section>
 
             <!-- SLIDE 3: FALLACY 1: THE AVERAGE -->
             <section>
-                <span class="tag rose">Fallacy #1</span>
-                <h2>The Fallacy of the Average</h2>
-                <p>Aggregate summary statistics (means, regional totals) mask severe internal spatial inequality.</p>
-                <ul>
-                    <li>A state or province can appear <strong>"moderately wealthy"</strong> or <strong>"well-served by healthcare"</strong> on paper based on its aggregate average.</li>
-                    <li>Yet inside that same state, affluent metropolitan centers sit alongside vast rural <strong>"healthcare deserts"</strong> where hundreds of thousands have zero access to clinics.</li>
-                    <li>Decisions made on averages allocate resources based on political quotas rather than actual geographic need.</li>
-                </ul>
-                <div class="callout" style="margin-top: 15px;">
-                    <p><strong>Teaching Takeaway:</strong> Never rely solely on summary averages for policy. You must map and analyze the localized spatial distribution.</p>
+                <span class="tag rose">Pitfall #1</span>
+                <h2>Spatial Fallacy 1: The Fallacy of the State Average</h2>
+                <p>Policymakers routinely allocate capital based on national or state-level summary aggregates:</p>
+                <div class="formula">
+                    $$\bar{y} = \frac{1}{n} \sum_{i=1}^n y_i \implies \text{Completely masks spatial variance within the boundary}$$
                 </div>
-            </section>
-
-            <!-- SLIDE 4: FALLACY 2: TOBLER'S LAW -->
-            <section>
-                <span class="tag teal">Fallacy #2</span>
-                <h2>The Spillover Blindspot: Tobler's First Law</h2>
-                <div class="callout teal" style="margin-bottom: 15px;">
-                    <p style="font-size: 0.72em;"><em>"Everything is related to everything else, but near things are more related than distant things."</em><br/>— Waldo Tobler, 1970</p>
-                </div>
-                <ul>
-                    <li><strong>Events are spatially coupled:</strong> Mosquito vectors fly across borders, commuters travel to regional wholesale markets, and public investments create spatial spillovers.</li>
-                    <li><strong>The Positive Multiplier:</strong> Investing in a major hospital or market in Area A benefits neighboring Areas B, C, and D as well.</li>
-                    <li>Standard regressions treat spatial dependence as unexplainable noise; <strong>spatial statistics explicitly measures and models it</strong>.</li>
-                </ul>
-            </section>
-
-            <!-- SLIDE 5: FALLACY 3: MISALLOCATION TRAP -->
-            <section>
-                <span class="tag amber">Fallacy #3</span>
-                <h2>The Capital Misallocation Trap</h2>
-                <p>Allocating capital without spatial intelligence leads to two major forms of waste:</p>
-                <div class="grid-2" style="margin-top: 15px;">
-                    <div>
-                        <h4 style="color: var(--crimson);">Over-Saturation</h4>
-                        <p>Opening bank kiosks, retail stores, or drilling boreholes in locations that already have heavy commercial competition, yielding diminishing returns.</p>
+                <div class="grid-2">
+                    <div class="callout" style="border-left: 3px solid var(--crimson);">
+                        <h4>The Numerical Distortion</h4>
+                        <p>A state may record an affluent mean Relative Wealth Index of <strong>+0.42</strong>, yet contain 15 rural wards suffering acute structural poverty (-0.85) alongside a single hyper-wealthy urban enclave (+1.65). The aggregate average renders vulnerable populations statistically invisible.</p>
                     </div>
-                    <div>
-                        <h4 style="color: var(--teal);">Underserved Catchments</h4>
-                        <p>Failing to identify high-wealth, high-population communities that currently lack physical service infrastructure.</p>
+                    <div class="callout teal">
+                        <h4 style="color: var(--teal);">Real-Life Applied Case</h4>
+                        <p><strong>Universal Healthcare Budgeting:</strong> Directing state grants based on statewide maternal mortality averages starves peripheral rural wards while over-subsidizing tertiary hospitals in state capitals.</p>
                     </div>
                 </div>
-                <div class="callout" style="margin-top: 18px;">
-                    <p><strong>The Solution:</strong> Spatial statistics provides catchment analysis and priority indexing to identify exactly where capital produces maximum impact.</p>
+            </section>
+
+            <!-- SLIDE 4: FALLACY 2: SPILLOVER BLINDSPOT -->
+            <section>
+                <span class="tag rose">Pitfall #2</span>
+                <h2>Spatial Fallacy 2: The Spatial Spillover Blindspot</h2>
+                <p>Aspatial program evaluation assumes interventions in Ward $A$ remain isolated inside Ward $A$:</p>
+                <div class="formula">
+                    $$\Delta y_A = \beta \Delta X_A \quad \text{(Ignores inter-ward geographic feedback loops)}$$
+                </div>
+                <div class="grid-2">
+                    <div>
+                        <h4>The Two Spatial Phenomena</h4>
+                        <ul>
+                            <li><strong>Spatial Contagion (Epidemics / Crime):</strong> Disease transmission in one ward directly causes infection surges in contiguous neighbor wards.</li>
+                            <li><strong>Economic Agglomeration (Trade / Retail):</strong> A wholesale market built in Ward $A$ creates customer traffic, logistics suppliers, and demand in Wards $B$ and $C$.</li>
+                        </ul>
+                    </div>
+                    <div class="callout teal">
+                        <h4 style="color: var(--teal);">Real-Life Applied Case</h4>
+                        <p><strong>Wholesale Market Construction:</strong> An aspatial ROI model calculates only municipal tax generated within Ward $A$, ignoring <strong>141% additional secondary wealth</strong> generated across adjacent boundary wards!</p>
+                    </div>
                 </div>
             </section>
 
-            <!-- SLIDE 6: TRADITIONAL EDA VS SPATIAL EDA DIAGRAM -->
+            <!-- SLIDE 5: FALLACY 3: MAUP -->
             <section>
-                <span class="tag teal">Exploratory Analysis</span>
-                <h2>Traditional Non-Spatial EDA vs. Spatial EDA (ESDA)</h2>
-                <p style="margin-bottom: 8px;">Why is spatial statistics so exceptionally powerful for exploratory pattern discovery?</p>
-                <img src="figures/08_traditional_vs_spatial_eda.png" class="slide-visual" style="max-height: 460px;" alt="Traditional vs Spatial EDA Comparison Diagram">
+                <span class="tag rose">Pitfall #3</span>
+                <h2>Spatial Fallacy 3: The Boundary Trap &amp; MAUP</h2>
+                <p>The <strong>Modifiable Areal Unit Problem (MAUP)</strong> dictates that statistical results change dramatically when boundaries are shifted or aggregated:</p>
+                <div class="grid-2">
+                    <div class="callout blue">
+                        <h4 style="color: var(--primary);">1. The Scale Effect</h4>
+                        <p>Aggregating 9,308 wards up to 774 Local Government Areas (LGAs) artificially inflates bivariate correlation coefficients ($r$) from <strong>0.31 to 0.74</strong>. High aggregation smooths out local variance and creates spurious associations.</p>
+                    </div>
+                    <div class="callout amber">
+                        <h4 style="color: var(--amber);">2. The Zoning Effect</h4>
+                        <p>Redrawing administrative district shapes while holding unit count constant alters statistical sign and magnitude (e.g. electoral gerrymandering or redrawn health catchment areas changing disease rate calculations).</p>
+                    </div>
+                </div>
+                <div class="callout teal" style="margin-top: 8px;">
+                    <p><strong>Methodological Antidote:</strong> Always model at the finest operational administrative unit (Ward level) and verify scale stability using multi-level or geographically weighted techniques.</p>
+                </div>
+            </section>
+
+            <!-- SLIDE 6: TRADITIONAL VS SPATIAL EDA (EMBEDDED DIAGRAM) -->
+            <section>
+                <span class="tag teal">Methodology</span>
+                <h2>Traditional vs. Spatial Exploratory Data Analysis</h2>
+                <p>Spatial EDA integrates geographic topology, proximity matrices, and spatial lag operators into exploratory discovery:</p>
+                <div style="text-align: center; margin-top: 8px;">
+                    <img src="figures/08_traditional_vs_spatial_eda.png" alt="Traditional vs Spatial EDA Architecture" style="max-height: 380px; width: auto; border-radius: 6px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+                </div>
             </section>
 
             <!-- SLIDE 7: SPATIAL OUTLIERS -->
             <section>
-                <span class="tag blue">Pattern Discovery</span>
-                <h2>Detecting Local Spatial Outliers</h2>
-                <p>Standard outlier detection (e.g. Tukey boxplots or $z$-scores $> 3$) only finds values that are globally extreme across an entire country.</p>
-                <p>It completely misses <strong>local spatial anomalies</strong>:</p>
-                <ul>
-                    <li><strong style="color: var(--amber);">High-Low Outliers ("Islands of Wealth"):</strong> An affluent commercial center surrounded by widespread rural poverty. Globally it may not look extreme, but locally it is a vital economic engine.</li>
-                    <li><strong style="color: var(--primary);">Low-High Outliers ("Opportunity Sinks"):</strong> An impoverished pocket trapped within an affluent metropolitan corridor.</li>
-                </ul>
-                <div class="callout teal" style="margin-top: 15px;">
-                    <p><strong>Teaching Value:</strong> Only spatial statistics (LISA) can detect these local anomalies, enabling surgical intervention.</p>
+                <span class="tag teal">Spatial EDA</span>
+                <h2>Spatial Outliers &amp; Local Geographic Anomalies</h2>
+                <p>In standard EDA, an outlier is defined solely by distance from the global distribution mean ($z = \frac{x - \mu}{\sigma}$):</p>
+                <div class="grid-2" style="margin-top: 8px;">
+                    <div class="callout rose">
+                        <h4 style="color: var(--crimson);">Aspatial Outlier (Global View)</h4>
+                        <p>A ward is flagged as an outlier only if its wealth or disease rate exceeds $3\sigma$ from the entire national average. Misses localized deprivation inside wealthy metropolitan regions.</p>
+                    </div>
+                    <div class="callout teal">
+                        <h4 style="color: var(--teal);">Spatial Outlier (Local View)</h4>
+                        <p>A unit that differs radically from its <strong>immediate spatial neighbors</strong>, regardless of where it falls in the national histogram:</p>
+                        <ul>
+                            <li><strong>High-Low (Island):</strong> An affluent commercial corridor surrounded by structural poverty.</li>
+                            <li><strong>Low-High (Sink):</strong> An excluded slum community trapped inside a wealthy city core.</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
 
-            <!-- SLIDE 8: SPATIAL WEIGHTS MATRIX (W) -->
+            <!-- SLIDE 8: SPATIAL WEIGHTS MATRIX W -->
             <section>
-                <span class="tag blue">Formulation</span>
-                <h2>The Spatial Weights Matrix ($W$)</h2>
-                <p>To mathematically model geographic relationships, we construct an $N \times N$ matrix $W$, where entry $w_{ij}$ quantifies the spatial connection between unit $i$ and unit $j$:</p>
+                <span class="tag blue">Spatial Weights</span>
+                <h2>Spatial Weights Matrix ($W$): Contiguity vs. Nearest Neighbours</h2>
+                <p>The spatial weights matrix $W$ encodes geographic connectivity among all $n$ observational units:</p>
                 <div class="formula">
-                    $$w_{ij}^* = \frac{w_{ij}}{\sum_{k=1}^n w_{ik}} \implies \sum_{j=1}^n w_{ij}^* = 1 \quad \text{(Row Standardization)}$$
+                    $$W = \begin{bmatrix} 0 & w_{12} & \dots & w_{1n} \\ w_{21} & 0 & \dots & w_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ w_{n1} & w_{n2} & \dots & 0 \end{bmatrix}, \quad w_{ij}^* = \frac{w_{ij}}{\sum_{k=1}^n w_{ik}} \implies \sum_{j=1}^n w_{ij}^* = 1$$
                 </div>
-                <ul>
-                    <li><strong>Queen Contiguity:</strong> Units $i$ and $j$ are neighbors if they share a common boundary edge or vertex.</li>
-                    <li><strong>K-Nearest Neighbors (KNN):</strong> Each unit is linked to its $k$ closest geographic neighbors (e.g., $k=5$).</li>
-                    <li>Row standardization ensures scale-invariance across units with differing numbers of neighbors.</li>
-                </ul>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div>
+                        <h4>Contiguity vs. $K$-Nearest Neighbours</h4>
+                        <ul>
+                            <li><strong>Queen Contiguity:</strong> Units sharing an edge or point vertex are neighbors ($w_{ij}=1$). <em>The Island Problem:</em> Islands or exclaves have zero neighbors, breaking row standardization.</li>
+                            <li><strong>$K$-Nearest Neighbours ($k$-NN):</strong> Every ward is connected to its $k$ closest centroids. Guarantees uniform degrees and eliminates island isolates.</li>
+                            <li><strong>Inverse Distance:</strong> $w_{ij} = d_{ij}^{-\alpha}$ with distance band threshold.</li>
+                        </ul>
+                    </div>
+                    <div class="callout teal">
+                        <h4 style="color: var(--teal);">Real-Life Applied Use Case</h4>
+                        <p><strong>Modeling Inter-Ward Trade Networks:</strong> Because administrative wards vary vastly in polygon area (from $0.2 \text{ km}^2$ in urban centers to $2,500 \text{ km}^2$ in rural areas), using $k\text{-NN} (k=5)$ provides robust, scale-invariant spatial weights.</p>
+                    </div>
+                </div>
             </section>
 
-            <!-- SLIDE 9: SPATIAL LAG (Wy) -->
+            <!-- SLIDE 9: SPATIAL LAG OPERATOR Wy -->
             <section>
-                <span class="tag blue">Formulation</span>
-                <h2>The Spatial Lag ($Wy$): Quantifying Neighborhood Context</h2>
-                <p>The <strong>Spatial Lag</strong> $[Wy]_i$ represents the spatially weighted average of variable $y$ among unit $i$'s neighbors:</p>
+                <span class="tag blue">Spatial Lag</span>
+                <h2>The Spatial Lag Operator ($Wy$): Local Neighborhood Averages</h2>
+                <p>Multiplying row-standardized $W$ by variable vector $y$ computes the <strong>spatial lag</strong> $[Wy]_i$:</p>
                 <div class="formula">
-                    $$[Wy]_i = \sum_{j=1}^n w_{ij}^* y_j$$
+                    $$[Wy]_i = \sum_{j=1}^n w_{ij}^* y_j = w_{i1}^* y_1 + w_{i2}^* y_2 + \dots + w_{in}^* y_n$$
                 </div>
-                <div class="callout teal" style="margin-top: 15px;">
-                    <p><strong>Intuitive Walkthrough:</strong><br/>
-                    If Unit $i$ has 4 neighbors with wealth scores $[0.2, 0.4, 0.6, 0.8]$:<br/>
-                    $$[Wy]_i = \frac{0.2 + 0.4 + 0.6 + 0.8}{4} = 0.50$$<br/>
-                    The spatial lag represents the ambient economic context surrounding Unit $i$.</p>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div>
+                        <h4>Step-by-Step Numerical Example</h4>
+                        <p>Suppose Ward $i$ has 4 neighbors with wealth index scores: <strong>[+0.20, +0.60, -0.10, +0.50]</strong>.</p>
+                        <p>Under row standardization, each neighbor weight is $w_{ij}^* = 0.25$:</p>
+                        <div class="formula" style="margin: 4px 0;">
+                            $$[Wy]_i = 0.25(0.20) + 0.25(0.60) + 0.25(-0.10) + 0.25(0.50) = \mathbf{+0.30}$$
+                        </div>
+                        <p>The spatial lag $[Wy]_i$ represents the <strong>average environmental context</strong> surrounding unit $i$.</p>
+                    </div>
+                    <div class="callout teal">
+                        <h4 style="color: var(--teal);">Moran Scatterplot Representation</h4>
+                        <p>Plotting standardized focal values $z$ on the horizontal axis against neighborhood lag $Wz$ on the vertical axis yields the <strong>Moran Scatterplot</strong>. The regression slope of this scatterplot is exactly equal to <strong>Global Moran's $I$</strong>!</p>
+                    </div>
                 </div>
             </section>
 
             <!-- SLIDE 10: GLOBAL MORAN'S I -->
             <section>
-                <span class="tag blue">Global Inference</span>
-                <h2>Global Moran's $I$: Is the Map Clustered or Random?</h2>
-                <p>Global Moran's $I$ evaluates whether an attribute exhibits positive clustering, negative dispersion, or random spatial distribution:</p>
+                <span class="tag teal">Global Autocorrelation</span>
+                <h2>Global Spatial Autocorrelation: Moran's $I$ Statistic</h2>
+                <p>Quantifies whether a variable clusters spatially across the entire study region:</p>
                 <div class="formula">
-                    $$I = \frac{n}{S_0} \frac{\sum_{i=1}^n \sum_{j=1}^n w_{ij}(y_i - \bar{y})(y_j - \bar{y})}{\sum_{i=1}^n (y_i - \bar{y})^2}, \quad E[I] = -\frac{1}{n-1} \approx 0$$
+                    $$I = \frac{n}{\sum_{i} \sum_{j} w_{ij}} \cdot \frac{\sum_{i=1}^n \sum_{j=1}^n w_{ij}(y_i - \bar{y})(y_j - \bar{y})}{\sum_{i=1}^n (y_i - \bar{y})^2}, \quad E[I] = -\frac{1}{n-1} \approx 0$$
                 </div>
-                <ul>
-                    <li><strong>$I \gt E[I]$ with $p \lt 0.05$:</strong> Positive Spatial Autocorrelation (Similar values cluster together).</li>
-                    <li><strong>$I \lt E[I]$ with $p \lt 0.05$:</strong> Negative Spatial Autocorrelation (Checkerboard dispersion).</li>
-                    <li>Empirical test: Asset wealth yields $I = 0.684$ ($p \lt 0.001$), decisively proving intense geographic clustering.</li>
-                </ul>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div>
+                        <h4>Statistical Significance &amp; Permutation Test</h4>
+                        <ul>
+                            <li>Compute reference distribution by randomly shuffling spatial coordinates $M=999$ times.</li>
+                            <li>Calculate pseudo $p$-value: $p = \frac{M_{\text{extreme}} + 1}{M + 1}$.</li>
+                            <li>Empirical Result: Relative Wealth Index yields <strong>$I = 0.614$ ($p = 0.001$)</strong>, proving extreme spatial clustering!</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Value Range &amp; Interpretation</h4>
+                        <ul>
+                            <li><strong>$I \gt 0$ (Positive Autocorrelation):</strong> Similar values cluster together (hotspots and coldspots).</li>
+                            <li><strong>$I \approx 0$ (Spatial Randomness):</strong> Spatial distribution is random noise.</li>
+                            <li><strong>$I \lt 0$ (Negative Autocorrelation):</strong> Dissimilar values neighbor each other (checkerboard pattern).</li>
+                        </ul>
+                    </div>
+                </div>
             </section>
 
-            <!-- SLIDE 11: ANSELIN LOCAL MORAN (LISA) -->
+            <!-- SLIDE 11: LOCAL MORAN LISA -->
             <section>
-                <span class="tag blue">Local Clustering</span>
-                <h2>Anselin Local Moran's $I_i$ (LISA Clusters)</h2>
-                <p>Decomposes global spatial autocorrelation into discrete, localized clusters:</p>
+                <span class="tag teal">Local Clusters</span>
+                <h2>Anselin Local Moran (LISA): Decomposing Global Clustering</h2>
+                <p>Global Moran's $I$ confirms clustering exists; Anselin Local Moran ($I_i$) maps <strong>where</strong> each cluster is located:</p>
                 <div class="formula">
-                    $$I_i = \frac{z_i}{s^2} \sum_{j=1}^n w_{ij} z_j, \quad \text{where } z_i = y_i - \bar{y}$$
+                    $$I_i = \frac{y_i - \bar{y}}{s^2} \sum_{j=1}^n w_{ij} (y_j - \bar{y})$$
                 </div>
-                <p>Classifies every significant geographic unit into one of four quadrants:</p>
-                <ul>
-                    <li><strong style="color: var(--crimson);">High-High (Hotspot):</strong> High value surrounded by high neighbors.</li>
-                    <li><strong style="color: #2563eb;">Low-Low (Coldspot):</strong> Low value surrounded by low neighbors (poverty traps).</li>
-                    <li><strong style="color: var(--amber);">High-Low (Spatial Outlier):</strong> Island of wealth surrounded by low neighbors.</li>
-                    <li><strong style="color: var(--primary);">Low-High (Spatial Outlier):</strong> Underserved pocket inside an affluent area.</li>
-                </ul>
-            </section>
-
-            <!-- SLIDE 12: CASE STUDY 1: HEALTHCARE DESERTS -->
-            <section>
-                <span class="tag rose">Case Study 1: Public Health</span>
-                <h2>Public Health: Identifying Healthcare Deserts</h2>
-                <div class="grid-split">
+                <div class="grid-2" style="margin-top: 6px;">
                     <div>
-                        <h4>Targeting Zero-Clinic Areas</h4>
+                        <h4>The Four Core Quadrants ($p \lt 0.05$)</h4>
                         <ul>
-                            <li><strong>Criterion:</strong> Populous wards with <strong>zero registered primary clinics or hospitals</strong>.</li>
-                            <li>Identifies thousands of residents lacking maternal care and emergency treatment.</li>
-                            <li><strong>Action:</strong> Routes mobile clinics and primary health funding directly to flagged coordinates.</li>
+                            <li><strong>High-High (Hotspot):</strong> High values surrounded by high values. Priority for commercial flagship investment.</li>
+                            <li><strong>Low-Low (Coldspot):</strong> Low values surrounded by low values. Priority for structural humanitarian aid.</li>
+                            <li><strong>High-Low (Outlier):</strong> High value island surrounded by poverty. Regional service hub.</li>
+                            <li><strong>Low-High (Outlier):</strong> Low value pocket inside affluent core. Urban slum requiring utility hookups.</li>
                         </ul>
                     </div>
-                    <div>
-                        <img src="figures/01_national_wealth_and_health_deserts.png" class="slide-visual" alt="Healthcare Deserts">
+                    <div class="callout rose">
+                        <h4 style="color: var(--crimson);">False Discovery Control</h4>
+                        <p>Because Local Moran performs $n$ simultaneous hypothesis tests (9,308 tests), multiple testing adjustments (Bonferroni or False Discovery Rate FDR) are applied to avoid spurious cluster identification.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 13: CASE STUDY 2: MALARIA -->
+            <!-- SLIDE 12: SECTORAL CASE: HEALTHCARE DESERTS -->
             <section>
-                <span class="tag teal">Case Study 2: Epidemiology</span>
-                <h2>Disease Surveillance: Modeling Malaria Contagion</h2>
-                <div class="grid-split">
+                <span class="tag rose">Public Health</span>
+                <h2>Sectoral Case 1: Healthcare Deserts &amp; Clinic Accessibility</h2>
+                <div class="case-study">
                     <div>
-                        <h4>Spatial Vector Coupling</h4>
-                        <ul>
-                            <li><strong>$I = 0.886$ ($p < 0.001$):</strong> High spatial autocorrelation along river basins and humid ecological zones.</li>
-                            <li>A location's risk is heavily predicted by its neighbors' infection rates.</li>
-                            <li><strong>Action:</strong> Coordinated cross-boundary spraying and bed net distribution to prevent reinfection across borders.</li>
-                        </ul>
+                        <h4>Problem &amp; Spatial Diagnostic</h4>
+                        <p>A <strong>Healthcare Desert</strong> is defined as a ward with a high population count (&gt; median of 17,400 residents) but <strong>zero registered primary healthcare clinics</strong>.</p>
+                        <p>Aspatial analysis calculates state clinic ratios (e.g. 1 clinic per 5,000 residents statewide) and assumes adequate coverage. Spatial overlay reveals severe geographic exclusion.</p>
+                        <div class="callout rose" style="margin-top: 6px;">
+                            <h4 style="color: var(--crimson);">Decision Intelligence Action</h4>
+                            <p>Deploy mobile clinical vans and prioritize the top 50 densest clinic-zero wards for new maternity clinic construction.</p>
+                        </div>
                     </div>
-                    <div>
-                        <img src="figures/07_disease_epidemiology_malaria_map.png" class="slide-visual" alt="Malaria Map">
+                    <div class="stats-panel">
+                        <div class="stat-badge">2,140 Wards</div>
+                        <p style="font-size: 0.54em;">Zero registered primary health clinics nationwide (23.0% of all wards).</p>
+                        <div class="stat-badge" style="color: var(--crimson); margin-top: 6px;">812 Wards</div>
+                        <p style="font-size: 0.54em;">Acute Healthcare Deserts (High population &amp; Zero clinics).</p>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 14: CASE STUDY 3: GEOMARKETING -->
+            <!-- SLIDE 13: SECTORAL CASE: MALARIA EPIDEMIOLOGY -->
             <section>
-                <span class="tag blue">Case Study 3: Commercial Analytics</span>
-                <h2>Geomarketing: Wealth vs. Commercial Market Density</h2>
-                <div class="grid-split">
+                <span class="tag rose">Epidemiology</span>
+                <h2>Sectoral Case 2: Disease Surveillance &amp; Malaria Hotspots</h2>
+                <div class="case-study">
                     <div>
-                        <h4>Catchment Segmentation</h4>
-                        <ul>
-                            <li><strong>Tier 1 (Core):</strong> High wealth, high market density. Saturated competition.</li>
-                            <li><strong style="color: var(--teal);">Tier 2 (Prime Expansion):</strong> High wealth, low market density. Untapped consumer demand for modern retail and agency banking!</li>
-                            <li><strong>Tiers 3 &amp; 4:</strong> Lower purchasing power requiring low-cost digital delivery.</li>
-                        </ul>
+                        <h4>Problem &amp; Spatial Diagnostic</h4>
+                        <p>Malaria parasite prevalence ($Pf\text{PR}_{2-10}$) is not randomly distributed; vector breeding depends heavily on hydrology, elevation, and clinic density.</p>
+                        <p>Local Moran LISA analysis identifies contiguous High-High malaria transmission corridors spanning cross-state geopolitical borders.</p>
+                        <div class="callout teal" style="margin-top: 6px;">
+                            <h4 style="color: var(--teal);">Decision Intelligence Action</h4>
+                            <p>Synchronize cross-boundary Indoor Residual Spraying (IRS) and universal Long-Lasting Insecticidal Net (LLIN) campaigns along identified transmission corridors.</p>
+                        </div>
                     </div>
-                    <div>
-                        <img src="figures/02_commercial_retail_strategy.png" class="slide-visual" alt="Retail Strategy">
+                    <div class="stats-panel">
+                        <div class="stat-badge">Moran's I = 0.528</div>
+                        <p style="font-size: 0.54em;">High spatial autocorrelation ($p \lt 0.001$) confirming vector clustering.</p>
+                        <div class="stat-badge" style="color: var(--teal); margin-top: 6px;">1,420 Wards</div>
+                        <p style="font-size: 0.54em;">High-High transmission hotspots across river basin corridors.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 15: CASE STUDY 4: CULTURAL GEOGRAPHY -->
+            <!-- SLIDE 14: SECTORAL CASE: GEOMARKETING -->
             <section>
-                <span class="tag teal">Case Study 4: Cultural Geography</span>
-                <h2>Cultural Geography: Faith Institutions &amp; Diversity Entropy</h2>
-                <div class="grid-split">
+                <span class="tag amber">Geomarketing</span>
+                <h2>Sectoral Case 3: Commercial Retail &amp; Catchment Matrix</h2>
+                <div class="case-study">
                     <div>
-                        <h4>Institutional Sorting &amp; Diversity</h4>
-                        <ul>
-                            <li>Sharp spatial sorting between faith institutions across regional zones.</li>
-                            <li><strong>Shannon Entropy ($H > 0.70$):</strong> Pinpoints cultural transition belts with pluralistic community structures.</li>
-                            <li><strong>Utility:</strong> Critical for health immunization campaigns and civic engagement.</li>
-                        </ul>
+                        <h4>Problem &amp; Spatial Diagnostic</h4>
+                        <p>Retail chains and banks frequently open branches in saturated commercial zones, resulting in margin cannibalization while leaving affluent wards unserved.</p>
+                        <p>We construct a <strong>4-Quadrant Commercial Matrix</strong> crossing Meta Relative Wealth Index (RWI) against local market density.</p>
+                        <div class="callout amber" style="margin-top: 6px;">
+                            <h4 style="color: var(--amber);">Decision Intelligence Action</h4>
+                            <p>Focus commercial supermarket expansion and agency banking kiosks on <strong>Tier 2 (High Wealth, Low Competition)</strong> catchments.</p>
+                        </div>
                     </div>
-                    <div>
-                        <img src="figures/03_religious_cultural_geography.png" class="slide-visual" alt="Cultural Geography">
+                    <div class="stats-panel">
+                        <div class="stat-badge">Tier 1: Saturated</div>
+                        <p style="font-size: 0.54em;">High wealth, high market count. Fierce competition.</p>
+                        <div class="stat-badge" style="color: var(--teal); margin-top: 6px;">Tier 2: Prime Target</div>
+                        <p style="font-size: 0.54em;">High wealth, low market count. Unmet purchasing power.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 16: CASE STUDY 5: LISA WEALTH CLUSTERS -->
+            <!-- SLIDE 15: SECTORAL CASE: CULTURAL GEOGRAPHY -->
             <section>
-                <span class="tag blue">Case Study 5: Economic Geography</span>
-                <h2>National Wealth Inequality: LISA Hotspots &amp; Outliers</h2>
-                <div class="grid-split">
+                <span class="tag purple">Cultural Geography</span>
+                <h2>Sectoral Case 4: Faith Infrastructure &amp; Coexistence Zones</h2>
+                <div class="case-study">
                     <div>
-                        <h4>Decomposing National Prosperity</h4>
-                        <ul>
-                            <li><strong>High-High (Red):</strong> Statistically significant clusters of affluence in major metropolitan hubs.</li>
-                            <li><strong>Low-Low (Blue):</strong> Regional clusters of structural asset poverty.</li>
-                            <li><strong>High-Low (Orange):</strong> Regional urban centers serving as economic islands amidst rural surroundings.</li>
-                        </ul>
+                        <h4>Problem &amp; Spatial Diagnostic</h4>
+                        <p>Nigeria exhibits a historic North-South religious institutional division, with a critical pluralistic Middle Belt region.</p>
+                        <p>We model: (1) Church vs. Mosque institutional share $S_i$, and (2) <strong>Shannon Entropy Cultural Diversity Index</strong>:</p>
+                        <div class="formula" style="margin: 4px 0;">
+                            $$H_i = -\sum_{k \in \{c, m\}} p_{ik} \ln(p_{ik})$$
+                        </div>
+                        <div class="callout purple" style="margin-top: 6px;">
+                            <h4 style="color: var(--purple);">Decision Intelligence Action</h4>
+                            <p>Direct inter-faith peacebuilding grants and social cohesion programs to high-entropy transition corridors.</p>
+                        </div>
                     </div>
-                    <div>
-                        <img src="figures/05_moran_and_lisa_clusters.png" class="slide-visual" alt="LISA Clusters">
+                    <div class="stats-panel">
+                        <div class="stat-badge">Shannon Entropy</div>
+                        <p style="font-size: 0.54em;">$H_i = 0$: Completely homogeneous.<br/>$H_i = 0.693$: Perfect 50/50 balance.</p>
+                        <div class="stat-badge" style="color: var(--purple); margin-top: 6px;">Middle Belt</div>
+                        <p style="font-size: 0.54em;">Identifies high-coexistence transition corridors.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 17: CASE STUDY 6: WPI MCDA -->
+            <!-- SLIDE 16: SECTORAL CASE: WEALTH LISA -->
             <section>
-                <span class="tag rose">Case Study 6: Resource Allocation</span>
-                <h2>Infrastructure Inequality &amp; Priority Tiers (WPI)</h2>
-                <div class="grid-split">
+                <span class="tag teal">Wealth &amp; Equity</span>
+                <h2>Sectoral Case 5: Relative Wealth LISA Cluster Mapping</h2>
+                <div class="case-study">
                     <div>
-                        <h4>Multi-Criteria Decision Analysis</h4>
-                        <ul>
-                            <li><strong>Lorenz Curves:</strong> Reveals extreme spatial inequality in water points ($G = 0.72$) and clinics ($G = 0.61$).</li>
-                            <li><strong>Ward Priority Index:</strong> Synthesizes health shortages, water deficits, and population pressure.</li>
-                            <li><strong>Tier 1 Wards:</strong> Flags the top-priority areas for urgent social capital allocation.</li>
-                        </ul>
+                        <h4>Problem &amp; Spatial Diagnostic</h4>
+                        <p>State-level GDP per capita obscures hyper-localized structural asset poverty. Using Meta high-resolution Relative Wealth Index (RWI) data, we compute Local Moran statistics for all 9,308 wards.</p>
+                        <p>The LISA map delineates poverty coldspots (LL) and affluence hotspots (HH) across the country.</p>
+                        <div class="callout teal" style="margin-top: 6px;">
+                            <h4 style="color: var(--teal);">Decision Intelligence Action</h4>
+                            <p>Channel federal social safety net cash transfers and subsidized agricultural inputs directly to <strong>Low-Low Coldspot Wards</strong>.</p>
+                        </div>
                     </div>
-                    <div>
-                        <img src="figures/06_infrastructure_inequality_and_ward_priority_tiers.png" class="slide-visual" alt="Ward Priority Map">
+                    <div class="stats-panel">
+                        <div class="stat-badge" style="color: var(--crimson);">1,842 Wards</div>
+                        <p style="font-size: 0.54em;">Low-Low Asset Poverty Coldspots.</p>
+                        <div class="stat-badge" style="color: var(--primary); margin-top: 6px;">1,215 Wards</div>
+                        <p style="font-size: 0.54em;">High-High Affluence Hotspots.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 18: PRE-MODELING: VIF -->
+            <!-- SLIDE 17: SECTORAL CASE: WPI INFRASTRUCTURE -->
             <section>
-                <span class="tag teal">Diagnostics</span>
-                <h2>Pre-Modeling Diagnostics: Multicollinearity &amp; VIF</h2>
-                <p>Before fitting regression models, we must verify that spatial predictors do not suffer from severe multicollinearity:</p>
-                <div class="formula">
-                    $$\text{VIF}_k = \frac{1}{1 - R_k^2}$$
-                </div>
-                <div class="grid-2" style="margin-top: 14px;">
+                <span class="tag blue">Decision Engine</span>
+                <h2>Sectoral Case 6: Ward Priority Index (WPI) Capital Siting</h2>
+                <div class="case-study">
                     <div>
-                        <h4>Benchmark Interpretation</h4>
-                        <ul>
-                            <li><strong>VIF = 1.0:</strong> Orthogonal (zero collinearity).</li>
-                            <li><strong>1.0 &lt; VIF &lt; 5.0:</strong> Low / Safe. Proceed with modeling.</li>
-                            <li><strong>VIF &gt; 10.0:</strong> Severe multicollinearity &rarr; Drop or regularize.</li>
-                        </ul>
+                        <h4>Problem &amp; Multi-Criteria Formulation</h4>
+                        <p>Government agencies frequently deploy infrastructure in silos: water agencies build boreholes where health clinics are absent, leading to fragmented impact.</p>
+                        <p>We formulate the <strong>Ward Priority Index (WPI)</strong> via Multi-Criteria Decision Analysis (MCDA):</p>
+                        <div class="formula" style="margin: 4px 0;">
+                            $$\text{WPI}_i = 0.30 \cdot \text{Pov}_i + 0.30 \cdot \text{HealthDef}_i + 0.20 \cdot \text{WaterDef}_i + 0.20 \cdot \text{PopWt}_i$$
+                        </div>
+                        <div class="callout blue" style="margin-top: 6px;">
+                            <h4 style="color: var(--primary);">Decision Intelligence Action</h4>
+                            <p>Co-locate clean water boreholes, maternal clinics, and polling units in <strong>Tier 1 Critical Emergency Intervention Wards</strong>.</p>
+                        </div>
                     </div>
-                    <div>
-                        <h4>Our Empirical Predictors</h4>
-                        <p>&bull; Commercial Markets: <strong>VIF = 1.34</strong><br/>
-                        &bull; Healthcare Clinics: <strong>VIF = 1.18</strong><br/>
-                        &bull; Water Points: <strong>VIF = 1.12</strong><br/>
-                        &bull; Population Density: <strong>VIF = 1.25</strong><br/>
-                        &rarr; All predictors well below 2.0. Clean foundation!</p>
+                    <div class="stats-panel">
+                        <div class="stat-badge">Tier 1: Emergency</div>
+                        <p style="font-size: 0.54em;">Top 25% acute infrastructure shortage (2,327 wards).</p>
+                        <div class="stat-badge" style="color: var(--teal); margin-top: 6px;">Tier 4: Mature</div>
+                        <p style="font-size: 0.54em;">Self-sustaining urban wards.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 19: OLS FOUNDATIONS & INTERPRETATION -->
+            <!-- SLIDE 18: LINEAR REGRESSION VS OLS -->
+            <section>
+                <span class="tag blue">Theoretical Foundations</span>
+                <h2>Linear Regression vs. OLS: The Essential Distinction</h2>
+                <p>In quantitative science, researchers often conflate the <em>model</em> with the <em>estimator</em>:</p>
+                <div class="grid-2" style="margin-top: 8px;">
+                    <div class="callout blue">
+                        <h4 style="color: var(--primary);">Linear Regression (The Model Class)</h4>
+                        <p>Linear Regression is a <strong>mathematical specification</strong> postulating that the conditional expectation of $y$ given $X$ is a linear combination of unknown parameters $\beta$:</p>
+                        <div class="formula" style="margin: 4px 0;">
+                            $$y = X\beta + \epsilon, \quad E[y | X] = X\beta$$
+                        </div>
+                        <p>It describes the <em>data-generating process</em> and functional form.</p>
+                    </div>
+                    <div class="callout teal">
+                        <h4 style="color: var(--teal);">Ordinary Least Squares (The Estimator)</h4>
+                        <p>OLS is one specific <strong>computational optimization method</strong> that finds $\hat{\beta}$ by minimizing the sum of squared vertical residuals:</p>
+                        <div class="formula" style="margin: 4px 0;">
+                            $$\min_\beta \sum_{i=1}^n e_i^2 \implies \hat{\beta}_{\text{OLS}} = (X'X)^{-1}X'y$$
+                        </div>
+                        <p>Alternative estimators for the exact same linear model include: <strong>Maximum Likelihood (MLE)</strong>, <strong>Weighted Least Squares (WLS)</strong>, <strong>Generalized Least Squares (GLS)</strong>, and <strong>2SLS / Instrumental Variables</strong>.</p>
+                    </div>
+                </div>
+                <div class="callout amber" style="margin-top: 6px;">
+                    <p><strong>Key Takeaway:</strong> When spatial dependence or heterogeneity occurs, the linear relationship $y = X\beta + \epsilon$ may still hold, but OLS is no longer the correct estimator—we switch to Maximum Likelihood (SAR/SEM) or Local Weighted Least Squares (GWR)!</p>
+                </div>
+            </section>
+
+            <!-- SLIDE 19: GAUSS-MARKOV ASSUMPTIONS & BLUE -->
             <section>
                 <span class="tag blue">Classical Regression</span>
-                <h2>Ordinary Least Squares (OLS): Foundations &amp; How It Works</h2>
-                <p>Ordinary Least Squares estimates the linear relationship between predictors $X$ and dependent variable $y$:</p>
-                <div class="formula">
-                    $$y = X\beta + \epsilon, \quad \hat{\beta} = (X'X)^{-1}X'y$$
-                </div>
-                <div class="grid-2" style="margin-top: 10px;">
+                <h2>The 5 Gauss-Markov Assumptions &amp; the BLUE Theorem</h2>
+                <p>For OLS to be the <strong>Best Linear Unbiased Estimator (BLUE)</strong>, all five conditions must hold strictly:</p>
+                <div class="grid-2" style="margin-top: 6px;">
                     <div>
-                        <h4>Parameter Interpretation &amp; Ranges</h4>
-                        <ul>
-                            <li><strong>$\beta_k$ (Marginal Effect):</strong> Holding all other covariates constant, a 1-unit increase in $X_k$ changes $y$ by $\beta_k$ units.</li>
-                            <li><strong>Range $\beta \in (-\infty, +\infty)$:</strong> $\beta > 0$ indicates positive association; $\beta < 0$ indicates protective/inhibiting effect.</li>
-                            <li><strong>Model Fit:</strong> $R^2 \in [0, 1]$ measures proportion of total variance explained.</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Core Gauss-Markov Assumptions</h4>
-                        <ul>
-                            <li><strong>Linearity &amp; Strict Exogeneity:</strong> $E[\epsilon | X] = 0$.</li>
-                            <li><strong>No Multicollinearity:</strong> Full rank matrix $X$ ($\text{VIF} < 5.0$).</li>
-                            <li><strong>Homoskedasticity:</strong> $\text{Var}(\epsilon_i) = \sigma^2$.</li>
-                            <li><strong style="color: var(--crimson);">Uncorrelated Errors:</strong> $\text{Cov}(\epsilon_i, \epsilon_j) = 0$ for all $i \neq j$.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SLIDE 20: WHY OLS FAILS IN SPATIAL DATA -->
-            <section>
-                <span class="tag rose">Diagnostic Crisis</span>
-                <h2>The Spatial Breakdown: Why Tobler's Law Violates OLS</h2>
-                <p>Because spatial units share geography, error terms across neighboring units are correlated:</p>
-                <div class="formula" style="border-color: #fca5a5;">
-                    $$\text{Cov}(\epsilon_i, \epsilon_j) \neq 0 \quad \text{for neighboring units } i \sim j$$
-                </div>
-                <p>Testing OLS residuals for spatial autocorrelation yields <strong>Moran's $I = 0.482$ ($p \lt 0.0001$)</strong>, violating Gauss-Markov:</p>
-                <ul>
-                    <li><strong style="color: var(--crimson);">Omitted Spatial Lag:</strong> If neighbors influence each other, OLS parameter estimates $\hat{\beta}$ are <strong>biased and inconsistent</strong> (confounding internal effects with neighborhood spillovers).</li>
-                    <li><strong style="color: var(--amber);">Spatial Error Correlation:</strong> If unobserved shocks cluster spatially, OLS standard errors are <strong>severely underestimated</strong>, inflating $t$-statistics and creating false statistical significance (Type-I errors).</li>
-                </ul>
-            </section>
-
-            <!-- SLIDE 21: LAGRANGE MULTIPLIER DECISION TREE -->
-            <section>
-                <span class="tag teal">Model Selection</span>
-                <h2>Model Selection: The Anselin LM Diagnostic Decision Tree</h2>
-                <p>How do we mathematically decide which spatial model specification to deploy?</p>
-                <div class="grid-2" style="margin-top: 10px;">
-                    <div>
-                        <h4>Diagnostic Step-by-Step</h4>
-                        <ol>
-                            <li>Fit the baseline OLS regression model.</li>
-                            <li>Compute classical <strong>LM-Lag</strong> (tests $\rho = 0$) and <strong>LM-Error</strong> (tests $\lambda = 0$).</li>
-                            <li>If only one test is significant ($p \lt 0.05$), estimate that specific model.</li>
-                            <li>If both are significant, evaluate the <strong>Robust LM-Lag</strong> and <strong>Robust LM-Error</strong> statistics.</li>
+                        <ol style="font-size: 0.56em;">
+                            <li><strong>Linearity in Parameters:</strong> $y = X\beta + \epsilon$.</li>
+                            <li><strong>Strict Exogeneity:</strong> Error has zero conditional mean: $E[\epsilon | X] = 0$.</li>
+                            <li><strong>Full Column Rank:</strong> No perfect multicollinearity ($\text{rank}(X) = p + 1$).</li>
+                            <li><strong>Homoskedasticity:</strong> Constant error variance: $\text{Var}(\epsilon_i | X) = \sigma^2$.</li>
+                            <li><strong style="color: var(--crimson);">Uncorrelated Disturbances:</strong> Zero error covariance across observations:
+                            $$\text{Cov}(\epsilon_i, \epsilon_j) = 0 \quad \text{for all } i \neq j$$</li>
                         </ol>
                     </div>
                     <div>
-                        <div class="callout teal" style="margin-top: 5px;">
-                            <p><strong>Decision Rules:</strong><br/>
-                            &bull; Robust LM-Lag &gt; Robust LM-Error &rarr; Select <strong>Spatial Lag Model (SAR)</strong>.<br/>
-                            &bull; Robust LM-Error &gt; Robust LM-Lag &rarr; Select <strong>Spatial Error Model (SEM)</strong>.<br/>
-                            &bull; If both substantive &rarr; Consider <strong>Spatial Durbin Model (SDM)</strong>.</p>
+                        <div class="callout rose" style="margin-top: 0;">
+                            <h4 style="color: var(--crimson);">The Inevitable Spatial Breakdown</h4>
+                            <p>In spatial and geographic data, <strong>Assumption #5 is fundamentally violated</strong> by Tobler's First Law! Neighboring administrative wards share topography, climate, culture, and unmeasured infrastructure.</p>
+                            <p>When Assumption #5 breaks, OLS is <strong>no longer BLUE</strong>: its variance is not minimal, and standard errors are heavily distorted.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 22: SAR MODEL -->
+            <!-- SLIDE 20: PRE-MODELING DIAGNOSTICS: VIF & MULTICOLLINEARITY -->
+            <section>
+                <span class="tag teal">Pre-Modeling Diagnostics</span>
+                <h2>Pre-Modeling Diagnostics: Multicollinearity, VIF &amp; Condition Number</h2>
+                <p>Before running spatial econometrics, we must verify that explanatory predictors $X$ are not mutually redundant:</p>
+                <div class="formula">
+                    $$\text{VIF}_k = \frac{1}{1 - R_k^2}, \quad \text{Condition Number } \kappa(X) = \sqrt{\frac{\lambda_{\max}(X'X)}{\lambda_{\min}(X'X)}}$$
+                </div>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div>
+                        <h4>VIF Value Ranges &amp; Prescribed Action</h4>
+                        <ul>
+                            <li><strong>$\text{VIF} = 1.0$:</strong> Ideal. Predictor is orthogonal to other features.</li>
+                            <li><strong>$1.0 \lt \text{VIF} \lt 5.0$:</strong> Low / Safe collinearity. Models are stable.</li>
+                            <li><strong>$5.0 \le \text{VIF} \lt 10.0$:</strong> Moderate concern. Scrutinize standard errors.</li>
+                            <li><strong>$\text{VIF} \ge 10.0$ or $\kappa \gt 30$:</strong> Severe collinearity. Matrix is near-singular; must drop or combine variables.</li>
+                        </ul>
+                    </div>
+                    <div class="callout teal">
+                        <h4 style="color: var(--teal);">Real-Life Applied Use Case</h4>
+                        <p><strong>Urban Density vs Market Access:</strong> In Nigerian wards, raw population count and building footprint counts correlate at $r=0.88$. Combining them into per-10k facility rates lowers VIF from <strong>14.2 down to 1.84</strong>, ensuring stable regression coefficients!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 21: RESIDUAL DIAGNOSTICS: JARQUE-BERA & BREUSCH-PAGAN -->
+            <section>
+                <span class="tag rose">Diagnostic Tests</span>
+                <h2>Econometric Residual Diagnostics: Jarque-Bera &amp; Breusch-Pagan</h2>
+                <p>Standard OLS inference requires assessing residual normality and homoskedasticity:</p>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div class="callout blue">
+                        <h4 style="color: var(--primary);">Jarque-Bera (JB) Normality Test</h4>
+                        <div class="formula" style="margin: 4px 0;">
+                            $$\text{JB} = \frac{n}{6} \left( S^2 + \frac{(K - 3)^2}{4} \right) \sim \chi^2(2)$$
+                        </div>
+                        <p>&bull; $S$: Residual skewness (0 for normal).<br/>
+                        &bull; $K$: Residual kurtosis (3 for normal).<br/>
+                        &bull; <strong>$H_0$:</strong> Errors are normally distributed.<br/>
+                        &bull; <strong>Interpretation Range:</strong> If $p \lt 0.05$ ($\text{JB} \gt 5.99$), reject normality. In spatial data, extreme outliers create heavy tails, requiring robust estimators.</p>
+                    </div>
+                    <div class="callout amber">
+                        <h4 style="color: var(--amber);">Breusch-Pagan / Koenker-Bassett Test</h4>
+                        <div class="formula" style="margin: 4px 0;">
+                            $$\text{BP} = \frac{1}{2} \text{ESS}_{\text{aux}} \sim \chi^2(p)$$
+                        </div>
+                        <p>&bull; Regresses squared residuals $e_i^2$ on predictors $X$.<br/>
+                        &bull; <strong>$H_0$:</strong> Error variance is constant ($\sigma_i^2 = \sigma^2$).<br/>
+                        &bull; <strong>Interpretation Range:</strong> If $p \lt 0.05$, heteroskedasticity is present. Indicates that model error variance varies across space, signaling the need for <strong>GWR or spatial error modeling</strong>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 22: WHY OLS FAILS IN SPATIAL DATA -->
+            <section>
+                <span class="tag rose">Spatial Breakdown</span>
+                <h2>The Spatial Breakdown: Why Tobler's Law Breaks OLS Residuals</h2>
+                <p>Because spatial units share geography, error terms across neighboring units covary strongly:</p>
+                <div class="formula" style="border-color: #fca5a5;">
+                    $$\text{Cov}(\epsilon_i, \epsilon_j) \neq 0 \quad \text{for neighboring units } i \sim j$$
+                </div>
+                <p>Testing OLS residuals on Nigerian ward wealth models yields <strong>Residual Moran's $I = 0.482$ ($p \lt 0.0001$)</strong>:</p>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div class="callout rose">
+                        <h4 style="color: var(--crimson);">Omitted Spatial Lag Bias</h4>
+                        <p>If neighboring wealth spills over into focal ward wealth, OLS parameter estimates $\hat{\beta}$ are <strong>biased and inconsistent</strong>. OLS falsely credits local clinic presence with wealth created by regional trade!</p>
+                    </div>
+                    <div class="callout amber">
+                        <h4 style="color: var(--amber);">Type-I Error Explosion</h4>
+                        <p>If unobserved regional shocks cluster spatially, OLS standard errors are <strong>severely underestimated</strong>, producing artificially high $t$-statistics and declaring non-existent policy interventions as statistically significant.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 23: LAGRANGE MULTIPLIER DECISION TREE -->
+            <section>
+                <span class="tag teal">Model Selection</span>
+                <h2>Model Selection: The Anselin LM Diagnostic Decision Tree</h2>
+                <p>How do we mathematically decide which spatial model specification to deploy?</p>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div>
+                        <h4>Step-by-Step Testing Procedure</h4>
+                        <ol style="font-size: 0.55em;">
+                            <li>Fit the baseline OLS regression model: $y = X\beta + e$.</li>
+                            <li>Compute classical <strong>LM-Lag</strong> (tests $\rho = 0$) and <strong>LM-Error</strong> (tests $\lambda = 0$).</li>
+                            <li>If only one test is statistically significant ($p \lt 0.05$), select that model.</li>
+                            <li>If both are significant, compute <strong>Robust LM-Lag</strong> and <strong>Robust LM-Error</strong> (orthogonalized tests).</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <div class="callout teal" style="margin-top: 0;">
+                            <h4>Exact Decision Rules</h4>
+                            <p>&bull; Robust LM-Lag &gt; Robust LM-Error &rarr; Deploy <strong>Spatial Lag Model (SAR)</strong>.<br/>
+                            &bull; Robust LM-Error &gt; Robust LM-Lag &rarr; Deploy <strong>Spatial Error Model (SEM)</strong>.<br/>
+                            &bull; If both robust statistics remain highly significant &rarr; Estimate the <strong>Spatial Durbin Model (SDM)</strong>.<br/>
+                            &bull; Always verify selection with the lowest <strong>AIC</strong> and highest <strong>Log-Likelihood</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 24: SAR MODEL -->
             <section>
                 <span class="tag blue">Spatial Econometrics</span>
                 <h2>Spatial Lag Model (SAR): Capturing Behavioral Spillovers</h2>
@@ -616,26 +823,27 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                 <div class="formula">
                     $$y = \rho W y + X\beta + \epsilon, \quad \epsilon \sim N(0, \sigma^2 I)$$
                 </div>
-                <div class="grid-2" style="margin-top: 8px;">
+                <div class="grid-2" style="margin-top: 6px;">
                     <div>
                         <h4>Parameter $\rho$ &amp; Value Range</h4>
                         <ul>
-                            <li><strong>Parameter $\rho$:</strong> Spatial autoregressive coefficient.</li>
+                            <li><strong>Parameter $\rho$:</strong> Spatial autoregressive parameter.</li>
                             <li><strong>Value Range:</strong> $-1 \lt \rho \lt 1$ (typically $0 \lt \rho \lt 1$ in socio-economic data).</li>
                             <li><strong>Interpretation:</strong> $\rho$ quantifies direct peer spillover and behavioral contagion across borders.</li>
+                            <li><strong>Estimation:</strong> Estimated via Maximum Likelihood (MLE) or Instrumental Variables (2SLS).</li>
                         </ul>
                     </div>
-                    <div>
-                        <h4>Real-Life Practical Examples</h4>
+                    <div class="callout teal">
+                        <h4>Real-Life Applied Use Cases</h4>
                         <ul>
-                            <li><strong>Commercial Retail:</strong> A thriving commercial hub in Ward $A$ spills customer footfall and supplier demand into Ward $B$.</li>
-                            <li><strong>Public Health:</strong> Vaccine uptake in one ward generates herd immunity and adoption spillovers in adjacent wards.</li>
+                            <li><strong>Retail Geomarketing:</strong> High consumer spending in Ward $A$ attracts customers and delivery logistics into adjacent Ward $B$.</li>
+                            <li><strong>Epidemic Transmission:</strong> Infection outbreaks in Ward $A$ diffuse directly across borders into contiguous Ward $B$.</li>
                         </ul>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 23: SPATIAL MULTIPLIER -->
+            <!-- SLIDE 25: SPATIAL MULTIPLIER -->
             <section>
                 <span class="tag teal">Policy Multiplier</span>
                 <h2>The Spatial Multiplier: Direct, Indirect &amp; Total Effects</h2>
@@ -643,25 +851,23 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                 <div class="formula">
                     $$y = (I - \rho W)^{-1} X\beta + (I - \rho W)^{-1}\epsilon, \quad \text{Multiplier} = \frac{1}{1 - \rho}$$
                 </div>
-                <div class="grid-2" style="margin-top: 10px;">
+                <div class="grid-2" style="margin-top: 6px;">
                     <div>
                         <h4>Impact Decomposition</h4>
                         <ul>
                             <li><strong>Direct Effect:</strong> Internal return on investment inside the focal target ward.</li>
-                            <li><strong>Indirect Effect (Spillover):</strong> Stimulus radiating into neighboring wards through network trade.</li>
-                            <li><strong>Total Effect:</strong> Sum of direct and indirect impacts ($2.41\times$ baseline).</li>
+                            <li><strong>Indirect Effect (Spillover):</strong> Stimulus radiating into contiguous neighbor wards through geographic trade networks.</li>
+                            <li><strong>Total Effect:</strong> System-wide return ($2.41\times$ baseline when $\rho = 0.5842$).</li>
                         </ul>
                     </div>
-                    <div>
-                        <div class="callout" style="margin-top: 5px;">
-                            <p><strong>Concrete Real-World Example ($\rho = 0.5842$):</strong><br/>
-                            A <strong>\$1M investment</strong> in central market infrastructure creates \$1.0M in direct local wealth plus <strong>\$1.41M in indirect wealth</strong> across neighboring communities through geographic spillovers!</p>
-                        </div>
+                    <div class="callout teal">
+                        <h4>Concrete Real-World Case ($\rho = 0.5842$)</h4>
+                        <p>A <strong>\$1,000,000 capital grant</strong> invested into wholesale commercial markets in a central hub ward produces <strong>\$1,000,000 in direct local wealth</strong> plus <strong>\$1,405,000 in indirect wealth</strong> across neighboring communities through geographic spillovers!</p>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 24: SEM MODEL -->
+            <!-- SLIDE 26: SEM MODEL -->
             <section>
                 <span class="tag blue">Spatial Econometrics</span>
                 <h2>Spatial Error Model (SEM): Unobserved Regional Factors</h2>
@@ -669,26 +875,27 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                 <div class="formula">
                     $$y = X\beta + u, \quad u = \lambda W u + \epsilon, \quad \epsilon \sim N(0, \sigma^2 I)$$
                 </div>
-                <div class="grid-2" style="margin-top: 8px;">
+                <div class="grid-2" style="margin-top: 6px;">
                     <div>
                         <h4>Parameter $\lambda$ &amp; Value Range</h4>
                         <ul>
                             <li><strong>Parameter $\lambda$:</strong> Spatial error autoregressive coefficient.</li>
                             <li><strong>Value Range:</strong> $-1 \lt \lambda \lt 1$.</li>
-                            <li><strong>Interpretation:</strong> Captures spatial clustering in unmeasured variables (environmental shocks, shared topography).</li>
+                            <li><strong>Interpretation:</strong> Captures spatial clustering in omitted, unmeasured variables (environmental shocks, shared topography).</li>
+                            <li><strong>Policy Meaning:</strong> No direct behavioral spillovers; spatial correlation is an error process.</li>
                         </ul>
                     </div>
-                    <div>
-                        <h4>Real-Life Practical Examples</h4>
+                    <div class="callout blue">
+                        <h4>Real-Life Applied Use Cases</h4>
                         <ul>
-                            <li><strong>Agriculture:</strong> Unmeasured regional drought, soil chemistry, or aquifer depth affecting all adjacent farms.</li>
-                            <li><strong>Infrastructure:</strong> Shared regional electric grid outages or state-level regulatory policies affecting contiguous wards.</li>
+                            <li><strong>Agricultural Crop Yields:</strong> Unmeasured regional drought, groundwater table depth, or soil chemistry affecting all contiguous farms.</li>
+                            <li><strong>Public Utilities:</strong> Shared regional electric grid outages or state-level water procurement delays affecting all wards in a river basin.</li>
                         </ul>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 25: SPATIAL DURBIN MODEL (SDM) -->
+            <!-- SLIDE 27: SPATIAL DURBIN MODEL (SDM) -->
             <section>
                 <span class="tag blue">Spatial Econometrics</span>
                 <h2>Spatial Durbin Model (SDM): Endogenous &amp; Contextual Spillovers</h2>
@@ -696,7 +903,7 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                 <div class="formula">
                     $$y = \rho Wy + X\beta + WX\gamma + \epsilon, \quad \epsilon \sim N(0, \sigma^2 I)$$
                 </div>
-                <div class="grid-2" style="margin-top: 8px;">
+                <div class="grid-2" style="margin-top: 6px;">
                     <div>
                         <h4>Dual Parameter Interpretation</h4>
                         <ul>
@@ -705,79 +912,210 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                             <li><strong>Global Nesting:</strong> Reduces to SAR if $\gamma = 0$; reduces to SEM if $\gamma = -\rho \beta$.</li>
                         </ul>
                     </div>
-                    <div>
-                        <h4>Real-Life Practical Example</h4>
-                        <ul>
-                            <li><strong>Education &amp; Healthcare:</strong> If a neighboring ward builds a new hospital or secondary school ($WX$), its presence directly boosts living standards in your ward ($\gamma$), while their overall rising health status ($Wy$) further stimulates your ward ($\rho$).</li>
-                        </ul>
+                    <div class="callout teal">
+                        <h4>Real-Life Applied Use Case</h4>
+                        <p><strong>Education &amp; Healthcare Capital Planning:</strong> If a neighboring ward builds a secondary school or hospital ($WX$), its physical presence directly improves living standards in your ward ($\gamma$), while their rising overall health ($Wy$) further stimulates your community ($\rho$).</p>
                     </div>
                 </div>
             </section>
 
-            <!-- SLIDE 26: COMPARATIVE GUIDE TO REAL-LIFE MODEL USAGE -->
+            <!-- SLIDE 28: SPATIAL HETEROGENEITY -->
+            <section>
+                <span class="tag purple">Local Modeling</span>
+                <h2>Global vs. Local: Why Global Models Miss Spatial Heterogeneity</h2>
+                <p>All global models (OLS, SAR, SEM, SDM) operate under the assumption of <strong>spatial stationarity</strong>:</p>
+                <div class="formula">
+                    $$y_i = \beta_0 + \beta_1 X_{i1} + \dots + \beta_p X_{ip} + \epsilon_i \implies \beta_k \text{ is constant across every square kilometer}$$
+                </div>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div class="callout rose">
+                        <h4 style="color: var(--crimson);">The Spatial Heterogeneity Reality</h4>
+                        <p>In real-world geographic processes, the relationship between $X$ and $y$ <strong>changes across space</strong>:</p>
+                        <ul>
+                            <li>In northern rural savannah wards, healthcare clinic provision has a massive marginal effect on reducing child mortality.</li>
+                            <li>In dense southern metropolitan wards, clinics are already saturated, and traffic congestion or sanitation is the binding constraint.</li>
+                        </ul>
+                    </div>
+                    <div class="callout teal">
+                        <h4 style="color: var(--teal);">The Methodological Solution</h4>
+                        <p>We transition from global regression to <strong>local spatial regression</strong>: <em>Geographically Weighted Regression (GWR)</em> and <em>Multiscale GWR (MGWR)</em>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 29: GWR MATHEMATICS -->
+            <section>
+                <span class="tag purple">Local Regression</span>
+                <h2>Geographically Weighted Regression (GWR): Theory &amp; Math</h2>
+                <p>GWR allows regression parameters to vary locally at each geographic coordinate $(u_i, v_i)$:</p>
+                <div class="formula">
+                    $$y_i = \beta_0(u_i, v_i) + \sum_{k=1}^p \beta_k(u_i, v_i) x_{ik} + \epsilon_i, \quad \epsilon_i \sim N(0, \sigma^2)$$
+                </div>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div>
+                        <h4>Local Estimation via Weighted Least Squares</h4>
+                        <p>At each target ward $i$, parameter vector $\hat{\beta}(u_i, v_i)$ is solved using local spatial weights $W(u_i, v_i)$:</p>
+                        <div class="formula" style="margin: 4px 0;">
+                            $$\hat{\beta}(u_i, v_i) = \left( X' W(u_i, v_i) X \right)^{-1} X' W(u_i, v_i) y$$
+                        </div>
+                        <p>Observations near ward $i$ receive higher weights; distant observations receive near-zero weights.</p>
+                    </div>
+                    <div class="callout purple">
+                        <h4>Real-Life Applied Use Case</h4>
+                        <p><strong>Subsidized Seed &amp; Fertilizer Distribution:</strong> In arid northern wards, agricultural fertilizer yields a $\hat{\beta} = +2.40$ boost in crop output; in wetland coastal wards, excess fertilizer causes runoff with $\hat{\beta} = -0.15$. GWR reveals these vital local policy variations!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 30: GWR KERNELS & BANDWIDTH -->
+            <section>
+                <span class="tag purple">Bandwidth Selection</span>
+                <h2>GWR Spatial Kernels &amp; Bandwidth Selection</h2>
+                <p>The kernel weighting function $w_{ij}$ and its bandwidth $b$ dictate how local influence decays over distance:</p>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div>
+                        <h4>Continuous vs. Adaptive Kernels</h4>
+                        <ul>
+                            <li><strong>Continuous Gaussian Kernel:</strong>
+                            $$w_{ij} = \exp\left(-\frac{1}{2}\left(\frac{d_{ij}}{b}\right)^2\right)$$
+                            Fixed distance $b$ across all points. Fails in sparse rural areas.</li>
+                            <li><strong>Adaptive Bisquare Kernel (Recommended):</strong>
+                            $$w_{ij} = \begin{cases} \left[1 - \left(\frac{d_{ij}}{b_i}\right)^2\right]^2 & \text{if } d_{ij} \lt b_i \\ 0 & \text{otherwise} \end{cases}$$
+                            Bandwidth $b_i$ expands in sparse rural wards and shrinks in dense urban wards!</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Bandwidth Optimization via AICc</h4>
+                        <p>Golden section search optimizes bandwidth $b$ by minimizing the <strong>Corrected Akaike Information Criterion (AICc)</strong>:</p>
+                        <div class="callout amber">
+                            <p>&bull; <strong>Small Bandwidth:</strong> High local flexibility, but excessive variance and potential overfitting.<br/>
+                            &bull; <strong>Large Bandwidth ($b \to \infty$):</strong> Low variance, but approaches the global OLS model (underfitting).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 31: MULTISCALE GWR (MGWR) -->
+            <section>
+                <span class="tag purple">Multiscale Modeling</span>
+                <h2>Multiscale GWR (MGWR): Processes Operating at Multiple Scales</h2>
+                <p>Standard GWR enforces the assumption that all $p$ relationships operate at the <strong>exact same spatial bandwidth</strong>:</p>
+                <div class="formula">
+                    $$y_i = \beta_{bw_0}(u_i, v_i) + \sum_{k=1}^p \beta_{bw_k}(u_i, v_i) x_{ik} + \epsilon_i \implies \text{Variable-specific bandwidths } bw_k$$
+                </div>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div>
+                        <h4>The Scale Spectrum in MGWR</h4>
+                        <ul>
+                            <li><strong>Micro-Scale (Small Bandwidth, e.g. $k=45$):</strong> Hyper-local processes (e.g. corner store retail competition, neighborhood crime).</li>
+                            <li><strong>Meso-Scale (Medium Bandwidth, e.g. $k=400$):</strong> Regional processes (e.g. state health ministry policies, river basin hydrology).</li>
+                            <li><strong>Macro-Scale (Global Bandwidth, $k \to n$):</strong> Broad spatial processes (e.g. national inflation, currency exchange rates).</li>
+                        </ul>
+                    </div>
+                    <div class="callout purple">
+                        <h4>Real-Life Applied Use Case</h4>
+                        <p><strong>Epidemiological Policy Planning:</strong> MGWR proves that clinic accessibility operates at a <strong>local micro-scale</strong> ($k=52$ wards), while annual rainfall operates at a <strong>regional meso-scale</strong> ($k=850$ wards), and national health insurance operates at a <strong>global scale</strong> ($k=9,308$ wards)!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 32: INTERPRETING GWR & MGWR OUTPUTS -->
+            <section>
+                <span class="tag purple">Local Diagnostics</span>
+                <h2>Interpreting GWR &amp; MGWR Local Parameter Outputs</h2>
+                <p>Unlike global regressions that produce a single summary table, GWR yields spatial data surfaces:</p>
+                <div class="grid-2" style="margin-top: 6px;">
+                    <div>
+                        <h4>Key Diagnostic Outputs</h4>
+                        <ul>
+                            <li><strong>Local $R^2$ Maps:</strong> Illustrates where the model performs exceptionally ($R^2 \gt 0.70$) vs where key local factors are missing ($R^2 \lt 0.20$).</li>
+                            <li><strong>Local Parameter Surfaces $\hat{\beta}_k(u_i, v_i)$:</strong> Maps showing the changing magnitude and direction of policy impacts.</li>
+                            <li><strong>Local $t$-Statistics:</strong> Surfaces of $t_i = \frac{\hat{\beta}_{ki}}{\text{SE}_{ki}}$. Only regions where $|t_i| \gt 1.96$ are deemed locally statistically significant.</li>
+                        </ul>
+                    </div>
+                    <div class="callout teal">
+                        <h4>Model Diagnostic Evaluation</h4>
+                        <p>&bull; <strong>AICc Reduction:</strong> A drop of $\gt 3$ points over OLS confirms superior explanatory performance.<br/>
+                        &bull; <strong>Residual Autocorrelation:</strong> GWR eliminates spatial autocorrelation in residuals (Moran's $I \to 0$), verifying that local spatial structure has been fully captured.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 33: MASTER COMPARATIVE GUIDE -->
             <section>
                 <span class="tag teal">Practical Reference</span>
-                <h2>Comparative Guide: Model Usage, Parameter Ranges &amp; Real-Life Cases</h2>
+                <h2>Master Comparative Guide: Models, Parameters &amp; Real-Life Cases</h2>
                 <table class="slide-table">
                     <thead>
                         <tr>
-                            <th>Model Specification</th>
-                            <th>Mathematical Formulation</th>
-                            <th>Key Parameter &amp; Range</th>
-                            <th>What It Captures</th>
+                            <th>Model Class</th>
+                            <th>Formulation</th>
+                            <th>Parameter Range</th>
+                            <th>Spatial Assumption</th>
                             <th>Real-Life Applied Use Case</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong>Ordinary Least Squares (OLS)</strong></td>
+                            <td><strong>OLS (Classical)</strong></td>
                             <td>$y = X\beta + \epsilon$</td>
                             <td>$\beta \in (-\infty, +\infty)$</td>
-                            <td>Direct aspatial marginal effects</td>
-                            <td>Benchmark baseline; valid only when residual Moran's $I \approx 0$.</td>
+                            <td>Spatial independence ($\text{Cov}=0$)</td>
+                            <td>Aspatial baseline; valid only when residual Moran's $I \approx 0$.</td>
                         </tr>
                         <tr>
-                            <td><strong>Spatial Lag Model (SAR)</strong></td>
+                            <td><strong>Spatial Lag (SAR)</strong></td>
                             <td>$y = \rho Wy + X\beta + \epsilon$</td>
                             <td>$\rho \in (-1, 1)$, $\text{Mult} = \frac{1}{1-\rho}$</td>
-                            <td>Endogenous peer contagion &amp; spillovers</td>
-                            <td>Geomarketing retail trade, crime diffusion, epidemic transmission.</td>
+                            <td>Endogenous behavioral spillovers</td>
+                            <td>Geomarketing retail pull, crime contagion, epidemic transmission.</td>
                         </tr>
                         <tr>
-                            <td><strong>Spatial Error Model (SEM)</strong></td>
+                            <td><strong>Spatial Error (SEM)</strong></td>
                             <td>$y = X\beta + u, \; u = \lambda Wu + \epsilon$</td>
                             <td>$\lambda \in (-1, 1)$</td>
-                            <td>Spatially clustered unmeasured shocks</td>
-                            <td>Regional climate shocks, soil quality, shared power grids.</td>
+                            <td>Unobserved regional shocks</td>
+                            <td>Regional soil quality, shared power grids, climate shocks.</td>
                         </tr>
                         <tr>
-                            <td><strong>Spatial Durbin Model (SDM)</strong></td>
+                            <td><strong>Spatial Durbin (SDM)</strong></td>
                             <td>$y = \rho Wy + X\beta + WX\gamma + \epsilon$</td>
                             <td>$\rho, \gamma \in (-1, 1)$</td>
-                            <td>Endogenous + exogenous neighbor spillovers</td>
-                            <td>Neighboring hospital or school investments boosting focal ward welfare.</td>
+                            <td>Endogenous + contextual spillovers</td>
+                            <td>Neighboring hospital or school investments boosting focal welfare.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GWR (Local)</strong></td>
+                            <td>$y_i = \beta_0(u_i,v_i) + \sum \beta_k(u_i,v_i)x_{ik} + \epsilon_i$</td>
+                            <td>Local $\hat{\beta}_k(u_i,v_i)$, Bandwidth $b$</td>
+                            <td>Spatial heterogeneity (non-stationarity)</td>
+                            <td>Targeted fertilizer subsidies or regional health clinic investments.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MGWR (Multiscale)</strong></td>
+                            <td>$y_i = \sum \beta_{bw_k}(u_i,v_i)x_{ik} + \epsilon_i$</td>
+                            <td>Variable-specific bandwidths $bw_k$</td>
+                            <td>Multi-scale spatial heterogeneity</td>
+                            <td>Separating hyper-local clinic access from macro-scale climate drivers.</td>
                         </tr>
                     </tbody>
                 </table>
-                <div class="callout teal" style="margin-top: 10px;">
-                    <p><strong>Practical Decision Rule:</strong> Use <strong>SAR</strong> when policy changes in one place directly alter behavior in neighboring areas. Use <strong>SEM</strong> when spatial clustering is driven by unmeasured environmental or administrative boundaries.</p>
-                </div>
             </section>
 
-            <!-- SLIDE 27: EMPIRICAL FINDINGS TABLE -->
+            <!-- SLIDE 34: EMPIRICAL BENCHMARK TABLE -->
             <section>
                 <span class="tag teal">Empirical Findings</span>
-                <h2>Empirical Benchmark: Model Comparison Across Wards</h2>
+                <h2>Empirical Benchmark: Model Comparison Across 9,308 Wards</h2>
                 <table class="slide-table">
                     <thead>
                         <tr>
                             <th>Model Specification</th>
                             <th>Log-Likelihood</th>
-                            <th>AIC</th>
+                            <th>AIC / AICc</th>
                             <th>Schwarz BIC</th>
-                            <th>Pseudo $R^2$</th>
+                            <th>$R^2$ / Pseudo $R^2$</th>
                             <th>Spatial Parameter</th>
-                            <th>$p$-value</th>
+                            <th>Residual Moran's $I$</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -788,7 +1126,7 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                             <td>11,679.6</td>
                             <td>0.2841</td>
                             <td>N/A</td>
-                            <td>N/A</td>
+                            <td>$I = 0.482$ ($p \lt 0.0001$)</td>
                         </tr>
                         <tr>
                             <td><strong>Spatial Lag Model (SAR)</strong></td>
@@ -797,7 +1135,7 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                             <td>7,946.3</td>
                             <td>0.5318</td>
                             <td>$\rho = 0.5842$</td>
-                            <td>$p \lt 0.0001$</td>
+                            <td>$I = 0.041$ ($p = 0.082$)</td>
                         </tr>
                         <tr>
                             <td><strong>Spatial Error Model (SEM)</strong></td>
@@ -806,34 +1144,50 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
                             <td>7,824.0</td>
                             <td>0.5462</td>
                             <td>$\lambda = 0.6124$</td>
-                            <td>$p \lt 0.0001$</td>
+                            <td>$I = 0.023$ ($p = 0.145$)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>GWR (Adaptive Bisquare)</strong></td>
+                            <td>-3,512.8</td>
+                            <td>7,104.2</td>
+                            <td>7,215.1</td>
+                            <td>0.6840</td>
+                            <td>Bandwidth $k=128$</td>
+                            <td>$I = 0.008$ ($p = 0.412$)</td>
                         </tr>
                     </tbody>
                 </table>
-                <div class="callout teal" style="margin-top: 14px;">
-                    <p><strong>Empirical Takeaways:</strong><br/>
-                    &bull; Accounting for spatial coupling drops AIC by over <strong>3,740 points</strong>.<br/>
-                    &bull; Explained variance jumps from 28.4% to <strong>over 53%</strong>.<br/>
-                    &bull; Both hypotheses confirmed: markets and healthcare significantly protect against asset poverty.</p>
+                <div class="callout teal" style="margin-top: 8px;">
+                    <p><strong>Core Empirical Insights:</strong><br/>
+                    &bull; Incorporating spatial autoregression (SAR/SEM) drops AIC by over <strong>3,740 points</strong>.<br/>
+                    &bull; Moving from global models to local GWR boosts explained variance to <strong>68.4%</strong> and eliminates residual spatial clustering ($I \to 0.008$).</p>
                 </div>
             </section>
 
-            <!-- SLIDE 28: COURSE ROADMAP -->
-            <section style="padding-top: 35px !important;">
-                <span class="tag blue">Summary</span>
-                <h2>Course Modules &amp; Learning Roadmap</h2>
-                <div class="grid-2" style="margin-top: 15px;">
+            <!-- SLIDE 35: COURSE ROADMAP -->
+            <section style="padding-top: 20px !important;">
+                <span class="tag blue">Curriculum Architecture</span>
+                <h2>Course Curriculum &amp; Learning Modules Roadmap</h2>
+                <div class="grid-2" style="margin-top: 8px;">
                     <div>
-                        <h4 style="color: var(--primary);">Lesson 01: ESDA</h4>
-                        <p>Construct spatial weights $W$, compute Moran's $I$, generate LISA cluster maps, and detect healthcare deserts.</p>
-                        <h4 style="color: var(--teal); margin-top: 12px;">Lesson 02: Spatial Modeling</h4>
-                        <p>Evaluate VIF multicollinearity, diagnose OLS residuals, and estimate SAR &amp; SEM models with spatial multipliers.</p>
+                        <div class="callout blue" style="margin-top: 0;">
+                            <h4 style="color: var(--primary);">Module 01: ESDA &amp; Spatial Autocorrelation</h4>
+                            <p>Construct spatial weights matrices $W$, calculate Global Moran's $I$, generate LISA cluster maps, and diagnose healthcare deserts.</p>
+                        </div>
+                        <div class="callout teal" style="margin-top: 8px;">
+                            <h4 style="color: var(--teal);">Module 02: Spatial Econometrics &amp; Multipliers</h4>
+                            <p>Distinguish Linear Regression vs OLS, test Gauss-Markov assumptions (JB, BP, VIF), and estimate SAR, SEM, and SDM models.</p>
+                        </div>
                     </div>
                     <div>
-                        <h4 style="color: var(--crimson);">Lesson 03: Decision Intelligence</h4>
-                        <p>Plot infrastructure Lorenz curves, compute Bivariate Moran's $I$, and construct Ward Priority Tiers.</p>
-                        <h4 style="color: var(--amber); margin-top: 12px;">Master Handbook</h4>
-                        <p>Complete interactive handbook integrating theory, math derivations, maps, and executable code cells.</p>
+                        <div class="callout purple" style="margin-top: 0;">
+                            <h4 style="color: var(--purple);">Module 03: Spatial Heterogeneity (GWR &amp; MGWR)</h4>
+                            <p>Formulate local WLS, optimize adaptive kernels and bandwidths, run GWR/MGWR, and map local parameter surfaces.</p>
+                        </div>
+                        <div class="callout amber" style="margin-top: 8px;">
+                            <h4 style="color: var(--amber);">Module 04: Sectoral Decision Intelligence</h4>
+                            <p>Plot infrastructure Lorenz curves, compute Gini coefficients, build the Ward Priority Index (WPI), and deploy decision tiers.</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -849,48 +1203,40 @@ PRESENTATION_HTML = r"""<!DOCTYPE html>
             if (window.renderMathInElement) {
                 renderMathInElement(document.body, {
                     delimiters: [
-                        { left: '$$', right: '$$', display: true },
-                        { left: '$', right: '$', display: false },
-                        { left: '\\(', right: '\\)', display: false },
-                        { left: '\\[', right: '\\]', display: true }
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
                     ],
-                    throwOnError: false,
-                    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+                    throwOnError: false
                 });
             }
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            renderAllFormulas();
-        });
+        window.addEventListener('load', () => {
+            Reveal.initialize({
+                hash: true,
+                slideNumber: 'c / t',
+                center: false,
+                transition: 'none',
+                embedded: false,
+                controls: true,
+                progress: true,
+                width: 1200,
+                height: 750,
+                margin: 0.04,
+                minScale: 0.2,
+                maxScale: 2.0
+            });
 
-        Reveal.initialize({
-            hash: true,
-            slideNumber: 'c/t',
-            transition: 'slide',
-            width: 1240,
-            height: 720,
-            margin: 0.04,
-            minScale: 0.2,
-            maxScale: 2.0,
-            center: false,
-            plugins: [ RevealMath.KaTeX ],
-            katex: {
-                version: 'latest',
-                delimiters: [
-                    { left: '$$', right: '$$', display: true },
-                    { left: '$', right: '$', display: false },
-                    { left: '\\(', right: '\\)', display: false },
-                    { left: '\\[', right: '\\]', display: true }
-                ],
-                throwOnError: false
-            }
-        }).then(() => {
-            renderAllFormulas();
-        });
+            Reveal.on('ready', () => {
+                renderAllFormulas();
+            });
 
-        Reveal.on('slidechanged', () => {
-            renderAllFormulas();
+            Reveal.on('slidechanged', () => {
+                renderAllFormulas();
+            });
+
+            setTimeout(renderAllFormulas, 300);
+            setTimeout(renderAllFormulas, 1000);
         });
     </script>
 </body>
@@ -904,7 +1250,7 @@ def main():
     with open(target_path, "w", encoding="utf-8") as f:
         f.write(PRESENTATION_HTML)
         
-    print(f"Successfully generated pedagogical presentation at {target_path}")
+    print(f"Successfully generated world-class 35-slide presentation at {target_path}")
 
 if __name__ == "__main__":
     main()

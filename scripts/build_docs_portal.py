@@ -1,10 +1,9 @@
 """
-Build a minimal, clean, all-white Master Course Portal for Spatial Statistics.
+Build a minimal, clean, all-white Course Portal for Advanced Spatial Statistics: Theory & Practical Application.
 Features:
 - Pure white background (#ffffff) with refined light border (#e2e8f0).
-- No indicator cards, no KPI cards, no corporate badges, no dsn.ai.gis tags.
-- No 'Fullscreen' or 'Pop Out' buttons on the top bar.
-- Lesson-focused curriculum navigation.
+- No indicator cards, no KPI badges, no corporate tags.
+- Lesson-focused curriculum navigation strictly reflecting the 4 learning modules.
 - Lecture Slides as the default first landing view.
 - Expansive full-height iframe viewport.
 """
@@ -29,7 +28,7 @@ PORTAL_HTML = r"""<!DOCTYPE html>
             --text-main: #0f172a;
             --text-secondary: #475569;
             --text-muted: #94a3b8;
-            --sidebar-width: 270px;
+            --sidebar-width: 275px;
         }
 
         * {
@@ -142,7 +141,7 @@ PORTAL_HTML = r"""<!DOCTYPE html>
             width: 18px;
         }
 
-        /* Main Content Viewport (Full Screen, Minimal Header) */
+        /* Main Content Viewport */
         .content-pane {
             flex: 1;
             height: 100vh;
@@ -253,37 +252,37 @@ PORTAL_HTML = r"""<!DOCTYPE html>
                     <span>Lecture Slides</span>
                 </div>
 
-                <!-- 2. Master Decision Handbook -->
-                <div class="nav-item" id="nav-handbook" onclick="switchView('handbook', 'notebooks_html/00_master_spatial_decision_handbook.html', 'Master Decision Handbook')">
-                    <span class="nav-icon">📖</span>
-                    <span>Master Handbook</span>
-                </div>
+                <div class="nav-category">Curriculum Modules</div>
 
-                <div class="nav-category">Lessons</div>
-
-                <!-- 3. Module 01: ESDA -->
-                <div class="nav-item" id="nav-01_esda" onclick="switchView('01_esda', 'notebooks_html/01_exploratory_spatial_data_analysis.html', 'Lesson 01: ESDA &amp; Autocorrelation')">
+                <!-- 2. Module 01: ESDA -->
+                <div class="nav-item" id="nav-01_esda" onclick="switchView('01_esda', 'notebooks_html/01_exploratory_spatial_data_analysis.html', 'Module 01: ESDA &amp; Autocorrelation')">
                     <span class="nav-icon">🗺️</span>
                     <span>01: ESDA &amp; Autocorrelation</span>
                 </div>
 
-                <!-- 4. Module 02: Spatial Modeling & VIF -->
-                <div class="nav-item" id="nav-02_modeling" onclick="switchView('02_modeling', 'notebooks_html/02_spatial_statistics_modeling.html', 'Lesson 02: Spatial Econometrics')">
+                <!-- 3. Module 02: Spatial Econometrics & Modeling -->
+                <div class="nav-item" id="nav-02_modeling" onclick="switchView('02_modeling', 'notebooks_html/02_spatial_statistics_modeling.html', 'Module 02: Spatial Econometrics')">
                     <span class="nav-icon">📐</span>
                     <span>02: Spatial Econometrics</span>
                 </div>
 
-                <!-- 5. Module 03: Decision Intelligence -->
-                <div class="nav-item" id="nav-03_sectoral" onclick="switchView('03_sectoral', 'notebooks_html/03_sectoral_decision_intelligence.html', 'Lesson 03: Decision Intelligence')">
+                <!-- 4. Module 03: Spatial Heterogeneity (GWR & MGWR) -->
+                <div class="nav-item" id="nav-03_gwr" onclick="switchView('03_gwr', 'notebooks_html/03_spatial_heterogeneity_gwr_mgwr.html', 'Module 03: Spatial Heterogeneity (GWR &amp; MGWR)')">
+                    <span class="nav-icon">🔬</span>
+                    <span>03: Spatial Heterogeneity (GWR)</span>
+                </div>
+
+                <!-- 5. Module 04: Sectoral Decision Intelligence -->
+                <div class="nav-item" id="nav-04_sectoral" onclick="switchView('04_sectoral', 'notebooks_html/04_sectoral_decision_intelligence.html', 'Module 04: Decision Intelligence')">
                     <span class="nav-icon">🎯</span>
-                    <span>03: Decision Engines</span>
+                    <span>04: Decision Engines</span>
                 </div>
             </nav>
         </aside>
 
-        <!-- Main Viewport (Clean, Minimal) -->
+        <!-- Main Viewport -->
         <main class="content-pane">
-            <!-- Mobile Toggle Header (Visible Only on Small Screens) -->
+            <!-- Mobile Toggle Header -->
             <div class="mobile-header">
                 <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation">
                     ☰
@@ -304,21 +303,21 @@ PORTAL_HTML = r"""<!DOCTYPE html>
                 url: 'presentation.html',
                 title: 'Lecture Slides'
             },
-            'handbook': {
-                url: 'notebooks_html/00_master_spatial_decision_handbook.html',
-                title: 'Master Decision Handbook'
-            },
             '01_esda': {
                 url: 'notebooks_html/01_exploratory_spatial_data_analysis.html',
-                title: 'Lesson 01: ESDA & Autocorrelation'
+                title: 'Module 01: ESDA & Autocorrelation'
             },
             '02_modeling': {
                 url: 'notebooks_html/02_spatial_statistics_modeling.html',
-                title: 'Lesson 02: Spatial Econometrics'
+                title: 'Module 02: Spatial Econometrics'
             },
-            '03_sectoral': {
-                url: 'notebooks_html/03_sectoral_decision_intelligence.html',
-                title: 'Lesson 03: Decision Intelligence'
+            '03_gwr': {
+                url: 'notebooks_html/03_spatial_heterogeneity_gwr_mgwr.html',
+                title: 'Module 03: Spatial Heterogeneity (GWR & MGWR)'
+            },
+            '04_sectoral': {
+                url: 'notebooks_html/04_sectoral_decision_intelligence.html',
+                title: 'Module 04: Decision Intelligence'
             }
         };
 

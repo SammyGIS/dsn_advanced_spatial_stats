@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>02_spatial_statistics_modeling</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>03_spatial_heterogeneity_gwr_mgwr</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7511,67 +7511,108 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b515db3d">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f232b995">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Module-02:-Spatial-Econometrics,-Linear-Regression-vs.-OLS-&amp;-Spatial-Autoregressive-Modeling">Module 02: Spatial Econometrics, Linear Regression vs. OLS &amp; Spatial Autoregressive Modeling<a class="anchor-link" href="#Module-02:-Spatial-Econometrics,-Linear-Regression-vs.-OLS-&amp;-Spatial-Autoregressive-Modeling">¶</a></h1><h3 id="Rigorous-Econometric-Modeling:-Theory,-Gauss-Markov-BLUE,-Jarque-Bera-&amp;-Breusch-Pagan-Residual-Diagnostics,-Multicollinearity-(VIF),-and-Maximum-Likelihood-SAR,-SEM-&amp;-SDM"><em>Rigorous Econometric Modeling: Theory, Gauss-Markov BLUE, Jarque-Bera &amp; Breusch-Pagan Residual Diagnostics, Multicollinearity (VIF), and Maximum Likelihood SAR, SEM &amp; SDM</em><a class="anchor-link" href="#Rigorous-Econometric-Modeling:-Theory,-Gauss-Markov-BLUE,-Jarque-Bera-&amp;-Breusch-Pagan-Residual-Diagnostics,-Multicollinearity-(VIF),-and-Maximum-Likelihood-SAR,-SEM-&amp;-SDM">¶</a></h3><hr/>
-<h2 id="1.-Linear-Regression-vs.-OLS:-The-Crucial-Conceptual-Distinction">1. Linear Regression vs. OLS: The Crucial Conceptual Distinction<a class="anchor-link" href="#1.-Linear-Regression-vs.-OLS:-The-Crucial-Conceptual-Distinction">¶</a></h2><p>In quantitative spatial science, researchers frequently use the terms <strong>Linear Regression</strong> and <strong>OLS (Ordinary Least Squares)</strong> interchangeably. However, they represent fundamentally distinct entities:</p>
-<h3 id="1.1-Linear-Regression:-The-Model-Class-(The-Data-Generating-Process)">1.1 Linear Regression: The Model Class (The Data-Generating Process)<a class="anchor-link" href="#1.1-Linear-Regression:-The-Model-Class-(The-Data-Generating-Process)">¶</a></h3><p>Linear Regression is a <strong>structural mathematical specification</strong> postulating that the conditional expectation of dependent variable $y$ given explanatory predictors $X$ is a linear function of unknown parameters $\beta$:</p>
+<h1 id="Module-03:-Spatial-Heterogeneity,-Geographically-Weighted-Regression-(GWR)-&amp;-Multiscale-GWR-(MGWR)">Module 03: Spatial Heterogeneity, Geographically Weighted Regression (GWR) &amp; Multiscale GWR (MGWR)<a class="anchor-link" href="#Module-03:-Spatial-Heterogeneity,-Geographically-Weighted-Regression-(GWR)-&amp;-Multiscale-GWR-(MGWR)">¶</a></h1><h3 id="Exploring-Spatial-Non-Stationarity:-Local-Weighted-Least-Squares,-Adaptive-Bisquare-Kernels,-Bandwidth-Optimization-(AICc-/-CV),-Multiscale-Process-Scales,-and-Local-Parameter-Mapping-Across-9,308-Wards"><em>Exploring Spatial Non-Stationarity: Local Weighted Least Squares, Adaptive Bisquare Kernels, Bandwidth Optimization (AICc / CV), Multiscale Process Scales, and Local Parameter Mapping Across 9,308 Wards</em><a class="anchor-link" href="#Exploring-Spatial-Non-Stationarity:-Local-Weighted-Least-Squares,-Adaptive-Bisquare-Kernels,-Bandwidth-Optimization-(AICc-/-CV),-Multiscale-Process-Scales,-and-Local-Parameter-Mapping-Across-9,308-Wards">¶</a></h3><hr/>
+<h2 id="1.-Why-Global-Models-Miss-Spatial-Heterogeneity">1. Why Global Models Miss Spatial Heterogeneity<a class="anchor-link" href="#1.-Why-Global-Models-Miss-Spatial-Heterogeneity">¶</a></h2><p>In Modules 01 and 02, we explored <strong>spatial dependence</strong> (autocorrelation) and estimated global spatial autoregressive models (SAR, SEM, SDM). While these models capture geographic spillovers, they still enforce the assumption of <strong>spatial stationarity</strong>:</p>
 <p>$$
-y = X\beta + \epsilon, \quad E[y | X] = X\beta
+y_i = \beta_0 + \sum_{k=1}^p \beta_k x_{ik} + \epsilon_i \implies \beta_k \text{ is identical across every square kilometer of the country}
 $$</p>
-<p>It describes the hypothetical data-generating relationship between economic or physical features and the outcome of interest. It says nothing about <em>how</em> to calculate or estimate $\beta$.</p>
-<h3 id="1.2-Ordinary-Least-Squares-(OLS):-The-Estimation-Algorithm">1.2 Ordinary Least Squares (OLS): The Estimation Algorithm<a class="anchor-link" href="#1.2-Ordinary-Least-Squares-(OLS):-The-Estimation-Algorithm">¶</a></h3><p>OLS is one specific <strong>computational optimization criterion</strong> that chooses parameter estimates $\hat{\beta}$ by minimizing the sum of squared vertical residuals:</p>
-<p>$$
-\min_\beta S(\beta) = \sum_{i=1}^n e_i^2 = (y - X\beta)'(y - X\beta) \implies \hat{\beta}_{\text{OLS}} = (X'X)^{-1}X'y
-$$</p>
-<h3 id="1.3-Alternative-Estimators-for-the-Exact-Same-Linear-Model">1.3 Alternative Estimators for the Exact Same Linear Model<a class="anchor-link" href="#1.3-Alternative-Estimators-for-the-Exact-Same-Linear-Model">¶</a></h3><p>A linear regression specification $y = X\beta + \epsilon$ can be estimated using many different statistical estimators:</p>
+<h3 id="1.1-The-Reality-of-Spatial-Non-Stationarity">1.1 The Reality of Spatial Non-Stationarity<a class="anchor-link" href="#1.1-The-Reality-of-Spatial-Non-Stationarity">¶</a></h3><p>In human geography, public health, and economics, the structural relationship between predictors and outcomes <strong>varies across space</strong>:</p>
 <ul>
-<li><strong>Maximum Likelihood Estimation (MLE):</strong> Solves $\max_\theta \ln L(\theta; y, X)$, indispensable for spatial autoregressive models (SAR and SEM).</li>
-<li><strong>Weighted Least Squares (WLS):</strong> Solves $\min_\beta \sum w_i e_i^2$, the mathematical backbone of <strong>Geographically Weighted Regression (GWR)</strong>.</li>
-<li><strong>Generalized Least Squares (GLS):</strong> $\hat{\beta}_{\text{GLS}} = (X'\Omega^{-1}X)^{-1}X'\Omega^{-1}y$, accounting for non-identity error covariance matrices $\Omega$.</li>
-<li><strong>Two-Stage Least Squares (2SLS / IV):</strong> Uses instruments $Z$ to purge endogenous regressors when $E[X'\epsilon] \neq 0$.</li>
+<li>In remote, infrastructure-sparse rural savannahs, establishing a primary health clinic dramatically lowers disease rates and stimulates local commerce.</li>
+<li>In dense, congested metropolitan cores, clinics are already physically proximate, and environmental sanitation, clean water drainage, or electricity tariffs become the binding constraint.</li>
+<li>Forcing a single global $\hat{\beta}_{\text{clinic}}$ obscures the areas of acute marginal return and leads to misallocated development capital!</li>
 </ul>
-<p><strong>Core Teaching Takeaway:</strong> When spatial autocorrelation or spatial heterogeneity is present, the linear relationship $y = X\beta + \epsilon$ is often still valid, but <strong>OLS estimation collapses</strong>. We change the estimator (to MLE or Local WLS) or expand the specification (to SAR, SEM, SDM, or GWR)!</p>
+<h3 id="1.2-The-Methodological-Solution:-Local-Spatial-Regression">1.2 The Methodological Solution: Local Spatial Regression<a class="anchor-link" href="#1.2-The-Methodological-Solution:-Local-Spatial-Regression">¶</a></h3><p>To model spatial non-stationarity, we deploy <strong>Geographically Weighted Regression (GWR)</strong> and its advanced generalization, <strong>Multiscale Geographically Weighted Regression (MGWR)</strong>.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ce4c6a83">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ee41bb4c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-The-5-Gauss-Markov-Assumptions-&amp;-the-BLUE-Theorem">2. The 5 Gauss-Markov Assumptions &amp; the BLUE Theorem<a class="anchor-link" href="#2.-The-5-Gauss-Markov-Assumptions-&amp;-the-BLUE-Theorem">¶</a></h2><p>Under classical regression theory, the <strong>Gauss-Markov Theorem</strong> proves that the OLS estimator is <strong>BLUE</strong> (Best Linear Unbiased Estimator):</p>
-<ol>
-<li><strong>Linear:</strong> $\hat{\beta}$ is a linear function of the data vector $y$: $\hat{\beta} = Ay$.</li>
-<li><strong>Unbiased:</strong> $E[\hat{\beta}] = \beta$.</li>
-<li><strong>Best (Minimum Variance):</strong> For any other linear unbiased estimator $\tilde{\beta}$, $\text{Var}(\tilde{\beta}) - \text{Var}(\hat{\beta})$ is positive semi-definite.</li>
-</ol>
-<h3 id="The-5-Necessary-Gauss-Markov-Conditions:">The 5 Necessary Gauss-Markov Conditions:<a class="anchor-link" href="#The-5-Necessary-Gauss-Markov-Conditions:">¶</a></h3><ol>
-<li><strong>Assumption 1 (Linearity in Parameters):</strong> The population relationship is linear: $y = X\beta + \epsilon$.</li>
-<li><strong>Assumption 2 (Strict Exogeneity):</strong> The conditional expectation of disturbances is zero: $E[\epsilon | X] = 0$.</li>
-<li><strong>Assumption 3 (Full Rank / No Perfect Multicollinearity):</strong> Predictor matrix $X$ has rank $p+1$, ensuring $(X'X)^{-1}$ exists.</li>
-<li><strong>Assumption 4 (Homoskedasticity):</strong> Constant error variance across all units: $\text{Var}(\epsilon_i | X) = \sigma^2$.</li>
-<li><strong>Assumption 5 (Uncorrelated Disturbances):</strong> Zero error covariance between distinct observations:
+<h2 id="2.-Mathematical-Formulations-of-GWR-&amp;-Local-WLS">2. Mathematical Formulations of GWR &amp; Local WLS<a class="anchor-link" href="#2.-Mathematical-Formulations-of-GWR-&amp;-Local-WLS">¶</a></h2><h3 id="2.1-The-GWR-Model-Specification">2.1 The GWR Model Specification<a class="anchor-link" href="#2.1-The-GWR-Model-Specification">¶</a></h3><p>Instead of fixed global parameters, GWR estimates location-specific parameters $\beta(u_i, v_i)$ at each geographic coordinate $(u_i, v_i)$:</p>
+<p>$$
+y_i = \beta_0(u_i, v_i) + \sum_{k=1}^p \beta_k(u_i, v_i) x_{ik} + \epsilon_i, \quad \epsilon_i \sim N(0, \sigma^2)
+$$</p>
+<h3 id="2.2-Local-Weighted-Least-Squares-(WLS)-Derivation">2.2 Local Weighted Least Squares (WLS) Derivation<a class="anchor-link" href="#2.2-Local-Weighted-Least-Squares-(WLS)-Derivation">¶</a></h3><p>At each target point $i$ with coordinates $(u_i, v_i)$, the parameter vector $\hat{\beta}(u_i, v_i)$ is solved by minimizing the geographically weighted sum of squared residuals:</p>
+<p>$$
+\min_{\beta(u_i, v_i)} \sum_{j=1}^n w_{ij} \left( y_j - \beta_0(u_i, v_i) - \sum_{k=1}^p \beta_k(u_i, v_i) x_{jk} \right)^2
+$$</p>
+<p>In matrix notation, the closed-form analytical solution is:
 $$
-\text{Cov}(\epsilon_i, \epsilon_j | X) = 0 \quad \text{for all } i \neq j
-$$</li>
+\hat{\beta}(u_i, v_i) = \left( X' W(u_i, v_i) X \right)^{-1} X' W(u_i, v_i) y
+$$</p>
+<p>where $W(u_i, v_i) = \text{diag}(w_{i1}, w_{i2}, \dots, w_{in})$ is an $n \times n$ diagonal spatial weight matrix whose elements represent the spatial proximity of all other observations $j$ to target location $i$.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dbf41785">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="3.-Spatial-Kernels-&amp;-Bandwidth-Selection">3. Spatial Kernels &amp; Bandwidth Selection<a class="anchor-link" href="#3.-Spatial-Kernels-&amp;-Bandwidth-Selection">¶</a></h2><p>The spatial weighting function $w_{ij} = f(d_{ij}, b)$ determines how spatial influence decays as Euclidean distance $d_{ij}$ increases:</p>
+<h3 id="3.1-Kernel-Weighting-Functions">3.1 Kernel Weighting Functions<a class="anchor-link" href="#3.1-Kernel-Weighting-Functions">¶</a></h3><ol>
+<li><p><strong>Continuous Gaussian Kernel (Fixed Distance):</strong>
+$$w_{ij} = \exp\left( -\frac{1}{2}\left( \frac{d_{ij}}{b} \right)^2 \right)$$
+Uses a constant distance bandwidth $b$ everywhere. Problematic in datasets with variable density: in dense cities, $b$ includes thousands of points; in sparse rural areas, $b$ may contain zero neighbors.</p>
+</li>
+<li><p><strong>Adaptive Bisquare Kernel (Recommended for Irregular Administrative Wards):</strong>
+$$
+w_{ij} = \begin{cases} 
+\left[ 1 - \left( \frac{d_{ij}}{b_i} \right)^2 \right]^2 &amp; \text{if } d_{ij} &lt; b_i \\ 
+0 &amp; \text{otherwise} 
+\end{cases}
+$$
+Here, $b_i$ is an <strong>adaptive distance bandwidth</strong> equal to the distance to the $k$-th nearest neighbor of unit $i$. In dense urban wards, the kernel automatically contracts; in sparse rural wards, the kernel expands to guarantee sufficient sample degrees of freedom!</p>
+</li>
 </ol>
-<h3 id="The-Spatial-Violation:">The Spatial Violation:<a class="anchor-link" href="#The-Spatial-Violation:">¶</a></h3><p>In cross-sectional spatial data, <strong>Assumption 5 is systematically violated</strong> by Tobler's First Law! Neighboring administrative wards share environmental factors, local markets, and public infrastructure. As a result, $\text{Cov}(\epsilon_i, \epsilon_j) \neq 0$. When Assumption 5 fails:</p>
+<h3 id="3.2-Bandwidth-Optimization-via-AICc-&amp;-Cross-Validation-(CV)">3.2 Bandwidth Optimization via AICc &amp; Cross-Validation (CV)<a class="anchor-link" href="#3.2-Bandwidth-Optimization-via-AICc-&amp;-Cross-Validation-(CV)">¶</a></h3><p>The optimal bandwidth $b$ (or number of neighbors $k$) balances the classical bias-variance trade-off:</p>
 <ul>
-<li>OLS is <strong>no longer BLUE</strong> (variance is not minimal).</li>
-<li>Standard errors are severely underestimated, causing true $p$-values to explode and generating massive <strong>Type-I false discoveries</strong>.</li>
-<li>If spatial spillovers affect the outcome, OLS parameter estimates $\hat{\beta}$ are <strong>biased and inconsistent</strong>!</li>
+<li><strong>Too small bandwidth ($b \to 0$):</strong> High local variance, noisy estimates, and severe overfitting.</li>
+<li><strong>Too large bandwidth ($b \to \infty$):</strong> Low variance, but approaches the global OLS model (underfitting spatial variation).</li>
 </ul>
+<p>The optimal bandwidth is found by golden section search minimizing the <strong>Corrected Akaike Information Criterion (AICc)</strong>:
+$$
+\text{AICc} = 2n \ln(\hat{\sigma}) + n \ln(2\pi) + n \left( \frac{n + \text{tr}(S)}{n - 2 - \text{tr}(S)} \right)
+$$
+where $S$ is the GWR hat matrix ($ \hat{y} = Sy $), and $\text{tr}(S)$ represents the effective degrees of freedom.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=b00cc5fd">
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a50010ef">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="4.-Multiscale-GWR-(MGWR):-Varying-Spatial-Scales-Across-Covariates">4. Multiscale GWR (MGWR): Varying Spatial Scales Across Covariates<a class="anchor-link" href="#4.-Multiscale-GWR-(MGWR):-Varying-Spatial-Scales-Across-Covariates">¶</a></h2><p>Standard GWR imposes an unrealistic constraint: <strong>every single predictor is forced to operate at the exact same spatial bandwidth $b$</strong>.</p>
+<p>In physical and socio-economic geography, processes operate across <strong>multiple spatial scales</strong>:
+$$
+y_i = \beta_{bw_0}(u_i, v_i) + \sum_{k=1}^p \beta_{bw_k}(u_i, v_i) x_{ik} + \epsilon_i
+$$</p>
+<h3 id="The-Multi-Scale-Spectrum:">The Multi-Scale Spectrum:<a class="anchor-link" href="#The-Multi-Scale-Spectrum:">¶</a></h3><ul>
+<li><strong>Micro-Scale (Local Process, e.g. $k=40-80$ neighbors):</strong> Highly localized phenomena (e.g. corner market retail competition, localized storm flood risk, crime hotspots).</li>
+<li><strong>Meso-Scale (Regional Process, e.g. $k=300-600$ neighbors):</strong> Regional phenomena (e.g. state ministry clinic subsidies, river basin malaria ecology).</li>
+<li><strong>Macro-Scale (Global Process, $k \to n$):</strong> Broad socio-economic phenomena (e.g. federal monetary inflation, currency devaluation).</li>
+</ul>
+<p>MGWR estimates variable-specific bandwidths $bw_k$ using an iterative <strong>backfitting algorithm</strong> that converges when parameter estimates stabilize across all spatial scales.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8a0a9112">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7588,12 +7629,8 @@ $$</li>
 <span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
-
 <span class="kn">import</span><span class="w"> </span><span class="nn">libpysal</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">spreg</span><span class="w"> </span><span class="kn">import</span> <span class="n">OLS</span><span class="p">,</span> <span class="n">ML_Lag</span><span class="p">,</span> <span class="n">ML_Error</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.stats.outliers_influence</span><span class="w"> </span><span class="kn">import</span> <span class="n">variance_inflation_factor</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">cdist</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'figure.dpi'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">120</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s1">'whitegrid'</span><span class="p">)</span>
@@ -7602,7 +7639,7 @@ $$</li>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c2532781">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=5fc4c343">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7620,69 +7657,33 @@ $$</li>
 
 <span class="n">gdf</span><span class="p">[</span><span class="s1">'rwi_mean'</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">'rwi_mean'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'rwi_mean'</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span>
 <span class="n">gdf</span><span class="p">[</span><span class="s1">'pop_2025_sum'</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">'pop_2025_sum'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'pop_2025_sum'</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span>
-<span class="n">gdf</span><span class="p">[</span><span class="s1">'population_density_per_sqkm'</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">'population_density_per_sqkm'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'population_density_per_sqkm'</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span>
-
 <span class="n">gdf</span><span class="p">[</span><span class="s1">'health_rate'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'health_facilities_count'</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'pop_2025_sum'</span><span class="p">]</span> <span class="o">+</span> <span class="mi">100</span><span class="p">))</span> <span class="o">*</span> <span class="mi">10000</span>
 <span class="n">gdf</span><span class="p">[</span><span class="s1">'market_rate'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'markets_count'</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'pop_2025_sum'</span><span class="p">]</span> <span class="o">+</span> <span class="mi">100</span><span class="p">))</span> <span class="o">*</span> <span class="mi">10000</span>
 <span class="n">gdf</span><span class="p">[</span><span class="s1">'water_rate'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'water_points_count'</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'pop_2025_sum'</span><span class="p">]</span> <span class="o">+</span> <span class="mi">100</span><span class="p">))</span> <span class="o">*</span> <span class="mi">10000</span>
-<span class="n">gdf</span><span class="p">[</span><span class="s1">'log_pop_density'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'population_density_per_sqkm'</span><span class="p">])</span>
-<span class="n">gdf</span><span class="p">[</span><span class="s1">'urban_flag'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'urban'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'urban'</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
-<span class="n">y_var</span> <span class="o">=</span> <span class="s1">'rwi_mean'</span>
-<span class="n">x_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'market_rate'</span><span class="p">,</span> <span class="s1">'health_rate'</span><span class="p">,</span> <span class="s1">'water_rate'</span><span class="p">,</span> <span class="s1">'log_pop_density'</span><span class="p">,</span> <span class="s1">'urban_flag'</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Sample prepared: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> administrative wards."</span><span class="p">)</span>
+<span class="c1"># Extract centroids and coordinates</span>
+<span class="n">centroids</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">centroid</span>
+<span class="n">gdf</span><span class="p">[</span><span class="s1">'coord_x'</span><span class="p">]</span> <span class="o">=</span> <span class="n">centroids</span><span class="o">.</span><span class="n">x</span>
+<span class="n">gdf</span><span class="p">[</span><span class="s1">'coord_y'</span><span class="p">]</span> <span class="o">=</span> <span class="n">centroids</span><span class="o">.</span><span class="n">y</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loaded </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> wards with spatial coordinates."</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=25aa9f8a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=108e6358">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-Pre-Modeling-Diagnostics:-Multicollinearity,-VIF-&amp;-Condition-Number">3. Pre-Modeling Diagnostics: Multicollinearity, VIF &amp; Condition Number<a class="anchor-link" href="#3.-Pre-Modeling-Diagnostics:-Multicollinearity,-VIF-&amp;-Condition-Number">¶</a></h2><p>Before estimating spatial models, we must verify that our feature matrix $X$ does not suffer from multicollinearity.</p>
-<h3 id="3.1-The-Mechanics-of-VIF">3.1 The Mechanics of VIF<a class="anchor-link" href="#3.1-The-Mechanics-of-VIF">¶</a></h3><p>$$
-\text{VIF}_k = \frac{1}{1 - R_k^2}
-$$
-where $R_k^2$ is the coefficient of determination from regressing predictor $X_k$ on all other remaining $p-1$ predictors.</p>
-<h3 id="3.2-Multicollinearity-Condition-Number">3.2 Multicollinearity Condition Number<a class="anchor-link" href="#3.2-Multicollinearity-Condition-Number">¶</a></h3><p>$$
-\kappa(X) = \sqrt{\frac{\lambda_{\max}(X'X)}{\lambda_{\min}(X'X)}}
-$$
-where $\lambda_{\max}$ and $\lambda_{\min}$ are the maximum and minimum eigenvalues of the scaled matrix $X'X$.</p>
-<h3 id="3.3-Diagnostic-Benchmark-Ranges:">3.3 Diagnostic Benchmark Ranges:<a class="anchor-link" href="#3.3-Diagnostic-Benchmark-Ranges:">¶</a></h3><table>
-<thead>
-<tr>
-<th style="text-align:left">Metric</th>
-<th style="text-align:center">Safe / Ideal Range</th>
-<th style="text-align:center">Moderate Concern</th>
-<th style="text-align:center">Severe Violation</th>
-<th style="text-align:left">Action Required</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><strong>VIF</strong></td>
-<td style="text-align:center">$1.0 \le \text{VIF} &lt; 5.0$</td>
-<td style="text-align:center">$5.0 \le \text{VIF} &lt; 10.0$</td>
-<td style="text-align:center">$\text{VIF} \ge 10.0$</td>
-<td style="text-align:left">Drop or combine collinear predictors</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>Condition Number ($\kappa$)</strong></td>
-<td style="text-align:center">$\kappa &lt; 20.0$</td>
-<td style="text-align:center">$20.0 \le \kappa &lt; 30.0$</td>
-<td style="text-align:center">$\kappa \ge 30.0$</td>
-<td style="text-align:left">Feature re-scaling or PCA reduction</td>
-</tr>
-</tbody>
-</table>
+<h2 id="5.-Simulating-Local-GWR-Parameter-Estimation-via-Adaptive-Bisquare-Kernel">5. Simulating Local GWR Parameter Estimation via Adaptive Bisquare Kernel<a class="anchor-link" href="#5.-Simulating-Local-GWR-Parameter-Estimation-via-Adaptive-Bisquare-Kernel">¶</a></h2><p>To demonstrate the mathematical mechanics of GWR, we implement the <strong>Local Weighted Least Squares</strong> algorithm using an adaptive bisquare kernel ($k=128$ nearest neighbors):</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=01179253">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=e0cf8dcb">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7690,54 +7691,75 @@ where $\lambda_{\max}$ and $\lambda_{\min}$ are the maximum and minimum eigenval
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">X_vif</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">gdf</span><span class="p">[</span><span class="n">x_vars</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
-<span class="n">vif_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-<span class="n">vif_df</span><span class="p">[</span><span class="s1">'Predictor'</span><span class="p">]</span> <span class="o">=</span> <span class="n">X_vif</span><span class="o">.</span><span class="n">columns</span>
-<span class="n">vif_df</span><span class="p">[</span><span class="s1">'VIF'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">variance_inflation_factor</span><span class="p">(</span><span class="n">X_vif</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X_vif</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
-<span class="n">vif_df</span><span class="p">[</span><span class="s1">'Status'</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">vif_df</span><span class="p">[</span><span class="s1">'VIF'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">5.0</span><span class="p">,</span> <span class="s1">'Low (Safe)'</span><span class="p">,</span> <span class="s1">'High (Collinear)'</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">gdf</span><span class="p">[</span><span class="s1">'coord_x'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">'coord_y'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">])</span>
+<span class="n">y_vec</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">'rwi_mean'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">X_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)),</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">'market_rate'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">'health_rate'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">'water_rate'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="p">])</span>
 
-<span class="c1"># Compute condition number</span>
-<span class="n">X_scaled</span> <span class="o">=</span> <span class="p">(</span><span class="n">X_vif</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">X_vif</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">X_vif</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
-<span class="n">evals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">X_scaled</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">))</span>
-<span class="n">cond_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">evals</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">/</span> <span class="n">evals</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+<span class="c1"># For pedagogical demonstration, evaluate GWR on a stratified spatial sample of 250 wards</span>
+<span class="n">sample_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">k_bandwidth</span> <span class="o">=</span> <span class="mi">128</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"=== MULTICOLLINEARITY (VIF) DIAGNOSTICS ==="</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">vif_df</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Multicollinearity Condition Number: </span><span class="si">{</span><span class="n">cond_number</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> (Threshold: &lt; 30 is stable)"</span><span class="p">)</span>
+<span class="n">local_betas</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">local_r2</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">sample_indices</span><span class="p">:</span>
+    <span class="n">target_coord</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">dists</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">target_coord</span><span class="p">,</span> <span class="n">coords</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    
+    <span class="c1"># Adaptive bandwidth: distance to k-th nearest neighbor</span>
+    <span class="n">sort_dists</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">dists</span><span class="p">)</span>
+    <span class="n">b_adaptive</span> <span class="o">=</span> <span class="n">sort_dists</span><span class="p">[</span><span class="n">k_bandwidth</span><span class="p">]</span>
+    
+    <span class="c1"># Adaptive bisquare weights</span>
+    <span class="n">w_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dists</span> <span class="o">&lt;</span> <span class="n">b_adaptive</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">dists</span> <span class="o">/</span> <span class="n">b_adaptive</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">W_diag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">w_i</span><span class="p">)</span>
+    
+    <span class="c1"># Local WLS: beta_i = (X' W X)^(-1) X' W y</span>
+    <span class="n">XtW</span> <span class="o">=</span> <span class="n">X_mat</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">w_i</span>
+    <span class="n">XtWX</span> <span class="o">=</span> <span class="n">XtW</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X_mat</span><span class="p">)</span>
+    <span class="n">XtWy</span> <span class="o">=</span> <span class="n">XtW</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_vec</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">beta_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">XtWX</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">X_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="n">XtWy</span><span class="p">)</span>
+        <span class="n">local_betas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">beta_i</span><span class="p">)</span>
+        
+        <span class="c1"># Local R2</span>
+        <span class="n">y_pred_local</span> <span class="o">=</span> <span class="n">X_mat</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">beta_i</span><span class="p">)</span>
+        <span class="n">y_w_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w_i</span> <span class="o">*</span> <span class="n">y_vec</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w_i</span><span class="p">)</span>
+        <span class="n">ss_tot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w_i</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_vec</span> <span class="o">-</span> <span class="n">y_w_mean</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">ss_res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w_i</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_vec</span> <span class="o">-</span> <span class="n">y_pred_local</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">r2_i</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">ss_res</span> <span class="o">/</span> <span class="p">(</span><span class="n">ss_tot</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">))</span>
+        <span class="n">local_r2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">r2_i</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">local_betas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">X_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">local_r2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+<span class="n">local_betas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">local_betas</span><span class="p">)</span>
+<span class="n">sample_gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">sample_indices</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">sample_gdf</span><span class="p">[</span><span class="s1">'beta_market'</span><span class="p">]</span> <span class="o">=</span> <span class="n">local_betas</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">sample_gdf</span><span class="p">[</span><span class="s1">'beta_health'</span><span class="p">]</span> <span class="o">=</span> <span class="n">local_betas</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">sample_gdf</span><span class="p">[</span><span class="s1">'local_r2'</span><span class="p">]</span> <span class="o">=</span> <span class="n">local_r2</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== LOCAL GWR PARAMETER ESTIMATES (SAMPLE SUMMARY) ==="</span><span class="p">)</span>
+<span class="n">param_summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">'Parameter'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'Intercept (beta_0)'</span><span class="p">,</span> <span class="s1">'Market Rate (beta_1)'</span><span class="p">,</span> <span class="s1">'Health Rate (beta_2)'</span><span class="p">,</span> <span class="s1">'Water Rate (beta_3)'</span><span class="p">],</span>
+    <span class="s1">'Min'</span><span class="p">:</span> <span class="n">local_betas</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+    <span class="s1">'Median'</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">local_betas</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+    <span class="s1">'Max'</span><span class="p">:</span> <span class="n">local_betas</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+    <span class="s1">'Std Dev'</span><span class="p">:</span> <span class="n">local_betas</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">param_summary</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a1a12940">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="4.-Econometric-Residual-Diagnostics:-Jarque-Bera-&amp;-Breusch-Pagan-Tests">4. Econometric Residual Diagnostics: Jarque-Bera &amp; Breusch-Pagan Tests<a class="anchor-link" href="#4.-Econometric-Residual-Diagnostics:-Jarque-Bera-&amp;-Breusch-Pagan-Tests">¶</a></h2><p>To evaluate whether classical OLS assumptions hold on empirical Nigerian ward data, we test residuals $e = y - X\hat{\beta}$:</p>
-<h3 id="4.1-Jarque-Bera-(JB)-Test-for-Error-Normality">4.1 Jarque-Bera (JB) Test for Error Normality<a class="anchor-link" href="#4.1-Jarque-Bera-(JB)-Test-for-Error-Normality">¶</a></h3><p>The Jarque-Bera test measures whether residual skewness and kurtosis match a normal distribution ($S=0, K=3$):
-$$
-\text{JB} = \frac{n}{6} \left( S^2 + \frac{(K - 3)^2}{4} \right) \sim \chi^2(2)
-$$</p>
-<ul>
-<li><strong>Hypotheses:</strong> $H_0: \text{Residuals are normally distributed}$ vs $H_1: \text{Residuals are non-normal}$.</li>
-<li><strong>Interpretation Range:</strong> If $p &lt; 0.05$ (or $\text{JB} &gt; 5.991$ with 2 degrees of freedom), we reject normality. In spatial data, extreme localized wealth enclaves create heavy tails, requiring robust inference.</li>
-</ul>
-<h3 id="4.2-Breusch-Pagan-(BP)-&amp;-Koenker-Bassett-Test-for-Heteroskedasticity">4.2 Breusch-Pagan (BP) &amp; Koenker-Bassett Test for Heteroskedasticity<a class="anchor-link" href="#4.2-Breusch-Pagan-(BP)-&amp;-Koenker-Bassett-Test-for-Heteroskedasticity">¶</a></h3><p>Tests whether error variance $\sigma_i^2$ varies systematically with predictors $X$:
-$$
-\text{BP} = \frac{1}{2} \text{ESS}_{\text{aux}} \sim \chi^2(p)
-$$
-where $\text{ESS}_{\text{aux}}$ is the explained sum of squares from regressing $(e_i^2 / \bar{\sigma}^2)$ on $X$. The <strong>Koenker-Bassett</strong> test is the studentized version, robust to non-normal errors.</p>
-<ul>
-<li><strong>Hypotheses:</strong> $H_0: \text{Homoskedasticity } \text{Var}(\epsilon_i | X) = \sigma^2$ vs $H_1: \text{Heteroskedasticity}$.</li>
-<li><strong>Interpretation Range:</strong> If $p &lt; 0.05$, heteroskedasticity is present, indicating that error variance varies across space. This directly motivates <strong>spatial error models (SEM)</strong> and <strong>Geographically Weighted Regression (GWR)</strong>!</li>
-</ul>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=02f7e1b1">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=035f6dfa">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7745,61 +7767,18 @@ where $\text{ESS}_{\text{aux}}$ is the explained sum of squares from regressing 
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Construct spatial weights matrix W</span>
-<span class="n">w</span> <span class="o">=</span> <span class="n">libpysal</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">KNN</span><span class="o">.</span><span class="n">from_dataframe</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">w</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="s1">'R'</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
-<span class="n">y</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="n">y_var</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="n">x_vars</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">sample_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">'beta_health'</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'coolwarm'</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
+                <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s1">'label'</span><span class="p">:</span> <span class="s1">'Local Beta: Health Facilities Impact on Wealth'</span><span class="p">,</span> <span class="s1">'orientation'</span><span class="p">:</span> <span class="s1">'horizontal'</span><span class="p">,</span> <span class="s1">'shrink'</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">'pad'</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">})</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"A. Spatial Non-Stationarity: Local Health Clinic Impact"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">'bold'</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">'off'</span><span class="p">)</span>
 
-<span class="n">ols_model</span> <span class="o">=</span> <span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">name_y</span><span class="o">=</span><span class="n">y_var</span><span class="p">,</span> <span class="n">name_x</span><span class="o">=</span><span class="n">x_vars</span><span class="p">,</span> <span class="n">name_w</span><span class="o">=</span><span class="s1">'knn_5'</span><span class="p">,</span> <span class="n">spat_diag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">moran</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ols_model</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=83d4673d">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="5.-Visualizing-Spatial-Residual-Autocorrelation-&amp;-The-Anselin-LM-Decision-Tree">5. Visualizing Spatial Residual Autocorrelation &amp; The Anselin LM Decision Tree<a class="anchor-link" href="#5.-Visualizing-Spatial-Residual-Autocorrelation-&amp;-The-Anselin-LM-Decision-Tree">¶</a></h2><p>In the OLS summary above:</p>
-<ul>
-<li><strong>Moran's $I$ on residuals:</strong> $I = 0.482$ ($p &lt; 0.0001$). Residuals cluster intensely in space!</li>
-<li><strong>Jarque-Bera test:</strong> Significant ($p &lt; 0.0001$), confirming heavy-tailed non-normal disturbances.</li>
-<li><strong>Breusch-Pagan test:</strong> Significant ($p &lt; 0.0001$), confirming spatial heteroskedasticity.</li>
-</ul>
-<h3 id="5.1-The-Anselin-Lagrange-Multiplier-(LM)-Decision-Framework">5.1 The Anselin Lagrange Multiplier (LM) Decision Framework<a class="anchor-link" href="#5.1-The-Anselin-Lagrange-Multiplier-(LM)-Decision-Framework">¶</a></h3><ol>
-<li>Inspect classical <strong>LM-Lag</strong> (tests spatial lag $\rho = 0$) and <strong>LM-Error</strong> (tests spatial error $\lambda = 0$).</li>
-<li>Both are highly significant ($p &lt; 0.0001$).</li>
-<li>Examine <strong>Robust LM-Lag</strong> and <strong>Robust LM-Error</strong>:<ul>
-<li>If Robust LM-Lag &gt; Robust LM-Error $\implies$ <strong>Spatial Lag Model (SAR)</strong>.</li>
-<li>If Robust LM-Error &gt; Robust LM-Lag $\implies$ <strong>Spatial Error Model (SEM)</strong>.</li>
-<li>If both robust tests are strong $\implies$ <strong>Spatial Durbin Model (SDM)</strong>.</li>
-</ul>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=df35cd0e">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">gdf</span><span class="p">[</span><span class="s1">'ols_residuals'</span><span class="p">]</span> <span class="o">=</span> <span class="n">ols_model</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">sample_gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">'local_r2'</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'YlGnBu'</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+                <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s1">'label'</span><span class="p">:</span> <span class="s1">'Local R-Squared (Explanatory Power)'</span><span class="p">,</span> <span class="s1">'orientation'</span><span class="p">:</span> <span class="s1">'horizontal'</span><span class="p">,</span> <span class="s1">'shrink'</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">'pad'</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">})</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"B. Local Explanatory Power (Local R² Surface)"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">'bold'</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">'off'</span><span class="p">)</span>
 
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">'ols_residuals'</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'coolwarm'</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-         <span class="n">legend_kwds</span><span class="o">=</span><span class="p">{</span><span class="s1">'label'</span><span class="p">:</span> <span class="s1">'OLS Residuals (e_i = Observed - Predicted)'</span><span class="p">,</span> <span class="s1">'orientation'</span><span class="p">:</span> <span class="s1">'horizontal'</span><span class="p">,</span> <span class="s1">'shrink'</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s1">'pad'</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">})</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Spatial Pattern of OLS Residuals (Visualizing Residual Autocorrelation)"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">'bold'</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">'off'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -7808,142 +7787,64 @@ where $\text{ESS}_{\text{aux}}$ is the explained sum of squares from regressing 
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cb08ef63">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fbb13d6e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="6.-Maximum-Likelihood-Spatial-Lag-Model-(SAR)-&amp;-Spatial-Policy-Multiplier">6. Maximum Likelihood Spatial Lag Model (SAR) &amp; Spatial Policy Multiplier<a class="anchor-link" href="#6.-Maximum-Likelihood-Spatial-Lag-Model-(SAR)-&amp;-Spatial-Policy-Multiplier">¶</a></h2><h3 id="6.1-The-Mathematical-Formulation">6.1 The Mathematical Formulation<a class="anchor-link" href="#6.1-The-Mathematical-Formulation">¶</a></h3><p>$$
-y = \rho W y + X\beta + \epsilon, \quad \epsilon \sim N(0, \sigma^2 I)
-$$
-where $\rho \in (-1, 1)$ is the spatial autoregressive parameter.</p>
-<h3 id="6.2-The-Spatial-Multiplier-Expansion">6.2 The Spatial Multiplier Expansion<a class="anchor-link" href="#6.2-The-Spatial-Multiplier-Expansion">¶</a></h3><p>$$
-y = (I - \rho W)^{-1} X\beta + (I - \rho W)^{-1}\epsilon = \left( I + \rho W + \rho^2 W^2 + \dots \right) X\beta + (I - \rho W)^{-1}\epsilon
-$$
-The scalar policy multiplier is:
-$$
-\text{Multiplier} = \frac{1}{1 - \rho} \approx \frac{1}{1 - 0.5842} \approx \mathbf{2.405\times}
-$$
-<strong>Economic Interpretation:</strong> Every 1.0 unit of direct economic stimulus inside a ward generates an additional <strong>1.405 units of secondary spillover wealth</strong> radiating across contiguous neighboring wards!</p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=0372863f">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Estimating Maximum Likelihood Spatial Lag Model (SAR)..."</span><span class="p">)</span>
-<span class="n">sar_model</span> <span class="o">=</span> <span class="n">ML_Lag</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">name_y</span><span class="o">=</span><span class="n">y_var</span><span class="p">,</span> <span class="n">name_x</span><span class="o">=</span><span class="n">x_vars</span><span class="p">,</span> <span class="n">name_w</span><span class="o">=</span><span class="s1">'knn_5'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sar_model</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=a1135dd9">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Estimating Maximum Likelihood Spatial Error Model (SEM)..."</span><span class="p">)</span>
-<span class="n">sem_model</span> <span class="o">=</span> <span class="n">ML_Error</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">name_y</span><span class="o">=</span><span class="n">y_var</span><span class="p">,</span> <span class="n">name_x</span><span class="o">=</span><span class="n">x_vars</span><span class="p">,</span> <span class="n">name_w</span><span class="o">=</span><span class="s1">'knn_5'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sem_model</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cceae5d5">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">rho_val</span> <span class="o">=</span> <span class="n">sar_model</span><span class="o">.</span><span class="n">rho</span>
-<span class="n">spatial_multiplier</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rho_val</span><span class="p">)</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">x_labs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Direct Focal Effect'</span><span class="p">,</span> <span class="s1">'Indirect Spatial Spillover'</span><span class="p">,</span> <span class="s1">'Total Systemic Multiplier'</span><span class="p">]</span>
-<span class="n">m_vals</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">spatial_multiplier</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">spatial_multiplier</span><span class="p">]</span>
-<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'#2a9d8f'</span><span class="p">,</span> <span class="s1">'#e76f51'</span><span class="p">,</span> <span class="s1">'#e63946'</span><span class="p">]</span>
-<span class="n">bars</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x_labs</span><span class="p">,</span> <span class="n">m_vals</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.45</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">bar</span> <span class="ow">in</span> <span class="n">bars</span><span class="p">:</span>
-    <span class="n">y_h</span> <span class="o">=</span> <span class="n">bar</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">bar</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">bar</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">y_h</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">y_h</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">x"</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">'center'</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">'bottom'</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">'bold'</span><span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Impact Multiplier Ratio"</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">spatial_multiplier</span> <span class="o">+</span> <span class="mf">0.6</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Spatial Multiplier Decomposition (rho = </span><span class="si">{</span><span class="n">rho_val</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, Total = </span><span class="si">{</span><span class="n">spatial_multiplier</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">x)"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">'bold'</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c5363301">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="7.-Comparative-Econometric-Benchmark-Across-Wards">7. Comparative Econometric Benchmark Across Wards<a class="anchor-link" href="#7.-Comparative-Econometric-Benchmark-Across-Wards">¶</a></h2><table>
+<h2 id="6.-Strategic-Executive-Synthesis-&amp;-Comparative-Model-Decision-Table">6. Strategic Executive Synthesis &amp; Comparative Model Decision Table<a class="anchor-link" href="#6.-Strategic-Executive-Synthesis-&amp;-Comparative-Model-Decision-Table">¶</a></h2><table>
 <thead>
 <tr>
-<th style="text-align:left">Metric / Parameter</th>
-<th style="text-align:center">OLS (Classical Non-Spatial)</th>
-<th style="text-align:center">Spatial Lag Model (SAR)</th>
-<th style="text-align:center">Spatial Error Model (SEM)</th>
-<th style="text-align:left">Interpretation &amp; Guidance</th>
+<th style="text-align:left">Model Specification</th>
+<th style="text-align:left">Mathematical Formulation</th>
+<th style="text-align:left">Spatial Parameter &amp; Range</th>
+<th style="text-align:left">What It Assumes</th>
+<th style="text-align:left">Primary Real-World Application</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left"><strong>Log-Likelihood</strong></td>
-<td style="text-align:center">-5,812.4</td>
-<td style="text-align:center"><strong>-3,941.2</strong></td>
-<td style="text-align:center"><strong>-3,884.6</strong></td>
-<td style="text-align:left">Massive improvement (&gt;1,870 log points)</td>
+<td style="text-align:left"><strong>OLS (Classical)</strong></td>
+<td style="text-align:left">$y = X\beta + \epsilon$</td>
+<td style="text-align:left">Aspatial ($\beta \in \mathbb{R}$)</td>
+<td style="text-align:left">Spatial independence ($\text{Cov}=0$)</td>
+<td style="text-align:left">Non-spatial baseline; valid only when residual Moran's $I \approx 0$.</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>AIC</strong></td>
-<td style="text-align:center">11,636.8</td>
-<td style="text-align:center"><strong>7,896.4</strong></td>
-<td style="text-align:center"><strong>7,781.2</strong></td>
-<td style="text-align:left">AIC drops by over 3,740 points!</td>
+<td style="text-align:left"><strong>Spatial Lag (SAR)</strong></td>
+<td style="text-align:left">$y = \rho Wy + X\beta + \epsilon$</td>
+<td style="text-align:left">$\rho \in (-1, 1)$, $\text{Mult} = \frac{1}{1-\rho}$</td>
+<td style="text-align:left">Behavioral feedback &amp; direct peer spillover</td>
+<td style="text-align:left">Retail customer catchment pull, disease epidemic diffusion.</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>Pseudo $R^2$</strong></td>
-<td style="text-align:center">0.2841</td>
-<td style="text-align:center"><strong>0.5318</strong></td>
-<td style="text-align:center"><strong>0.5462</strong></td>
-<td style="text-align:left">Spatial models explain over 53% of variance</td>
+<td style="text-align:left"><strong>Spatial Error (SEM)</strong></td>
+<td style="text-align:left">$y = X\beta + u, \; u = \lambda Wu + \epsilon$</td>
+<td style="text-align:left">$\lambda \in (-1, 1)$</td>
+<td style="text-align:left">Spatially clustered unmeasured shocks</td>
+<td style="text-align:left">Regional soil chemistry, climate shocks, shared electric grids.</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>Spatial Parameter</strong></td>
-<td style="text-align:center">N/A</td>
-<td style="text-align:center">$\rho = 0.5842$ ($p &lt; 0.0001$)</td>
-<td style="text-align:center">$\lambda = 0.6124$ ($p &lt; 0.0001$)</td>
-<td style="text-align:left">Extreme spatial coupling confirmed</td>
+<td style="text-align:left"><strong>Spatial Durbin (SDM)</strong></td>
+<td style="text-align:left">$y = \rho Wy + X\beta + WX\gamma + \epsilon$</td>
+<td style="text-align:left">$\rho, \gamma \in (-1, 1)$</td>
+<td style="text-align:left">Endogenous and contextual spillovers</td>
+<td style="text-align:left">Cross-boundary hospital or school investments boosting local welfare.</td>
 </tr>
 <tr>
-<td style="text-align:left"><strong>Residual Moran's $I$</strong></td>
-<td style="text-align:center">$0.482$ ($p &lt; 0.0001$)</td>
-<td style="text-align:center">$0.041$ ($p = 0.082$)</td>
-<td style="text-align:center">$0.023$ ($p = 0.145$)</td>
-<td style="text-align:left">Spatial autocorrelation purged from errors</td>
+<td style="text-align:left"><strong>GWR (Local)</strong></td>
+<td style="text-align:left">$y_i = \beta_0(u_i,v_i) + \sum \beta_k(u_i,v_i)x_{ik} + \epsilon_i$</td>
+<td style="text-align:left">Local $\hat{\beta}_k(u_i,v_i)$, Bandwidth $b$</td>
+<td style="text-align:left">Spatial non-stationarity across regions</td>
+<td style="text-align:left">Targeting regional fertilizer subsidies or custom health programs.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>MGWR (Multiscale)</strong></td>
+<td style="text-align:left">$y_i = \sum \beta_{bw_k}(u_i,v_i)x_{ik} + \epsilon_i$</td>
+<td style="text-align:left">Variable-specific bandwidths $bw_k$</td>
+<td style="text-align:left">Multi-scale spatial processes</td>
+<td style="text-align:left">Disentangling local clinic impacts from regional climate drivers.</td>
 </tr>
 </tbody>
 </table>
@@ -7951,7 +7852,7 @@ $$
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7e1e2831">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=bce78c7c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
