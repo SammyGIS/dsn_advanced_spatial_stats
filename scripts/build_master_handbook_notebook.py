@@ -268,6 +268,27 @@ To explore each mathematical and methodological domain in comprehensive depth:
 | **[03_sectoral_decision_intelligence.ipynb](03_sectoral_decision_intelligence.ipynb)** | Spatial infrastructure inequality, Lorenz Curves, Gini coefficients, Bivariate Moran's $I$, Ward Priority Index (WPI), and Executive State Action Rosters. |
 """))
 
+# Cell 12: Markdown - Data Sources & Key References
+cells.append(nbf.v4.new_markdown_cell("""\
+## 7. Primary Data Sources & Key Academic References
+
+### Primary Geospatial Data Sources
+- **Administrative Ward Boundaries:** GRID3 Nigeria Admin-3 Wards (9,308 polygons): [https://grid3.gov.ng/datasets/nigeria/administrative-boundaries](https://grid3.gov.ng/datasets/nigeria/administrative-boundaries)
+- **Relative Wealth Index (RWI):** Meta AI Research & UC Berkeley micro-wealth estimates: [https://data.humdata.org/dataset/relative-wealth-index](https://data.humdata.org/dataset/relative-wealth-index)
+- **Demographic Population Counts:** WorldPop 2025 Gridded Population Projections: [https://hub.worldpop.org/geodata/listing?id=29](https://hub.worldpop.org/geodata/listing?id=29)
+- **Points of Interest Registries:** GRID3 Nigeria Health Clinics, Markets, Water Points, Police, Religious Centers: [https://grid3.gov.ng/datasets](https://grid3.gov.ng/datasets)
+- **Disease Epidemiology:** Malaria Atlas Project (MAP) Plasmodium falciparum $Pf\text{PR}_{2-10}$: [https://malariaatlas.org/](https://malariaatlas.org/)
+- **Electoral Infrastructure:** INEC Polling Units Location Registry: [https://irev.inecnigeria.org](https://irev.inecnigeria.org)
+
+### Key Academic Literature & Methodological References
+1. **Anselin, L. (1988).** *Spatial Econometrics: Methods and Models*. Dordrecht: Kluwer Academic Publishers.
+2. **Anselin, L. (1995).** Local Indicators of Spatial Association -- LISA. *Geographical Analysis*, 27(2), 93-115.
+3. **Chi, G., Fang, H., Chatterjee, S., & Blumenstock, J. E. (2022).** Micro-estimate of wealth for all low- and middle-income countries. *Proceedings of the National Academy of Sciences (PNAS)*, 119(3), e2113658119.
+4. **Rey, S. J., & Anselin, L. (2007).** PySAL: A Python library for spatial analytical methods. *The Review of Regional Studies*, 37(1), 5-27.
+5. **Tobler, W. R. (1970).** A computer movie simulating urban growth in the Detroit region. *Economic Geography*, 46(sup1), 234-240.
+6. **Weiss, D. J., et al. (2019).** Mapping the global prevalence, incidence, and mortality of Plasmodium falciparum, 2000-17. *The Lancet*, 394(10195), 322-331.
+"""))
+
 nb['cells'] = cells
 out_path = 'notebooks/00_master_spatial_decision_handbook.ipynb'
 nbf.write(nb, out_path)

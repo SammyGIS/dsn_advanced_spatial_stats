@@ -3,6 +3,26 @@ import nbformat as nbf
 
 os.makedirs('notebooks', exist_ok=True)
 
+DATA_SOURCES_AND_REFS = """\
+## Primary Data Sources & Key References
+
+### Primary Geospatial Data Sources
+- **Administrative Ward Boundaries:** GRID3 Nigeria Admin-3 Wards (9,308 polygons): [https://grid3.gov.ng/datasets/nigeria/administrative-boundaries](https://grid3.gov.ng/datasets/nigeria/administrative-boundaries)
+- **Relative Wealth Index (RWI):** Meta AI Research & UC Berkeley micro-wealth estimates: [https://data.humdata.org/dataset/relative-wealth-index](https://data.humdata.org/dataset/relative-wealth-index)
+- **Demographic Population Counts:** WorldPop 2025 Gridded Population Projections: [https://hub.worldpop.org/geodata/listing?id=29](https://hub.worldpop.org/geodata/listing?id=29)
+- **Points of Interest Registries:** GRID3 Nigeria Health Clinics, Markets, Water Points, Police, Religious Centers: [https://grid3.gov.ng/datasets](https://grid3.gov.ng/datasets)
+- **Disease Epidemiology:** Malaria Atlas Project (MAP) Plasmodium falciparum $Pf\\text{PR}_{2-10}$: [https://malariaatlas.org/](https://malariaatlas.org/)
+- **Electoral Infrastructure:** INEC Polling Units Location Registry: [https://irev.inecnigeria.org](https://irev.inecnigeria.org)
+
+### Methodological References & Literature
+1. **Anselin, L. (1988).** *Spatial Econometrics: Methods and Models*. Kluwer Academic Publishers.
+2. **Anselin, L. (1995).** Local Indicators of Spatial Association -- LISA. *Geographical Analysis*, 27(2), 93-115.
+3. **Chi, G., Fang, H., Chatterjee, S., & Blumenstock, J. E. (2022).** Micro-estimate of wealth for all low- and middle-income countries. *PNAS*, 119(3), e2113658119.
+4. **Rey, S. J., & Anselin, L. (2007).** PySAL: A Python library for spatial analytical methods. *The Review of Regional Studies*, 37(1), 5-27.
+5. **Tobler, W. R. (1970).** A computer movie simulating urban growth in the Detroit region. *Economic Geography*, 46(sup1), 234-240.
+6. **Weiss, D. J., et al. (2019).** Mapping the global prevalence, incidence, and mortality of Plasmodium falciparum, 2000-17. *The Lancet*, 394(10195), 322-331.
+"""
+
 # ==============================================================================
 # NOTEBOOK 1: MULTI-SECTOR ESDA & EPIDEMIOLOGY MASTERCLASS
 # ==============================================================================
@@ -528,6 +548,8 @@ plt.show()
 | **Low-High (Outlier)** | Municipal utility expansion; connecting excluded slum communities to city care. | Community retail shops, commuter transit sales points. | Environmental drainage remediation and larvicide application. |
 """))
 
+    cells.append(nbf.v4.new_markdown_cell(DATA_SOURCES_AND_REFS))
+
     nb['cells'] = cells
     out_path = 'notebooks/01_exploratory_spatial_data_analysis.ipynb'
     nbf.write(nb, out_path)
@@ -850,6 +872,8 @@ if 'malaria_prevalence_pct' in gdf.columns:
 2. **Healthcare Is an Economic & Epidemiological Stabilizer:** Clinic access protects against asset poverty and directly suppresses malaria parasite prevalence.
 """))
 
+    cells.append(nbf.v4.new_markdown_cell(DATA_SOURCES_AND_REFS))
+
     nb['cells'] = cells
     out_path = 'notebooks/02_spatial_statistics_modeling.ipynb'
     nbf.write(nb, out_path)
@@ -1106,6 +1130,8 @@ plt.show()
 1. **Precision Budgeting:** Fund allocation must shift from flat LGA-level grants to ward-level priority tiers.
 2. **Multi-Sector Bundling:** Interventions in Tier 1 wards must co-locate water boreholes, primary clinics, and micro-retail support.
 """))
+
+    cells.append(nbf.v4.new_markdown_cell(DATA_SOURCES_AND_REFS))
 
     nb['cells'] = cells
     out_path = 'notebooks/03_sectoral_decision_intelligence.ipynb'

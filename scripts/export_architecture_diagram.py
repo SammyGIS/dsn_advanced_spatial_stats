@@ -66,8 +66,8 @@ stages = [
 ]
 
 box_width = 0.20
-box_height = 0.48   # shorter cards — no dead space below text
-box_y = 0.24        # centred vertically in the figure
+box_height = 0.42   # compact cards tightly wrapping the content without dead space
+box_y = 0.28        # balanced vertical centering
 
 for i, s in enumerate(stages):
     # Shadow
