@@ -1,0 +1,38 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Scratch & Temporary Logs
+scratch/
+log.txt
+*.log
+data/logs/
+
+# Large Raw and Staging Geospatial Data
+data/raw/
+data/staging/
+*.tif
+*.tiff
+*.part
+*.geojson
+
+# Keep directory structure
+!data/raw/.gitkeep
+!data/staging/.gitkeep
+!data/processed/.gitkeep
+
+# Track the final processed dataset & portable bundle
+!data/processed/nigeria_wards_master.parquet
+!data/processed_data_bundle.zip
+
+# OS artifacts
+.DS_Store
+Thumbs.db

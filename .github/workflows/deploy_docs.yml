@@ -1,0 +1,62 @@
+name: Deploy Spatial Intelligence Documentation & Presentation
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install jupyter nbconvert
+
+      - name: Prepare Site Directory
+        run: |
+          mkdir -p _site/docs/figures
+          mkdir -p _site/notebooks_html
+
+          # Copy Presentation and Figures
+          cp docs/presentation.html _site/index.html
+          cp docs/spatial_statistics_masterclass_presentation.pptx _site/docs/ || true
+          cp -r docs/figures/* _site/docs/figures/
+
+          # Export Notebooks to HTML
+          jupyter nbconvert --to html notebooks/*.ipynb --output-dir=_site/notebooks_html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

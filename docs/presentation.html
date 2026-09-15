@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Spatial Statistics & Econometric Decision Intelligence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/white.min.css">
+    <style>
+        .reveal h1, .reveal h2, .reveal h3 { color: #1d3557; font-weight: 700; text-transform: none; }
+        .reveal h2 { font-size: 1.5em; border-bottom: 3px solid #2a9d8f; padding-bottom: 8px; margin-bottom: 20px; }
+        .reveal p, .reveal li { color: #2b2d42; font-size: 0.72em; line-height: 1.45; }
+        .split-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 25px; align-items: center; text-align: left; }
+        .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; }
+        .card { background: #f8f9fa; border: 1.5px solid #2a9d8f; border-radius: 8px; padding: 18px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); }
+        .card.crimson { border-color: #d90429; }
+        .card.coral { border-color: #e76f51; }
+        .card.navy { border-color: #1d3557; }
+        .card h4 { margin-top: 0; color: #1d3557; font-size: 1.05em; font-weight: bold; }
+        .formula-box { background: #eef2f5; padding: 10px 14px; border-radius: 6px; font-family: monospace; font-size: 0.85em; margin: 10px 0; border-left: 4px solid #2a9d8f; }
+        .badge { background: #2a9d8f; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.6em; font-weight: bold; vertical-align: middle; }
+        img.slide-img { border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); max-height: 520px; width: 100%; object-fit: contain; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Slide 1: Title -->
+            <section style="text-align: left; padding: 40px;">
+                <span class="badge">SPATIAL DECISION SCIENCE</span>
+                <h1 style="font-size: 2.1em; margin-top: 15px; color: #1d3557;">Advanced Spatial Statistics & Decision Science</h1>
+                <h3 style="font-size: 1.1em; color: #2a9d8f; font-weight: 500;">How Location Data and Spatial Modeling Drive Smarter Decisions Across Every Sector</h3>
+                <p style="margin-top: 25px; font-size: 0.72em; color: #6c757d;">
+                    Every sector starts with a question. Spatial statistics gives the answer.<br/>
+                    Covering Disease Epidemiology (Malaria), Healthcare Deserts, Geomarketing, Cultural Geography, and Spatial Econometrics across 9,308 Nigerian Wards.
+                </p>
+                <p style="font-size: 0.65em; color: #e76f51;"><em>A Production-Grade Open Source Decision Support Framework</em></p>
+            </section>
+
+            <!-- Slide 2: The Big Idea -->
+            <section>
+                <h2>The Big Idea: Why Traditional Statistics Fails in the Real World</h2>
+                <div class="card-grid">
+                    <div class="card crimson">
+                        <h4>The Fallacy of the Average</h4>
+                        <p>Traditional analytics uses state or national averages. A state can look moderately healthy on paper, while having hundreds of wards with ZERO clinics. Decisions based on averages waste money by funding the wrong places.</p>
+                    </div>
+                    <div class="card navy">
+                        <h4>Tobler's First Law of Geography</h4>
+                        <p><em>"Near things are more related than distant things."</em> (Tobler, 1970). Events in one ward do not stay in that ward. Pathogens spread, shoppers travel, and investments spill over across borders.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 3: Spatial Stats vs ML -->
+            <section>
+                <h2>Why Spatial Statistics Must Come BEFORE Machine Learning</h2>
+                <div class="card-grid">
+                    <div class="card crimson">
+                        <h4>The Trap: Spatial Data Leakage in ML</h4>
+                        <ul>
+                            <li>Random train/test splits leak neighboring data, creating fake 95% accuracy that fails when deployed in new regions.</li>
+                            <li>Tree models (XGBoost) chop coordinates into rigid square boxes, ignoring continuous spatial connectivity.</li>
+                            <li>Off-the-shelf ML cannot calculate causal policy multipliers.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>The Solution: Spatial Stats First</h4>
+                        <ul>
+                            <li><strong>Spatial Feature Engineering:</strong> Compute spatial lags <code>Wy</code> and distance decays before training ML.</li>
+                            <li><strong>Spatial Block Cross-Validation:</strong> Split data by geographic clusters to guarantee true generalization.</li>
+                            <li><strong>Spatial Econometrics:</strong> Test whether spatial spillovers exist using Lagrange Multiplier (LM) tests.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 4: Flowchart -->
+            <section>
+                <h2>End-to-End Decision Pipeline: From Raw Data to Actions</h2>
+                <img src="figures/00_architecture_and_methodology_flowchart.png" class="slide-img" alt="Methodology Flowchart">
+            </section>
+
+            <!-- Slide 5: Formula 1 - Weights Matrix -->
+            <section>
+                <h2>Formula 1: The Spatial Weights Matrix (W)</h2>
+                <div class="card-grid">
+                    <div class="card navy">
+                        <h4>Connecting Geography Mathematically</h4>
+                        <div class="formula-box">w<sub>ij</sub> = 1 if j &in; Neighbors(i), else 0</div>
+                        <div class="formula-box">w*<sub>ij</sub> = w<sub>ij</sub> / &sum;<sub>k</sub> w<sub>ik</sub> &nbsp;&implies;&nbsp; &sum;<sub>j</sub> w*<sub>ij</sub> = 1</div>
+                        <p><strong>Row-Standardization:</strong> Makes spatial calculations independent of raw neighbor counts, placing all wards on an equal scale.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Queen vs. K-Nearest Neighbors (KNN)</h4>
+                        <p><strong>Queen Contiguity:</strong> Wards are neighbors if they share a boundary border or point vertex.</p>
+                        <p><strong>KNN-5 (Recommended):</strong> Connects each ward to its 5 closest neighbors, preventing isolated islands from breaking matrix computations.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 6: Formula 2 - Spatial Lag -->
+            <section>
+                <h2>Formula 2: The Spatial Lag Operator [Wy]</h2>
+                <div class="card-grid">
+                    <div class="card navy">
+                        <h4>The Equation & Definition</h4>
+                        <div class="formula-box">[Wy]<sub>i</sub> = &sum;<sub>j</sub> w*<sub>ij</sub> &middot; y<sub>j</sub></div>
+                        <p><strong>Simple Intuition:</strong> <code>[Wy]<sub>i</sub></code> is the spatially weighted neighborhood average of variable <code>y</code> around focal ward <code>i</code>.</p>
+                    </div>
+                    <div class="card coral">
+                        <h4>Real-World Applications</h4>
+                        <p><strong>Public Health:</strong> If Ward <code>i</code> has 0 clinics, but <code>[W &middot; Clinics] = 6.0</code>, patients can walk to neighboring clinics. If <code>[W &middot; Clinics] = 0.0</code>, it is an isolated Healthcare Desert.</p>
+                        <p><strong>Geomarketing:</strong> Measuring surrounding consumer purchasing power <code>[W &middot; Wealth]</code> before opening a supermarket.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 7: Formula 3 - Moran's I -->
+            <section>
+                <h2>Formula 3: Global Moran's I (Testing for Spatial Clustering)</h2>
+                <div class="card-grid">
+                    <div class="card navy">
+                        <h4>The Mathematical Formula</h4>
+                        <div class="formula-box">I = (n / S<sub>0</sub>) &middot; [ &sum;<sub>i</sub>&sum;<sub>j</sub> w<sub>ij</sub> (y<sub>i</sub> - y&#772;)(y<sub>j</sub> - y&#772;) ] / &sum;<sub>i</sub> (y<sub>i</sub> - y&#772;)<sup>2</sup></div>
+                        <p><strong>Null Hypothesis (H<sub>0</sub>):</strong> Values are randomly scattered across the country.</p>
+                        <p><strong>Expected Value under H<sub>0</sub>:</strong> <code>E[I] = -1 / (n - 1) &rarr; 0</code>.</p>
+                    </div>
+                    <div class="card coral">
+                        <h4>Results across 9,308 Wards</h4>
+                        <ul>
+                            <li><strong>Wealth (RWI):</strong> I = 0.684 (z = 112.4, p = 0.001) &rarr; Extreme wealth clustering</li>
+                            <li><strong>Malaria Prevalence:</strong> I = 0.886 (z = 140.5, p = 0.001) &rarr; Intense disease corridors</li>
+                            <li><strong>Churches Distribution:</strong> I = 0.812 (z = 138.2, p = 0.001) &rarr; Clear North-South sorting</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 8: Formula 4 - Anselin LISA -->
+            <section>
+                <h2>Formula 4: Local Moran's I (LISA) & Hotspots</h2>
+                <div class="card-grid">
+                    <div class="card navy">
+                        <h4>Local Decomposition: I<sub>i</sub></h4>
+                        <div class="formula-box">I<sub>i</sub> = (z<sub>i</sub> / s<sup>2</sup>) &middot; &sum;<sub>j</sub> w<sub>ij</sub> z<sub>j</sub>, &nbsp; z<sub>i</sub> = y<sub>i</sub> - y&#772;</div>
+                        <p>Tests each individual ward against local spatial randomness to isolate exact geographic clusters.</p>
+                    </div>
+                    <div class="card crimson">
+                        <h4>The 4 Core Quadrants</h4>
+                        <ul>
+                            <li><strong style="color:#d90429;">High-High (Hotspot):</strong> High focal value in high neighborhood.</li>
+                            <li><strong style="color:#0077b6;">Low-Low (Coldspot):</strong> Low focal value in low neighborhood.</li>
+                            <li><strong style="color:#f77f00;">High-Low (Outlier):</strong> Island of wealth in low neighborhood.</li>
+                            <li><strong style="color:#90e0ef;">Low-High (Outlier):</strong> Pocket of deprivation inside affluent zone.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 9: LISA Wealth Map -->
+            <section>
+                <h2>National Wealth Clusters: Anselin LISA Map</h2>
+                <img src="figures/05_moran_and_lisa_clusters.png" class="slide-img" alt="LISA Wealth Clusters">
+            </section>
+
+            <!-- Slide 10: Sector 1 - Healthcare Deserts -->
+            <section>
+                <h2>Sector 1: Public Health & Healthcare Deserts</h2>
+                <div class="split-grid">
+                    <div class="card crimson">
+                        <h4>The Question & Answer</h4>
+                        <p><strong>THE QUESTION:</strong> Where are populations trapped with zero primary healthcare clinics?</p>
+                        <p><strong>THE ANSWER:</strong> We identified <strong>1,800+ Healthcare Deserts</strong>: wards with over 17,000 residents and 0 registered health facilities.</p>
+                        <p>Over 30 million people live in these wards. Mobile clinics and maternal care can be routed directly to them.</p>
+                    </div>
+                    <div>
+                        <img src="figures/01_national_wealth_and_health_deserts.png" class="slide-img" alt="Healthcare Deserts Map">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 11: Sector 2 - Malaria Epidemiology -->
+            <section>
+                <h2>Sector 2: Disease Epidemiology & Malaria Surveillance</h2>
+                <div class="split-grid">
+                    <div class="card navy">
+                        <h4>The Question & Answer</h4>
+                        <p><strong>THE QUESTION:</strong> Does malaria transmission cluster in distinct environmental corridors, and do local clinics buffer against the disease?</p>
+                        <p><strong>THE ANSWER:</strong> Malaria prevalence exhibits extreme spatial clustering (Moran's I = 0.886, p = 0.001). Southern riverine basins form endemic hotspots (PfPR > 40%). Wards with higher clinic rates experience significantly lower parasite rates.</p>
+                    </div>
+                    <div>
+                        <img src="figures/07_disease_epidemiology_malaria_map.png" class="slide-img" alt="Malaria Map">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 12: Sector 3 - Geomarketing -->
+            <section>
+                <h2>Sector 3: Geomarketing & Retail Expansion Strategy</h2>
+                <div class="split-grid">
+                    <div class="card coral">
+                        <h4>The Question & Answer</h4>
+                        <p><strong>THE QUESTION:</strong> Where can modern retail supermarkets, FMCG brands, and fintechs expand without crowded competition?</p>
+                        <p><strong>THE ANSWER:</strong> By cross-referencing Relative Wealth (RWI) with market density, we isolate <strong>Tier 2 Wards (High Wealth, Low Markets)</strong> as prime expansion catchments.</p>
+                    </div>
+                    <div>
+                        <img src="figures/02_commercial_retail_strategy.png" class="slide-img" alt="Retail Strategy Map">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 13: Sector 4 - Cultural Geography -->
+            <section>
+                <h2>Sector 4: Cultural Geography & Community Cohesion</h2>
+                <div class="split-grid">
+                    <div class="card">
+                        <h4>The Question & Answer</h4>
+                        <p><strong>THE QUESTION:</strong> How are faith institutions distributed, and where are the cultural transition zones of high co-presence?</p>
+                        <p><strong>THE ANSWER:</strong> The Shannon Entropy Diversity Index identifies the Middle Belt (Plateau, Benue, Kaduna South) as intense coexistence zones. Health vaccination drives must engage dominant local faith leaders.</p>
+                    </div>
+                    <div>
+                        <img src="figures/03_religious_cultural_geography.png" class="slide-img" alt="Religious Geography Map">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 14: Sector 5 - WASH & Clean Water -->
+            <section>
+                <h2>Sector 5: Public Utilities (WASH) & Infrastructure Equity</h2>
+                <div class="split-grid">
+                    <div class="card navy">
+                        <h4>The Question & Answer</h4>
+                        <p><strong>THE QUESTION:</strong> How unequal is clean water distribution, and which communities need urgent boreholes?</p>
+                        <p><strong>THE ANSWER:</strong> Lorenz Curve analysis reveals severe inequality: Gini = 0.72 for clean water points. The Ward Priority Index (WPI) synthesizes water, health, and poverty deficits into 4 Action Tiers.</p>
+                    </div>
+                    <div>
+                        <img src="figures/06_infrastructure_inequality_and_ward_priority_tiers.png" class="slide-img" alt="WASH Equity Map">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 15: Spatial Econometrics - OLS Failure -->
+            <section>
+                <h2>Spatial Econometrics: Why Ordinary Least Squares (OLS) Fails</h2>
+                <div class="card-grid">
+                    <div class="card crimson">
+                        <h4>The OLS Failure</h4>
+                        <div class="formula-box">y = X&beta; + &epsilon;, &nbsp; Cov(&epsilon;<sub>i</sub>, &epsilon;<sub>j</sub>) &ne; 0</div>
+                        <p>When units are georeferenced, residuals cluster spatially. If spatial lag is omitted, <strong>&beta; is biased and wrong</strong>. If spatial error exists, standard errors are deflated, causing false policy claims.</p>
+                    </div>
+                    <div class="card navy">
+                        <h4>The Solution: Lagrange Multiplier (LM) Tests</h4>
+                        <p>We test OLS residuals using Anselin's LM-Lag and LM-Error tests. For Nigeria, residual Moran's I is 0.421 (p &lt; 0.001), demanding Spatial Lag (SAR) or Spatial Error (SEM) models.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 16: SAR & The 2.4x Multiplier -->
+            <section>
+                <h2>The Spatial Lag Model (SAR) & The 2.4x Multiplier</h2>
+                <div class="card-grid">
+                    <div class="card navy">
+                        <h4>The Mathematical Model</h4>
+                        <div class="formula-box">y = &rho;Wy + X&beta; + &epsilon;</div>
+                        <div class="formula-box">y = (I - &rho;W)<sup>-1</sup> X&beta; + (I - &rho;W)<sup>-1</sup> &epsilon;</div>
+                        <p><code>&rho;</code> captures endogenous peer spillovers across neighboring wards.</p>
+                    </div>
+                    <div class="card coral">
+                        <h4>The 2.4x Spatial Multiplier</h4>
+                        <p>Our regression found: <strong>&rho; = 0.5842</strong> (p &lt; 0.0001).</p>
+                        <div class="formula-box">Multiplier = 1 / (1 - &rho;) = 1 / (1 - 0.5842) = 2.405x</div>
+                        <p><strong>Policy Rule:</strong> For every 1.0 unit of wealth created in a ward by building a market or clinic, an additional <strong>1.405 units spill over into surrounding wards</strong>!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 17: Spatial Error Model -->
+            <section>
+                <h2>The Spatial Error Model (SEM): Unobserved Shocks</h2>
+                <div class="card-grid">
+                    <div class="card navy">
+                        <h4>The Mathematical Formulation</h4>
+                        <div class="formula-box">y = X&beta; + u, &nbsp; u = &lambda;Wu + &epsilon;</div>
+                        <p><code>&lambda;</code> captures spatial autocorrelation in unobserved factors: regional climate, soil quality, or shared administrative shocks.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Results for Nigeria</h4>
+                        <p>Empirical parameter: <strong>&lambda; = 0.6124</strong> (p &lt; 0.0001).</p>
+                        <p>Correcting for spatial error autocorrelation dramatically improves model fit, reducing AIC by over 3,850 points compared to classical OLS.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 18: Model Comparison -->
+            <section>
+                <h2>Comparing Econometric Models Across 9,308 Wards</h2>
+                <div class="card navy" style="margin-top: 20px;">
+                    <table style="width: 100%; font-size: 0.7em; color: #212529; border-collapse: collapse;">
+                        <tr style="background: #1d3557; color: white;">
+                            <th style="padding: 10px;">Model Specification</th>
+                            <th>Pseudo R²</th>
+                            <th>Log-Likelihood</th>
+                            <th>AIC</th>
+                            <th>Spatial Parameter</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd; background: white;">
+                            <td style="padding: 10px;"><strong>Classical OLS</strong></td>
+                            <td>0.2841</td>
+                            <td>-5,812.4</td>
+                            <td>11,636.8</td>
+                            <td>None (Moran e = 0.421)</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd; background: #e8f8f5;">
+                            <td style="padding: 10px;"><strong>Spatial Lag (SAR)</strong></td>
+                            <td>0.5318</td>
+                            <td>-3,941.2</td>
+                            <td>7,896.4</td>
+                            <td>&rho; = 0.5842 (p &lt; 0.0001)</td>
+                        </tr>
+                        <tr style="background: #fef5f1;">
+                            <td style="padding: 10px;"><strong>Spatial Error (SEM)</strong></td>
+                            <td>0.5462</td>
+                            <td>-3,884.6</td>
+                            <td>7,781.2</td>
+                            <td>&lambda; = 0.6124 (p &lt; 0.0001)</td>
+                        </tr>
+                    </table>
+                    <p style="margin-top: 15px; color: #e76f51; font-weight: bold;">Spatial models explain almost twice as much variance as classical OLS and eliminate residual spatial bias.</p>
+                </div>
+            </section>
+
+            <!-- Slide 19: 15 Use Cases -->
+            <section>
+                <h2>15 Real-World Enterprise & Policy Use Cases</h2>
+                <div class="card-grid" style="font-size: 0.8em;">
+                    <div class="card">
+                        <h4>Public Health & Enterprise</h4>
+                        <ol style="padding-left:18px;">
+                            <li>Disease Surveillance (Malaria/Cholera clustering)</li>
+                            <li>Healthcare Facility Siting & Desert Eradication</li>
+                            <li>Clean Water (WASH) Borehole Prioritization</li>
+                            <li>Primary Education & School Dropout Prevention</li>
+                            <li>Commercial Supermarket Catchment Planning</li>
+                            <li>Fintech POS Agency Banking Siting</li>
+                            <li>Telecommunications 4G/5G Tower Siting</li>
+                            <li>Off-Grid Solar Mini-Grid Deployment</li>
+                        </ol>
+                    </div>
+                    <div class="card navy">
+                        <h4 style="color:#ffffff;">Civic, Safety & Governance</h4>
+                        <ol start="9" style="padding-left:18px; color:#e0e0e0;">
+                            <li>Cultural Cohesion & Peacebuilding</li>
+                            <li>Emergency Services (Police/Fire response radiuses)</li>
+                            <li>Urban Heat Island & Climate Resilience</li>
+                            <li>Agricultural Supply Chains & Grain Silo Siting</li>
+                            <li>Real Estate & Spatial Hedonic Land Pricing</li>
+                            <li>Transport Corridors & Road Multiplier Analysis</li>
+                            <li>Electoral Logistics & Polling Unit Administration</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 20: Conclusion -->
+            <section style="text-align: left; padding: 40px;">
+                <span class="badge">ACTION PLAN</span>
+                <h2 style="margin-top: 15px;">Summary: How to Deploy This Framework</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h4>Key Takeaways</h4>
+                        <p>&bull; Stop using flat averages—look at localized spatial distributions.</p>
+                        <p>&bull; Account for spillovers: policy capital returns 2.4x due to neighboring gains.</p>
+                        <p>&bull; Start with a clear question / hypothesis before modeling.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Access & Reproducibility</h4>
+                        <p>&bull; <strong>Fast Track (5 seconds):</strong> Unpack <code>data/processed_data_bundle.zip</code> (9.2 MB).</p>
+                        <p>&bull; <strong>Notebooks:</strong> Explore <code>notebooks/00</code> to <code>03</code>.</p>
+                        <p>&bull; <strong>GitHub Repository:</strong> <code>https://github.com/SammyGIS/dsn_advanced_spatial_stats.git</code></p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            transition: 'slide'
+        });
+    </script>
+</body>
+</html>
