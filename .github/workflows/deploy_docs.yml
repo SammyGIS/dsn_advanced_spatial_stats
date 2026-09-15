@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -16,8 +16,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # ── Step 1: Build the site ───────────────────────────────────────────────────
-  build:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -34,48 +36,27 @@ jobs:
           pip install -r requirements.txt
           pip install jupyter nbconvert
 
-      - name: Unpack Data Bundle
-        run: |
-          python scripts/unpack_data_bundle.py || true
-
       - name: Prepare Site Directory
         run: |
           mkdir -p _site/docs/figures
           mkdir -p _site/notebooks_html
 
-          # Copy presentation HTML as index
+          # Copy Presentation and Figures
           cp docs/presentation.html _site/index.html
-
-          # Copy PPTX (for download link)
           cp docs/spatial_statistics_masterclass_presentation.pptx _site/docs/ || true
+          cp -r docs/figures/* _site/docs/figures/
 
-          # Copy all map figures
-          cp -r docs/figures/* _site/docs/figures/ || true
-
-          # Export notebooks to HTML
-          jupyter nbconvert --to html notebooks/*.ipynb \
-            --output-dir=_site/notebooks_html || true
+          # Export Notebooks to HTML
+          jupyter nbconvert --to html notebooks/*.ipynb --output-dir=_site/notebooks_html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          # Auto-enable Pages on first run (requires contents: write permission)
-          enablement: true
 
-      - name: Upload Pages artifact
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '_site'
 
-  # ── Step 2: Deploy to GitHub Pages ──────────────────────────────────────────
-  deploy:
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        continue-on-error: true
