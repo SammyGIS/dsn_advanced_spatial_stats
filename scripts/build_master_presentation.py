@@ -145,7 +145,42 @@ add_box(s, 6.8, 1.3, 5.7, 5.7, "Spatial Data Science (Engineering + Analytics)",
 ], TEAL)
 
 # ──────────────────────────────────────────────────────────────────────────────
-# SLIDE 2D — 4 STRATEGIC ADVANTAGES
+# SLIDE 2D — ESDA: THE SUPERPOWER OF PATTERN DISCOVERY
+# ──────────────────────────────────────────────────────────────────────────────
+s = prs.slides.add_slide(blank_layout)
+add_header(s, "The Superpower of Spatial Statistics: Pattern Discovery via ESDA", "EXPLORATORY ANALYSIS")
+add_box(s, 0.8, 1.3, 5.7, 5.7, "Why Traditional EDA is Blind to Geography", [
+    "Traditional EDA relies on histograms, means, and boxplots.",
+    "Coordinates and topologies are completely discarded.",
+    "",
+    "Random Shuffle Test:",
+    "  Randomly shuffle 9,308 ward locations across Nigeria.",
+    "  The histogram, mean, and std dev remain 100% IDENTICAL.",
+    "  Standard EDA cannot tell whether poverty is clustered",
+    "  or randomly scattered across the country.",
+    "",
+    "Global Outlier Blindness:",
+    "  Only detects national extremes (z > 3). Completely misses",
+    "  wealthy commercial islands embedded in poor regions.",
+], CRIMSON)
+add_box(s, 6.8, 1.3, 5.7, 5.7, "What ESDA Unlocks: Seeing Real Patterns", [
+    "1. Hypothesis-Free Pattern Discovery:",
+    "   Reveals spatial regimes and natural clustering before",
+    "   formulating complex equations.",
+    "",
+    "2. Rigorous Statistical Clustering (Moran's I):",
+    "   Proves map patterns are genuine, not visual noise (p < 0.001).",
+    "",
+    "3. Local Spatial Outliers (Anselin LISA):",
+    "   Pinpoints High-Low 'Islands of Wealth' (commercial hubs)",
+    "   and Low-High 'Pockets of Poverty' (underserved sinks).",
+    "",
+    "4. Spatial Heterogeneity:",
+    "   Identifies where relationships invert across state borders.",
+], TEAL)
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SLIDE 2E — 4 STRATEGIC ADVANTAGES
 # ──────────────────────────────────────────────────────────────────────────────
 s = prs.slides.add_slide(blank_layout)
 add_header(s, "The 4 Strategic Advantages of Spatial Statistics", "CORE ADVANTAGES")

@@ -1,35 +1,160 @@
 # Advanced Spatial Statistics & Multi-Sector Decision Intelligence
-### *A Production-Grade Spatial Econometrics & ESDA Framework Across 9,308 Nigerian Administrative Wards*
+### *A Masterclass Curriculum & Applied Decision Support Framework Across 9,308 Nigerian Administrative Wards*
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![GeoPandas](https://img.shields.io/badge/GeoPandas-1.0+-green.svg)](https://geopandas.org/)
 [![PySAL](https://img.shields.io/badge/PySAL-libpysal%20%7C%20esda%20%7C%20spreg-orange.svg)](https://pysal.org/)
+[![Documentation](https://img.shields.io/badge/Documentation-GitHub%20Pages-teal.svg)](https://sammygis.github.io/dsn_advanced_spatial_stats/)
+[![Slide Deck](https://img.shields.io/badge/Slide%20Deck-Reveal.js%20Presentation-coral.svg)](https://sammygis.github.io/dsn_advanced_spatial_stats/presentation.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
-## The Big Ideas: Why Spatial Statistics & What Drives This Project?
+## Quick Navigation & Course Resources
 
-Traditional data analytics operates under the assumption of **aspatial independence**—the belief that what happens in one village, ward, or neighborhood has no bearing on its neighbors. In the real world, human society, economic commerce, disease transmission, and cultural practices do not stop at arbitrary political borders.
+- 🌐 **[Live Documentation & Master Handbook Portal](https://sammygis.github.io/dsn_advanced_spatial_stats/)**
+- 📊 **[Interactive Slide Deck (Reveal.js Web Presentation)](https://sammygis.github.io/dsn_advanced_spatial_stats/presentation.html)**
+- 📥 **[Download Masterclass Presentation (.pptx)](docs/spatial_statistics_masterclass_presentation.pptx)**
+- 🔬 **Notebook Modules:**
+  - [Module 0: Master Spatial Decision Handbook](notebooks/00_master_spatial_decision_handbook.ipynb)
+  - [Module 1: Exploratory Spatial Data Analysis (ESDA)](notebooks/01_exploratory_spatial_data_analysis.ipynb)
+  - [Module 2: Spatial Econometrics & Statistical Modeling](notebooks/02_spatial_statistics_modeling.ipynb)
+  - [Module 3: Sectoral Decision Intelligence Engines](notebooks/03_sectoral_decision_intelligence.ipynb)
 
-When governments and corporations make decisions using state-level averages or non-spatial models, they fall victim to three major fallacies:
-1. **The Fallacy of the State Average:** A state may appear "moderately wealthy" or "well-served by clinics" on paper, yet contain extreme internal polarization—dense metropolitan enclaves masked alongside vast rural "healthcare deserts" where hundreds of thousands have zero access to primary care.
-2. **The Spillover Blindspot (Tobler's First Law):** *"Everything is related to everything else, but near things are more related than distant things"* (Tobler, 1970). Investing in a major wholesale produce market or specialized regional hospital in one ward does not benefit that ward alone—it generates a **positive spatial multiplier wave** across contiguous neighboring wards. Standard models treat this as unexplainable noise; **spatial econometrics captures and quantifies it**.
-3. **The Misallocation Trap:** Opening retail stores, agency banking kiosks, or building boreholes without spatial intelligence leads to capital waste: building where competition is already saturated, or failing to identify high-wealth, underserved communities.
+---
+
+## Course Overview: Why Spatial Statistics in the Real World?
+
+Traditional statistical methods and data science pipelines operate under the assumption of **independent and identically distributed ($i.i.d.$) observations**—the assumption that what happens in one village, ward, or neighborhood is completely independent of its neighbors. In reality, human settlements, economic commerce, disease vectors, and infrastructural access do not stop at administrative boundaries.
+
+When public institutions and private corporations make strategic decisions based on state or national averages, they fall victim to three major fallacies:
+
+1. **The Fallacy of the Average:** A state or province can appear "moderately wealthy" or "well-served by healthcare" on paper, while masking extreme internal inequality—such as affluent metropolitan centers sitting beside vast rural "healthcare deserts" where hundreds of thousands of citizens have zero access to clinics.
+2. **The Spillover Blindspot (Tobler's First Law):** *"Everything is related to everything else, but near things are more related than distant things"* (Waldo Tobler, 1970). Investing in a major regional hospital, agricultural market, or road corridor in one ward creates positive spatial externalities (spillovers) across neighboring wards. Standard regressions dismiss this as unexplainable noise; **spatial econometrics explicitly models and quantifies it**.
+3. **The Capital Misallocation Trap:** Deploying bank branches, supermarket retail stores, or drilling water boreholes without spatial intelligence leads to capital waste: saturating already competitive clusters while completely missing high-demand, underserved communities.
 
 ### The Core Objective
-This project bridges the gap between **raw Earth Observation data** (satellite-derived asset wealth, gridded population counts) and **on-the-ground operational decisions**. By analyzing all **9,308 administrative wards in Nigeria**, we demonstrate how advanced spatial statistics directly answers critical questions across diverse spheres of life:
-- **Where are the most urgent healthcare deserts?** (Wards with $>17,000$ people and zero registered clinics).
-- **Where are prime, untapped consumer retail catchments?** (Wards with high relative wealth but low market competition).
+This curriculum bridges the gap between **raw Earth Observation (EO) data** (high-resolution satellite-derived asset wealth, gridded population rasters) and **on-the-ground operational decisions**. By analyzing all **9,308 administrative wards in Nigeria**, students master how spatial statistics answers critical questions across diverse spheres of national life:
+- **Where are the most urgent healthcare deserts?** (Wards with $>17,000$ residents and zero registered clinics).
+- **Where are prime, untapped consumer retail catchments?** (Wards with high relative wealth but low commercial market density).
 - **How do religious and civic institutions sort geographically?** (Mapping cultural cohesion and Shannon Entropy diversity zones).
 - **How unequal is clean water infrastructure?** (Lorenz inequality curves and Gini coefficients).
 - **What is the true economic multiplier of public investments?** (Spatial Lag SAR models decomposing direct vs. indirect spillover effects).
 
 ---
 
-## End-to-End Methodology & Pipeline Flow
+## The Superpower of Spatial Statistics: Exploratory Spatial Data Analysis (ESDA) for Pattern Discovery
 
-The diagram below illustrates how raw satellite rasters, administrative boundaries, and infrastructure registries are ingested, cleaned, spatially harmonized, and processed through our spatial statistical engine to power evidence-based decisions:
+Why is spatial statistics so exceptionally powerful for exploratory analysis? 
+
+Traditional non-spatial data exploration relies on **summary metrics (mean, median, standard deviation)**, **histograms**, and **correlation matrices**. These tools operate in "feature space" and completely discard geographic coordinates and spatial relationships:
+
+```
+Traditional EDA:  [Values] ───────► Summary Stats (Mean, SD) ──► BLIND to geographic arrangement
+Spatial EDA:      [Values + Space] ─► Moran's I + LISA Maps  ──► UNLOCKS hidden clusters & anomalies
+```
+
+### What Traditional Exploratory Data Analysis (EDA) Misses:
+- **Geographic Blindness:** You can shuffle the locations of 9,308 Nigerian wards randomly across the map, and the dataset's histogram, mean, and standard deviation will remain **100% identical**. Traditional EDA cannot tell whether poverty is randomly scattered or concentrated in vast regional belts.
+- **Hidden Structural Regimes:** A single national correlation coefficient ($r = 0.45$) can conceal that the relationship between healthcare facilities and population is strongly positive in the South, but non-existent or reversed in remote Sahelian border areas.
+- **Inability to Detect Local Spatial Anomalies:** Standard outlier detection (e.g. Tukey boxplots or $z$-scores $> 3$) only finds values that are globally extreme across the entire country. It completely misses **spatial outliers**—such as an affluent commercial ward surrounded by severe poverty, or an impoverished rural pocket inside a wealthy metropolitan corridor.
+
+### What Exploratory Spatial Data Analysis (ESDA) Unlocks:
+1. **Hypothesis-Free Pattern Discovery:** ESDA allows analysts to detect statistically significant geographic structures *before* formulating complex parametric equations.
+2. **Global Spatial Autocorrelation (Moran's $I$):** Statistically proves whether an observed map pattern is genuine clustering or mere random chance ($p < 0.001$).
+3. **Local Indicators of Spatial Association (Anselin LISA $I_i$):** Pinpoints the exact coordinates of:
+   - **Hotspots ($HH$):** Statistically robust clusters of high values (e.g., concentrated wealth in Lagos and Abuja).
+   - **Coldspots ($LL$):** Entrenched structural deprivation zones requiring targeted social interventions.
+   - **Spatial Outliers ($HL$ & $LH$):** Regional economic engines ("Islands of Wealth") and underserved pockets within affluent zones ("Opportunity Sinks").
+4. **Spatial Heterogeneity & Boundary Regimes:** Reveals non-stationary processes across state borders, river basins, and agro-ecological zones.
+
+In short, **spatial statistics transforms raw geodata into structured pattern intelligence**, enabling decision-makers to see the structural geography that standard data science leaves invisible.
+
+---
+
+## Masterclass Syllabus & Curriculum Roadmap
+
+This course is structured into four progressive, hands-on modules designed for university lectures, professional masterclasses, and self-paced research labs:
+
+```mermaid
+flowchart LR
+    subgraph M0["Module 0: Master Handbook"]
+        direction TB
+        M0A["Executive Synthesis"] --> M0B["Interactive Map Dashboard"]
+        M0B --> M0C["Decision Playbooks"]
+    end
+
+    subgraph M1["Module 1: ESDA & Autocorrelation"]
+        direction TB
+        M1A["Spatial Weights (W)"] --> M1B["Global Moran's I"]
+        M1B --> M1C["Local LISA Clusters"]
+    end
+
+    subgraph M2["Module 2: Spatial Econometrics"]
+        direction TB
+        M2A["Multicollinearity (VIF)"] --> M2B["Lagrange Multiplier Tests"]
+        M2B --> M2C["SAR & SEM Models"]
+    end
+
+    subgraph M3["Module 3: Decision Intelligence"]
+        direction TB
+        M3A["Lorenz Curves & Gini"] --> M3B["Bivariate Spatial Lag"]
+        M3B --> M3C["MCDA Ward Priority Index"]
+    end
+
+    M0 --> M1
+    M1 --> M2
+    M2 --> M3
+```
+
+| Module | Notebook | Core Statistical Topics | Practical Decision Output |
+| :--- | :--- | :--- | :--- |
+| **0** | **[00_master_spatial_decision_handbook.ipynb](notebooks/00_master_spatial_decision_handbook.ipynb)** | End-to-end framework, methodology architecture, dynamic multi-sector filtering | Master decision support dashboard & multi-sector synthesis |
+| **1** | **[01_exploratory_spatial_data_analysis.ipynb](notebooks/01_exploratory_spatial_data_analysis.ipynb)** | Spatial topology, Queen/KNN weights ($W$), Global Moran's $I$, Anselin LISA Local Moran ($I_i$) | Healthcare Deserts flagged ($n=1,800+$), Commercial retail quadrants, Cultural Shannon entropy |
+| **2** | **[02_spatial_statistics_modeling.ipynb](notebooks/02_spatial_statistics_modeling.ipynb)** | Multicollinearity diagnostics (VIF), OLS diagnostics, Anselin LM decision tree, SAR (Spatial Lag), SEM (Spatial Error) | Empirical spillover quantification ($\rho = 0.5842$), Spatial Multiplier simulation ($2.41\times$) |
+| **3** | **[03_sectoral_decision_intelligence.ipynb](notebooks/03_sectoral_decision_intelligence.ipynb)** | Spatial inequality (Lorenz curves & Gini), Bivariate spatial autocorrelation, Multi-Criteria Decision Analysis (MCDA) | Ward Priority Index (WPI Tiers 1-4), Top-5 emergency state investment rosters |
+
+---
+
+## 10 Real-World Strategic Sectoral Applications
+
+Every sector begins with an operational question. Spatial statistics provides the empirical answer:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                           10 APPLIED SECTORAL DECISION INTELLIGENCE ENGINES                             │
+├──────────────────────────┬──────────────────────────────────────────┬───────────────────────────────────┤
+│ Sector                   │ Applied Spatial Statistical Method       │ Strategic Decision Output         │
+├──────────────────────────┼──────────────────────────────────────────┼───────────────────────────────────┤
+│ 1. Public Health         │ Binary Deserts Masking + Spatial Density │ 1,800+ Zero-Clinic Wards Flagged  │
+│ 2. Disease Epidemiology  │ Spatial Lag SAR Model + Covariate Rates  │ Malaria Transmission Corridors    │
+│ 3. Commercial Marketing  │ Bivariate Quadrant Catchment Analysis    │ High-Wealth, Low-Density Markets  │
+│ 4. Water & WASH          │ Cumulative Lorenz Curves + Gini Index    │ Structural Clean Water Inequity   │
+│ 5. Education Logistics   │ Facility-to-School-Age Dependency Ratio  │ Classroom Deficit Bottlenecks     │
+│ 6. Cultural Geography    │ Shannon Diversity Entropy ($H$)          │ Middle Belt Religious Pluralism   │
+│ 7. Civic Security        │ Nearest-Neighbor Euclidean Distance      │ Policing & Security Dark Zones    │
+│ 8. Governance & Voting   │ Population Centroids + Catchment Buffers │ Polling Unit Logistics & Access   │
+│ 9. Wealth & Inequality   │ Anselin Local Moran LISA ($I_i$)         │ Affluence Hotspots vs. Coldspots  │
+│ 10. Capital Allocation   │ Multi-Criteria Decision Analysis (MCDA)  │ Ward Priority Index (Tiers 1-4)   │
+└──────────────────────────┴──────────────────────────────────────────┴───────────────────────────────────┘
+```
+
+1. **Public Health & Healthcare Deserts:** Cross-referencing gridded population with registered clinics identifies wards with $>17,000$ residents and zero primary health facilities, directing mobile clinic routes.
+2. **Malaria & Disease Epidemiology:** Quantifying how ambient climate and spatial neighborhood proximity drive parasite prevalence ($PfPR$) rates.
+3. **Commercial Retail & Geomarketing:** Segmenting wards into wealth vs. market density quadrants isolates **Tier 2 (Prime Expansion Targets)** for supermarket chains and fintech agency banking.
+4. **Water, Sanitation & Hygiene (WASH):** Calculating Lorenz curves reveals extreme spatial inequality ($Gini \approx 0.72$) in functional borehole infrastructure.
+5. **Educational Infrastructure:** Evaluating ward school counts against school-age demographic cohorts (ages 5–14) to pinpoint severe classroom shortages.
+6. **Cultural Geography & Cohesion:** Mapping faith institution ratios and Shannon Diversity Entropy reveals cultural sorting and transition zones across the Middle Belt.
+7. **Civic Safety & Security:** Measuring spatial access to police stations to highlight vulnerable rural zones lacking emergency response coverage.
+8. **Electoral Demographics & Governance:** Ward-level population clustering enables transparent boundary delimitation and equitable ballot distribution.
+9. **Macro-Wealth Inequality:** Anselin LISA analysis identifies statistically significant affluence clusters (Lagos, Abuja, Port Harcourt) versus structural poverty traps.
+10. **Multi-Sector Capital Allocation:** A composite Ward Priority Index (WPI) synthesizes health deficits, water poverty, and population pressure into four actionable investment tiers.
+
+---
+
+## End-to-End Methodology Architecture
+
+The diagram below illustrates how raw Earth Observation rasters, administrative boundaries, and infrastructure registries are ingested, cleaned, spatially harmonized, and modeled through our spatial statistical engine:
 
 ![End to End Methodology Flowchart](docs/figures/00_architecture_and_methodology_flowchart.png)
 
@@ -83,14 +208,14 @@ flowchart TD
 
 ---
 
-## Visual Intelligence & Sector Findings
+## Visual Intelligence & Empirical Findings
 
 ### 1. Public Health: National Wealth vs. Healthcare Deserts
 ![National Wealth and Healthcare Deserts](docs/figures/01_national_wealth_and_health_deserts.png)
 
-- **Relative Wealth Index (RWI):** Reveals pronounced macro-regional disparities, with concentrated wealth corridors in the South-West (Lagos-Ogun axis) and Southern oil-producing hubs, contrasted with lower asset wealth across northern agricultural belts.
+- **Relative Wealth Index (RWI):** Reveals concentrated wealth corridors in the South-West (Lagos-Ogun axis) and Southern oil hubs, contrasted with lower asset wealth across northern agricultural belts.
 - **Healthcare Deserts:** Identified **over 1,800 vulnerable wards** where the population exceeds the national median (> 17,000 residents) but has **exactly zero registered primary health centers or hospitals**.
-- **Action Playbook:** Directs state ministries and international health agencies (UNICEF, WHO) to bypass state-level quotas and route mobile clinics and capital investments directly to flagged desert wards.
+- **Operational Takeaway:** Directs state ministries and international health agencies (UNICEF, WHO) to bypass state-level quotas and route mobile clinics and capital investments directly to flagged desert wards.
 
 ---
 
@@ -106,8 +231,8 @@ flowchart TD
 ![Religious Cultural Geography](docs/figures/03_religious_cultural_geography.png)
 
 - **Spatial Sorting:** Distinct institutional divergence between the predominantly Muslim North (Mosque-dominant) and Christian South (Church-dominant).
-- **Middle Belt Transition Zone:** High Shannon Entropy scores (> 0.70) identify the Middle Belt (Plateau, Benue, Nasarawa, Taraba, Kaduna South) as critical zones of cultural co-presence and religious pluralism.
-- **Policy Application:** Essential intelligence for conflict-resolution NGOs, community health immunization drives, and civic campaigns that require engagement with dominant local faith anchors.
+- **Middle Belt Transition Zone:** High Shannon Entropy scores ($H > 0.70$) identify the Middle Belt (Plateau, Benue, Nasarawa, Taraba, Kaduna South) as critical zones of cultural co-presence and religious pluralism.
+- **Strategic Utility:** Critical intelligence for public health immunization drives, civic campaigns, and conflict-resolution organizations that require engagement with dominant local faith anchors.
 
 ---
 
@@ -145,7 +270,7 @@ flowchart TD
 
 ## Theoretical & Mathematical Foundations
 
-### 1. Spatial Weights Matrix ($W$) and Spatial Lag
+### 1. Spatial Weights Matrix ($W$) and Spatial Lag ($Wy$)
 Spatial adjacency across wards is formalized via an $n \times n$ weights matrix $W$, where entry $w_{ij}$ quantifies the spatial relationship between unit $i$ and unit $j$. To ensure scale-invariance across units with varying neighbor counts, $W$ is **row-standardized**:
 
 $$
@@ -157,6 +282,8 @@ The **Spatial Lag** $[Wy]_i$ of variable $y$ represents the spatially weighted n
 $$
 [Wy]_i = \sum_{j=1}^n w_{ij}^* y_j
 $$
+
+*Intuition for Students:* If ward $i$ has 4 neighbors with wealth scores of $[0.2, 0.4, 0.6, 0.8]$, the spatial lag $[Wy]_i = \frac{0.2 + 0.4 + 0.6 + 0.8}{4} = 0.50$. It represents the ambient spatial context surrounding ward $i$.
 
 ---
 
@@ -173,12 +300,12 @@ $$
 E[I] = -\frac{1}{n - 1} \xrightarrow{n \to \infty} 0
 $$
 
-- $I > E[I]$ with $p < 0.05$: **Positive Spatial Autocorrelation** (Clustering).
-- $I < E[I]$ with $p < 0.05$: **Negative Spatial Autocorrelation** (Dispersion).
+- $I > E[I]$ with $p < 0.05$: **Positive Spatial Autocorrelation** (Clustering of similar values).
+- $I < E[I]$ with $p < 0.05$: **Negative Spatial Autocorrelation** (Spatial dispersion / checkerboard pattern).
 
 ---
 
-### 3. Local Indicators of Spatial Association (LISA / Anselin Local Moran's $I_i$)
+### 3. Local Indicators of Spatial Association (Anselin Local Moran's $I_i$)
 To decompose global spatial autocorrelation into discrete localized clusters:
 
 $$
@@ -193,7 +320,24 @@ Each ward is categorized into one of four quadrants:
 
 ---
 
-### 4. Econometric Modeling & The Gauss-Markov Violation
+### 4. Multicollinearity Diagnostics: Variance Inflation Factor (VIF)
+Before specifying econometric models, regression models must be tested for severe collinearity among spatial predictors:
+
+$$
+VIF_j = \frac{1}{1 - R_j^2}
+$$
+
+where $R_j^2$ is the coefficient of determination obtained from regressing feature $X_j$ against all other explanatory features $X_{-j}$.
+
+- **$VIF = 1$:** Zero collinearity; predictor is completely orthogonal.
+- **$VIF > 5$:** Moderate collinearity; warrants scrutiny.
+- **$VIF > 10$:** Severe multicollinearity; standard errors explode, signs destabilize, and variables must be pruned or regularized.
+
+In our Nigerian ward dataset, all predictors (market density, healthcare accessibility, water points, population density) demonstrate $VIF < 2.5$, confirming stable regression estimation.
+
+---
+
+### 5. Spatial Econometric Modeling & Gauss-Markov Violation
 In georeferenced cross-sectional models, Ordinary Least Squares (OLS) encounters correlated error terms:
 
 $$
@@ -203,6 +347,17 @@ $$
 When spatial autocorrelation is present:
 - **Omitted Spatial Lag:** OLS parameter estimates $\hat{\beta}$ are **biased and inconsistent**.
 - **Spatial Error Autocorrelation:** OLS parameter estimates remain unbiased but are **inefficient**, and standard errors are severely underestimated, inflating type-I errors.
+
+#### The Anselin Lagrange Multiplier (LM) Decision Tree
+```mermaid
+flowchart TD
+    OLS["Fit Classical OLS Model<br/>y = Xβ + ε"] --> TEST["Compute Lagrange Multiplier Tests<br/>(LM-Lag vs. LM-Error)"]
+    TEST --> COND1{"Are both LM tests<br/>statistically significant?"}
+    COND1 -- No: LM-Lag only --> SAR["Estimate Spatial Lag (SAR)<br/>y = ρWy + Xβ + ε"]
+    COND1 -- No: LM-Error only --> SEM["Estimate Spatial Error (SEM)<br/>y = Xβ + u, u = λWu + ε"]
+    COND1 -- Yes: Both Significant --> ROBUST["Examine Robust LM Tests<br/>(Robust LM-Lag vs. Robust LM-Error)"]
+    ROBUST --> DECIDE["Select specification with higher<br/>Robust LM test statistic & lower AIC/SC"]
+```
 
 #### Spatial Lag Model (SAR - Spatial AutoRegressive)
 Models spatial behavioral spillovers and endogenous peer effects:
@@ -218,7 +373,7 @@ y = (I - \rho W)^{-1} X\beta + (I - \rho W)^{-1}\epsilon = \left( I + \rho W + \
 $$
 
 #### Spatial Error Model (SEM)
-Captures unobserved spatial covariates (e.g. regional climate, geographic terrain, state-level policy shocks):
+Captures unobserved spatial covariates (e.g. regional climate, terrain, unmeasured state policies):
 
 $$
 y = X\beta + u, \quad u = \lambda W u + \epsilon, \quad \epsilon \sim N(0, \sigma^2 I_n)
@@ -237,159 +392,96 @@ Estimated on all $N = 9,308$ wards using row-standardized $K$-Nearest Neighbors 
 | **Spatial Error Model (SEM)** | -3,884.6 | 7,781.2 | 7,824.0 | 0.5462 | $\lambda = 0.6124$ | $< 0.0001$ |
 
 ### Econometric Insights:
-1. **Hypothesis 1 Confirmed ($\beta_{\text{markets}} > 0, p < 0.001$):** Physical market infrastructure strongly and positively contributes to ward micro-wealth.
-2. **Hypothesis 2 Confirmed ($\beta_{\text{health}} > 0, p < 0.001$):** Healthcare accessibility acts as a structural defense against household asset poverty.
-3. **Hypothesis 3 Confirmed ($\rho = 0.5842, p < 0.0001$):** Spatial spillovers account for over half of total wealth variance.
+1. **Physical Markets ($\beta_{\text{markets}} > 0, p < 0.001$):** Market infrastructure strongly and positively contributes to ward micro-wealth.
+2. **Healthcare Defense ($\beta_{\text{health}} > 0, p < 0.001$):** Healthcare accessibility acts as a structural defense against household asset poverty.
+3. **Endogenous Spatial Spillovers ($\rho = 0.5842, p < 0.0001$):** Over half of total wealth variance is explained by neighborhood context.
 4. **Calculated Spatial Multiplier:**
    $$\text{Multiplier} = \frac{1}{1 - \rho} \approx \frac{1}{1 - 0.5842} \approx 2.405$$
    Every 1.0 unit of economic enhancement injected into a focal ward yields an additional **1.405 units of wealth** across contiguous neighboring wards through spatial feedback loops.
 
 ---
 
-## Interactive Masterclass Teaching Notebooks
+## Class Lab Setup & Execution Guide
 
-The repository includes four hands-on Jupyter Notebooks structured with formulas, interpretation rules, code, and pre-rendered figures:
+### 1. System Requirements & Environment Setup
+Ensure you have Python 3.10, 3.11, or 3.12 installed:
 
-| Notebook | Focus & Methodology | Cells | Primary Deliverables |
-| :--- | :--- | :---: | :--- |
-| **[00_master_spatial_decision_handbook.ipynb](notebooks/00_master_spatial_decision_handbook.ipynb)** | Master Executive Handbook & Interactive Spatial Decision Support Dashboard | 11 | Multi-Sector Dashboard, State Profile Inspector, Dynamic Custom WPI Calculator |
-| **[01_exploratory_spatial_data_analysis.ipynb](notebooks/01_exploratory_spatial_data_analysis.ipynb)** | Multi-Sector ESDA, Spatial Topology, Global Moran's $I$, Anselin LISA Clusters | 21 | Healthcare Deserts, Retail Expansion Quadrants, Cultural Geography, LISA Maps |
-| **[02_spatial_statistics_modeling.ipynb](notebooks/02_spatial_statistics_modeling.ipynb)** | Spatial Econometrics: OLS, Lagrange Multiplier Tests, SAR, SEM, Multiplier Spillovers | 19 | Multicollinearity VIF, LM diagnostics, Maximum Likelihood SAR/SEM, Multiplier Policy simulation |
-| **[03_sectoral_decision_intelligence.ipynb](notebooks/03_sectoral_decision_intelligence.ipynb)** | Spatial Inequality (Lorenz/Gini), Bivariate Spatial Autocorrelation, Ward Priority Index (WPI) | 13 | Lorenz Curves, Bivariate Moran, National MCDA WPI Map, Top 5 Priority State Rosters |
+```bash
+# Clone the repository
+git clone https://github.com/SammyGIS/dsn_advanced_spatial_stats.git
+cd dsn_advanced_spatial_stats
 
----
+# Create virtual environment
+python -m venv .venv
 
-## Project Directory Architecture
+# Activate environment
+# On Windows (PowerShell):
+.venv\Scripts\Activate.ps1
+# On macOS / Linux:
+source .venv/bin/activate
 
+# Install core geospatial dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
 ```
-advanced-spatial-statistics/
-├── README.md                                # Master documentation & visual book
-├── requirements.txt                         # Dependency specifications
-├── data/
-│   ├── raw/
-│   │   ├── grid3/                           # GRID3 POI GeoJSONs (Health, Markets, Faith, Water)
-│   │   ├── demographics/                    # WorldPop gridded population & age/sex cohorts
-│   │   └── rwi/                             # Meta Relative Wealth Index GeoTIFF
-│   ├── staging/                             # Cropped, reprojected raster layers
-│   └── processed/
-│       └── nigeria_wards_master.parquet     # Master multi-sector spatial dataset (9,308 wards)
-├── etl/
-│   ├── config.py                            # Centralized paths, URLs, and bounding box CRS
-│   ├── run_pipeline.py                      # Master pipeline orchestration runner
-│   ├── extract/
-│   │   ├── get_boundaries.py                # GRID3 ward boundary extraction
-│   │   ├── get_rwi.py                       # Meta RWI raster download & staging
-│   │   ├── get_grid3_pois.py                # Multi-sector POI ingestion
-│   │   └── get_demographics.py             # WorldPop Age/Sex demographic cohort aggregator
-│   ├── transform/
-│   │   ├── zonal_stats.py                   # Multi-core raster zonal statistics
-│   │   └── spatial_joins.py                 # Fast spatial point-in-polygon aggregation
-│   └── load/
-│       └── merge_ward_master.py             # Production Parquet schema consolidation
-├── notebooks/
-│   ├── 00_master_spatial_decision_handbook.ipynb
-│   ├── 01_exploratory_spatial_data_analysis.ipynb
-│   ├── 02_spatial_statistics_modeling.ipynb
-│   └── 03_sectoral_decision_intelligence.ipynb
-├── docs/
-│   └── figures/                             # High-resolution standalone publication figures
-├── scratch/                                 # Ephemeral scratch scripts & logs (safe to purge)
-└── scripts/
-    ├── build_master_handbook_notebook.py    # Master handbook notebook builder
-    ├── build_masterclass_notebooks.py       # Programmatic notebook generator
-    ├── execute_notebooks.py                 # Headless execution & figure baking engine
-    ├── export_architecture_diagram.py       # End-to-end flowchart export engine
-    └── export_publication_figures.py        # High-res publication chart export pipeline
+
+### 2. Exploring Interactive Notebooks
+Launch JupyterLab or open the project folder in VS Code:
+
+```bash
+jupyter lab
+```
+
+Navigate to `notebooks/` and run the modules in sequential order:
+- `00_master_spatial_decision_handbook.ipynb`
+- `01_exploratory_spatial_data_analysis.ipynb`
+- `02_spatial_statistics_modeling.ipynb`
+- `03_sectoral_decision_intelligence.ipynb`
+
+### 3. Re-exporting Documentation & Visual Assets
+The codebase provides automated CLI tools for batch processing and figure regeneration:
+
+```bash
+# Regenerate publication figures
+python scripts/export_publication_figures.py
+
+# Regenerate methodology flowchart
+python scripts/export_architecture_diagram.py
+
+# Rebuild and refresh presentation slides
+python scripts/build_master_presentation.py
+
+# Inject responsive navigation across HTML documentation
+python scripts/enhance_docs_portal.py
 ```
 
 ---
 
-## Data Access & Execution Paths
+## Data Sources & Attributions
 
-We provide **two flexible ways** to use this repository, ensuring seamless access whether you are an analyst who wants instant results or an engineer learning the full ETL pipeline:
+All datasets used in this framework originate from reputable global geospatial and development data repositories:
 
-### Option A: The Fast-Track (Instant Analysis & Notebooks)
-*Best for: Econometricians, Data Scientists, Decision-Makers, and Students.*
-
-You **do not need** to download gigabytes of raw satellite imagery or run the 30-minute ETL pipeline. The final consolidated dataset is pre-packaged as a lightweight, compressed bundle (`data/processed_data_bundle.zip`, **~9.2 MB**).
-
-1. **Clone the repository & install dependencies:**
-   ```bash
-   git clone https://github.com/username/advanced-spatial-statistics.git
-   cd advanced-spatial-statistics
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-
-2. **Unpack the master dataset:**
-   ```bash
-   python scripts/unpack_data_bundle.py
-   ```
-   *(This immediately extracts `data/processed/nigeria_wards_master.parquet` containing all 9,308 wards and 32+ multi-sector indicators).*
-
-3. **Explore & Run the Masterclasses:**
-   Launch JupyterLab / VS Code and immediately explore any notebook in `notebooks/`:
-   ```bash
-   jupyter lab
-   ```
+| Data Layer | Source Organization | Resolution / Scope | Direct URL |
+| :--- | :--- | :--- | :--- |
+| **Ward Administrative Boundaries** | GRID3 Nigeria | 9,308 Polygon Boundaries | [data.grid3.gov.ng](https://data.grid3.gov.ng/) |
+| **Points of Interest (Health, Markets, WASH, Faith, Police)** | GRID3 Nigeria | National Point Registries | [data.grid3.gov.ng](https://data.grid3.gov.ng/) |
+| **Relative Wealth Index (RWI)** | Meta Data for Good & UC Berkeley | 2.4 km High-Resolution Raster | [dataforgood.facebook.com](https://dataforgood.facebook.com/) |
+| **Gridded Population & Demographics** | WorldPop Project | 100m Constrained Rasters (2025) | [worldpop.org](https://www.worldpop.org/) |
+| **Malaria Parasite Rate ($PfPR_{2-10}$)** | Malaria Atlas Project (MAP) | Oxford University 1km Rasters | [malariaatlas.org](https://malariaatlas.org/) |
 
 ---
 
-### Option B: The Full-Track (Run the End-to-End ETL Pipeline)
-*Best for: Data Engineers, GIS Specialists, and those looking to customize or reproduce the pipeline.*
+## Citation & Academic Use
 
-If you want to extract fresh satellite rasters, recompute multi-core zonal statistics, and execute spatial joins from raw data:
-
-1. **Verify automated directory creation:**
-   The ETL configuration (`etl/config.py`) automatically ensures that `data/raw/`, `data/staging/`, and `data/processed/` exist.
-2. **Execute the pipeline:**
-   ```bash
-   python etl/run_pipeline.py
-   ```
-   This automated pipeline will:
-   - Download GRID3 administrative ward boundary polygons (9,308 units).
-   - Ingest Meta Relative Wealth Index GeoTIFF and crop to Nigeria bounds.
-   - Fetch WorldPop 100m constrained population projection rasters.
-   - Query 8 GRID3 Points-of-Interest registries (Health, Markets, WASH, Religion, Security).
-   - Execute multi-threaded raster zonal statistics (mean wealth, total population).
-   - Perform spatial point-in-polygon aggregation.
-   - Save the consolidated master Parquet file at `data/processed/nigeria_wards_master.parquet`.
-
-3. **Re-build & Execute Notebooks Headlessly:**
-   ```bash
-   python scripts/build_master_handbook_notebook.py
-   python scripts/build_masterclass_notebooks.py
-   python scripts/execute_notebooks.py
-   ```
-
-4. **Re-export Publication Visual Figures:**
-   ```bash
-   python scripts/export_architecture_diagram.py
-   python scripts/export_publication_figures.py
-   ```
-
----
-
-### Data Management & `.gitignore` Policy
-To keep this repository lightweight, clean, and collaborative:
-- Heavy raw rasters (`*.tif`, `*.part`) and multi-megabyte GeoJSON point dumps (`data/raw/`, `data/staging/`) are excluded from Git via `.gitignore`.
-- Directory structures are preserved using `.gitkeep`.
-- The portable, production-ready master dataset is tracked via `data/processed_data_bundle.zip` (9.2 MB) and `data/processed/nigeria_wards_master.parquet`.
-
----
-
-## Citation & License
-
-If you utilize this framework, codebase, or methodology in academic research, public policy planning, or commercial analytics, please cite:
+If you use this curriculum, code, or decision support framework in your teaching, coursework, research publications, or consulting engagements, please cite:
 
 ```bibtex
-@misc{nigeria_spatial_statistics_2026,
-  author = {Advanced Spatial Statistics Working Group},
-  title = {Multi-Sector Spatial Statistics & Econometric Decision Intelligence Across Nigerian Administrative Wards},
+@misc{nigeria_spatial_statistics_masterclass_2026,
+  author = {Adedoyin, Samuel and Data Science Nigeria AI/GIS Working Group},
+  title = {Advanced Spatial Statistics & Multi-Sector Decision Intelligence Across Nigerian Administrative Wards: A Masterclass Curriculum},
   year = {2026},
   publisher = {GitHub},
-  howpublished = {\url{https://github.com/username/advanced-spatial-statistics}}
+  howpublished = {\url{https://github.com/SammyGIS/dsn_advanced_spatial_stats}}
 }
 ```
 

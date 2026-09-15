@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Spatial Statistics & Econometric Decision Intelligence</title>
+    <title>Spatial Statistics Presentation Slides | DSN</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/white.min.css">
     <style>
@@ -23,6 +23,108 @@
     </style>
 </head>
 <body>
+<!-- DSN_NAV_START -->
+
+
+<style>
+/* DSN Spatial Intelligence Top Navigation Bar */
+#dsn-top-nav {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999999;
+    background: linear-gradient(135deg, #1d3557 0%, #162436 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    border-bottom: 3px solid #2a9d8f;
+}
+#dsn-top-nav .nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 24px;
+}
+#dsn-top-nav .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+    color: #ffffff;
+    text-decoration: none;
+}
+#dsn-top-nav .nav-brand-badge {
+    background: #2a9d8f;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+#dsn-top-nav .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#dsn-top-nav .nav-links a {
+    color: #e2e8f0;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+#dsn-top-nav .nav-links a:hover {
+    background: rgba(42, 157, 143, 0.25);
+    color: #ffffff;
+}
+#dsn-top-nav .nav-links a.active {
+    background: #2a9d8f;
+    color: #ffffff;
+    font-weight: 600;
+}
+#dsn-top-nav .nav-btn-pptx {
+    background: #e76f51 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+#dsn-top-nav .nav-btn-pptx:hover {
+    background: #d95a3a !important;
+}
+@media (max-width: 992px) {
+    #dsn-top-nav .nav-container { flex-direction: column; gap: 8px; }
+    #dsn-top-nav .nav-links { flex-wrap: wrap; justify-content: center; }
+}
+</style>
+
+<nav id="dsn-top-nav">
+    <div class="nav-container">
+        <a href="index.html" class="nav-brand">
+            <span class="nav-brand-badge">DSN AI/GIS</span>
+            Spatial Decision Intelligence Suite
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="">📖 Master Decision Handbook</a></li><li><a href="presentation.html" class="active">📊 Presentation Slides</a></li><li><a href="notebooks_html/01_exploratory_spatial_data_analysis.html" class="">🗺️ 01: ESDA</a></li><li><a href="notebooks_html/02_spatial_statistics_modeling.html" class="">📐 02: Modeling</a></li><li><a href="notebooks_html/03_sectoral_decision_intelligence.html" class="">🎯 03: Decision Engines</a></li><li><a href="spatial_statistics_masterclass_presentation.pptx" class=" nav-btn-pptx" download="spatial_statistics_masterclass_presentation.pptx">📥 Download PPTX</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- DSN_NAV_END -->
+
     <div class="reveal">
         <div class="slides">
 
@@ -49,6 +151,26 @@
                     <div class="card navy">
                         <h4>Tobler's First Law of Geography</h4>
                         <p><em>"Near things are more related than distant things."</em> (Tobler, 1970). Events in one ward do not stay in that ward. Pathogens spread, shoppers travel, and investments spill over across borders.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 2B: ESDA Pattern Discovery -->
+            <section>
+                <h2>The Superpower of Spatial Statistics: Pattern Discovery via ESDA</h2>
+                <div class="card-grid">
+                    <div class="card crimson">
+                        <h4>Why Traditional EDA is Blind to Space</h4>
+                        <p>Traditional EDA relies on histograms, means, and boxplots. Coordinates and topologies are discarded.</p>
+                        <p><strong>The Random Shuffle Test:</strong> Randomly shuffle 9,308 wards across Nigeria. The histogram and mean remain 100% identical! Traditional EDA cannot tell whether poverty is clustered or randomly scattered.</p>
+                        <p><strong>Outlier Blindness:</strong> Tukey boxplots ($z > 3$) miss local spatial anomalies like an island of wealth inside a poor region.</p>
+                    </div>
+                    <div class="card navy">
+                        <h4>What ESDA (Spatial EDA) Unlocks</h4>
+                        <p><strong>1. Hypothesis-Free Pattern Discovery:</strong> Discovers natural clustering and spatial regimes before formulating complex regression equations.</p>
+                        <p><strong>2. Statistical Significance (Moran's I):</strong> Proves whether an observed map pattern is genuine clustering or mere random noise ($p < 0.001$).</p>
+                        <p><strong>3. Local LISA Clusters:</strong> Identifies High-High Hotspots, Low-Low Coldspots, and High-Low / Low-High Spatial Outliers.</p>
+                        <p><strong>4. Boundary Regimes:</strong> Identifies where economic relationships invert across state borders.</p>
                     </div>
                 </div>
             </section>
