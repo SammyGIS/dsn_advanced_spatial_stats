@@ -1,5 +1,5 @@
-# Advanced Spatial Statistics & Multi-Sector Decision Intelligence
-### *A Masterclass Curriculum & Applied Decision Support Framework Across 9,308 Nigerian Administrative Wards*
+# Advanced Spatial Statistics
+### *A Comprehensive Course on Theory and Practical Application*
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![GeoPandas](https://img.shields.io/badge/GeoPandas-1.0+-green.svg)](https://geopandas.org/)
@@ -477,8 +477,8 @@ If you use this curriculum, code, or decision support framework in your teaching
 
 ```bibtex
 @misc{nigeria_spatial_statistics_masterclass_2026,
-  author = {Adedoyin, Samuel and Data Science Nigeria AI/GIS Working Group},
-  title = {Advanced Spatial Statistics & Multi-Sector Decision Intelligence Across Nigerian Administrative Wards: A Masterclass Curriculum},
+  author = {Adedoyin, Samuel},
+  title = {Advanced Spatial Statistics: Theory and Practical Application},
   year = {2026},
   publisher = {GitHub},
   howpublished = {\url{https://github.com/SammyGIS/dsn_advanced_spatial_stats}}

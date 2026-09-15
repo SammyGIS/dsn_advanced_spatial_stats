@@ -16,7 +16,7 @@ PORTAL_HTML = r"""<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spatial Statistics & Econometrics — Course Materials</title>
+    <title>Advanced Spatial Statistics — Course Materials</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -110,9 +110,9 @@ PORTAL_HTML = r"""<!DOCTYPE html>
         .nav-item {
             display: flex;
             align-items: center;
-            padding: 9px 12px;
-            margin-bottom: 3px;
-            border-radius: 6px;
+            padding: 9px 14px;
+            margin-bottom: 4px;
+            border-radius: 8px;
             color: var(--text-secondary);
             font-size: 13px;
             font-weight: 500;
@@ -120,7 +120,6 @@ PORTAL_HTML = r"""<!DOCTYPE html>
             transition: all 0.15s ease;
             text-decoration: none;
             gap: 10px;
-            border-left: 3px solid transparent;
         }
 
         .nav-item:hover {
@@ -129,48 +128,18 @@ PORTAL_HTML = r"""<!DOCTYPE html>
         }
 
         .nav-item.active {
-            background: var(--bg-active);
-            color: var(--text-main);
+            background: #e0f2fe;
+            color: #0369a1;
             font-weight: 600;
-            border-left-color: var(--text-main);
         }
 
         .nav-icon {
             font-size: 15px;
-            opacity: 0.85;
+            opacity: 0.9;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             width: 18px;
-        }
-
-        /* Sidebar Footer */
-        .sidebar-footer {
-            padding: 14px 16px;
-            border-top: 1px solid var(--border);
-            background: #ffffff;
-        }
-
-        .btn-download {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            background: #ffffff;
-            color: var(--text-main);
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.15s ease;
-        }
-
-        .btn-download:hover {
-            background: var(--bg-hover);
-            border-color: #cbd5e1;
         }
 
         /* Main Content Viewport (Full Screen, Minimal Header) */
@@ -271,8 +240,8 @@ PORTAL_HTML = r"""<!DOCTYPE html>
         <!-- Minimal White Sidebar -->
         <aside class="sidebar" id="portalSidebar">
             <div class="sidebar-header">
-                <h1 class="course-title">Spatial Statistics &amp; Econometrics</h1>
-                <p class="course-subtitle">Course Materials &amp; Lecture Notes</p>
+                <h1 class="course-title">Advanced Spatial Statistics</h1>
+                <p class="course-subtitle">Theory &amp; Practical Application</p>
             </div>
 
             <nav class="sidebar-nav">
@@ -310,13 +279,6 @@ PORTAL_HTML = r"""<!DOCTYPE html>
                     <span>03: Decision Engines</span>
                 </div>
             </nav>
-
-            <div class="sidebar-footer">
-                <a href="spatial_statistics_masterclass_presentation.pptx" class="btn-download" download>
-                    <span>📥</span>
-                    <span>Download Slides (.pptx)</span>
-                </a>
-            </div>
         </aside>
 
         <!-- Main Viewport (Clean, Minimal) -->

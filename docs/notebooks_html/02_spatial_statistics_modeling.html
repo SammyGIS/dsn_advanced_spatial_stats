@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>02: Spatial Statistics & Econometric Modeling | DSN</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>02_spatial_statistics_modeling</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7510,8 +7510,6 @@ a.anchor-link {
 </style>
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
-
-
 <main>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2fc199c9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -7663,70 +7661,64 @@ $$</p>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="3.-Pre-Modeling-Diagnostics:-Multicollinearity-&amp;-Variance-Inflation-Factor-(VIF)">3. Pre-Modeling Diagnostics: Multicollinearity &amp; Variance Inflation Factor (VIF)<a class="anchor-link" href="#3.-Pre-Modeling-Diagnostics:-Multicollinearity-&amp;-Variance-Inflation-Factor-(VIF)">¶</a></h2><h3 id="3.1-What-Is-Multicollinearity-&amp;-Why-Does-It-Break-Models?">3.1 What Is Multicollinearity &amp; Why Does It Break Models?<a class="anchor-link" href="#3.1-What-Is-Multicollinearity-&amp;-Why-Does-It-Break-Models?">¶</a></h3><p>Multicollinearity occurs when two or more explanatory covariates ($X_1, X_2, \dots, X_p$) in a regression model are highly correlated with each other. While multicollinearity does not violate the OLS Gauss-Markov assumption of unbiasedness (coefficients remain theoretically centered around their true population values), it introduces <strong>devastating practical consequences</strong>:</p>
 <ol>
-<li><strong>Variance Inflation:</strong> The variance of the estimated coefficients $	ext{Var}(\hat{eta}_k)$ explodes toward infinity as collinearity increases.</li>
+<li><strong>Variance Inflation:</strong> The variance of the estimated coefficients $\text{Var}(\hat{\beta}_k)$ explodes toward infinity as collinearity increases.</li>
 <li><strong>Standard Error Blowup:</strong> Wide standard errors produce artificially small $t$-statistics and inflated $p$-values, leading researchers to conclude that key policy interventions have "no significant effect" (<strong>Type-II Error</strong>).</li>
 <li><strong>Coefficient Instability &amp; Sign Reversals:</strong> Minor perturbations or adding/removing a single variable can cause estimated coefficients to swing erratically or flip to counter-intuitive signs (e.g., healthcare clinics appearing to "increase" poverty).</li>
 </ol>
 <hr/>
-<h3 id="3.2-The-Mathematical-Mechanics-of-VIF">3.2 The Mathematical Mechanics of VIF<a class="anchor-link" href="#3.2-The-Mathematical-Mechanics-of-VIF">¶</a></h3><p>To measure the exact degree to which collinearity inflates the variance of coefficient $\hat{eta}_k$, we compute the <strong>Variance Inflation Factor ($	ext{VIF}_k$)</strong>:</p>
+<h3 id="3.2-The-Mathematical-Mechanics-of-VIF">3.2 The Mathematical Mechanics of VIF<a class="anchor-link" href="#3.2-The-Mathematical-Mechanics-of-VIF">¶</a></h3><p>To measure the exact degree to which collinearity inflates the variance of coefficient $\hat{\beta}_k$, we compute the <strong>Variance Inflation Factor ($\text{VIF}_k$)</strong>:</p>
 <p>$$
-	ext{VIF}_k = rac{1}{1 - R_k^2}
+\text{VIF}_k = \frac{1}{1 - R_k^2}
 $$</p>
 <p><strong>Step-by-Step Mathematical Derivation:</strong></p>
 <ol>
 <li><strong>Auxiliary Regression:</strong> We take predictor $X_k$ and run an ordinary regression using $X_k$ as the dependent variable against all other remaining $p-1$ predictors in the matrix:
-$$X_k = lpha_0 + \sum_{j 
-eq k} lpha_j X_j + 
-u_k$$</li>
+$$X_k = \alpha_0 + \sum_{j \neq k} \alpha_j X_j + u_k$$</li>
 <li><strong>Coefficient of Determination ($R_k^2$):</strong> We extract $R_k^2$, which represents the proportion of variance in $X_k$ that is completely explained by the other predictors.</li>
-<li><strong>Variance Inversion:</strong> The variance of $\hat{eta}_k$ in the full regression is given by:
-$$	ext{Var}(\hat{eta}_k) = rac{\sigma^2}{(n-1) s_k^2} \cdot \left(rac{1}{1 - R_k^2}
-ight) = 	ext{Var}_{	ext{orthogonal}}(\hat{eta}_k) \cdot 	ext{VIF}_k$$
+<li><strong>Variance Inversion:</strong> The variance of $\hat{\beta}_k$ in the full regression is given by:
+$$\text{Var}(\hat{\beta}_k) = \frac{\sigma^2}{(n-1) s_k^2} \cdot \left(\frac{1}{1 - R_k^2}\right) = \text{Var}_{\text{orthogonal}}(\hat{\beta}_k) \cdot \text{VIF}_k$$
 where $s_k^2$ is the sample variance of $X_k$.</li>
 </ol>
 <p><strong>Intuitive Walkthrough:</strong></p>
 <ul>
-<li>If $X_k$ is completely orthogonal to all other predictors: $R_k^2 = 0 \implies 	ext{VIF}_k = rac{1}{1 - 0} = 1.0$ (Zero variance inflation).</li>
-<li>If other predictors explain 80% of $X_k$: $R_k^2 = 0.80 \implies 	ext{VIF}_k = rac{1}{1 - 0.80} = 5.0$ (Variance is inflated $5	imes$).</li>
-<li>If other predictors explain 90% of $X_k$: $R_k^2 = 0.90 \implies 	ext{VIF}_k = rac{1}{1 - 0.90} = 10.0$ (Variance is inflated $10	imes$, standard error is inflated $\sqrt{10} pprox 3.16	imes$).</li>
+<li>If $X_k$ is completely orthogonal to all other predictors: $R_k^2 = 0 \implies \text{VIF}_k = \frac{1}{1 - 0} = 1.0$ (Zero variance inflation).</li>
+<li>If other predictors explain 80% of $X_k$: $R_k^2 = 0.80 \implies \text{VIF}_k = \frac{1}{1 - 0.80} = 5.0$ (Variance is inflated $5\times$).</li>
+<li>If other predictors explain 90% of $X_k$: $R_k^2 = 0.90 \implies \text{VIF}_k = \frac{1}{1 - 0.90} = 10.0$ (Variance is inflated $10\times$, standard error is inflated $\sqrt{10} \approx 3.16\times$).</li>
 </ul>
 <hr/>
 <h3 id="3.3-Interpretation-Benchmark-Thresholds">3.3 Interpretation Benchmark Thresholds<a class="anchor-link" href="#3.3-Interpretation-Benchmark-Thresholds">¶</a></h3><table>
 <thead>
 <tr>
-<th style="text-align:center">VIF Score Range</th>
+<th style="text-align:center">VIF Range</th>
 <th style="text-align:center">Collinearity Level</th>
-<th style="text-align:left">Diagnostic Interpretation &amp; Prescribed Action</th>
+<th style="text-align:left">Practical Meaning &amp; Prescribed Action</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><strong>$	ext{VIF} = 1.0$</strong></td>
+<td style="text-align:center"><strong>VIF = 1.0</strong></td>
 <td style="text-align:center"><strong>Ideal (Orthogonal)</strong></td>
-<td style="text-align:left">Predictor shares zero linear overlap with other features. Maximum statistical precision.</td>
+<td style="text-align:left">Predictor shares zero linear overlap with other features. Maximum parameter precision.</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>$1.0 &lt; 	ext{VIF} &lt; 5.0$</strong></td>
-<td style="text-align:center"><strong>Low / Acceptable</strong></td>
+<td style="text-align:center"><strong>1.0 &lt; VIF &lt; 5.0</strong></td>
+<td style="text-align:center"><strong>Low / Safe</strong></td>
 <td style="text-align:left">Mild correlation that does not compromise parameter stability. <strong>Safe to proceed with OLS and Spatial Econometrics.</strong></td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>$5.0 \le 	ext{VIF} &lt; 10.0$</strong></td>
+<td style="text-align:center"><strong>5.0 ≤ VIF &lt; 10.0</strong></td>
 <td style="text-align:center"><strong>Moderate Concern</strong></td>
 <td style="text-align:left">Noticeable coefficient inflation. Coefficients should be scrutinized and standard errors verified.</td>
 </tr>
 <tr>
-<td style="text-align:center"><strong>$	ext{VIF} \ge 10.0$</strong></td>
+<td style="text-align:center"><strong>VIF ≥ 10.0</strong></td>
 <td style="text-align:center"><strong>Severe Multicollinearity</strong></td>
-<td style="text-align:left">Critical violation. Feature matrix is near-singular. Variables must be dropped, combined via Principal Components, or regularized.</td>
+<td style="text-align:left">Critical violation: feature matrix is near-singular. Variables must be dropped, combined via dimensionality reduction, or regularized.</td>
 </tr>
 </tbody>
 </table>
 <hr/>
-<h3 id="3.4-Why-VIF-Is-Mandatory-BEFORE-Spatial-Econometrics-(SAR-&amp;-SEM)">3.4 Why VIF Is Mandatory BEFORE Spatial Econometrics (SAR &amp; SEM)<a class="anchor-link" href="#3.4-Why-VIF-Is-Mandatory-BEFORE-Spatial-Econometrics-(SAR-&amp;-SEM)">¶</a></h3><p>In Spatial Autoregressive models (SAR: $y = 
-ho Wy + Xeta + \epsilon$), the spatial lag $
-ho Wy$ acts as an endogenous regressor. If the exogenous feature matrix $X$ is already contaminated with high multicollinearity, the Maximum Likelihood or Instrumental Variables estimator cannot reliably separate exogenous predictor effects ($Xeta$) from endogenous spatial contagion ($
-ho Wy$). Verifying low VIF ($	ext{VIF} &lt; 5$) establishes the essential empirical foundation before spatial diagnostics.</p>
+<h3 id="3.4-Why-VIF-Is-Mandatory-BEFORE-Spatial-Econometrics-(SAR-&amp;-SEM)">3.4 Why VIF Is Mandatory BEFORE Spatial Econometrics (SAR &amp; SEM)<a class="anchor-link" href="#3.4-Why-VIF-Is-Mandatory-BEFORE-Spatial-Econometrics-(SAR-&amp;-SEM)">¶</a></h3><p>In Spatial Autoregressive models (SAR: $y = \rho Wy + X\beta + \epsilon$), the spatial lag $\rho Wy$ acts as an endogenous regressor. If the exogenous feature matrix $X$ is already contaminated with high multicollinearity, the Maximum Likelihood or Instrumental Variables estimator cannot reliably separate exogenous predictor effects ($X\beta$) from endogenous spatial contagion ($\rho Wy$). Verifying low VIF ($\text{VIF} &lt; 5$) establishes the essential empirical foundation before spatial diagnostics.</p>
 </div>
 </div>
 </div>
