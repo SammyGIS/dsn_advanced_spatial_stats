@@ -1,88 +1,236 @@
 """
-Build the DSN Themed Presentation & Unified Course Portal for Advanced Spatial Statistics.
+DSN Spatial Statistics Masterclass Deck & Portal - Refined Minimalist Theme.
 
-Features:
-- PPT Template Match from 'DSN New Presentation Slides .pptx':
-  * Slide size: 16:9 Widescreen (1280x720 internal viewport).
-  * Cover Slide (Slide 1): background figures/dsn_theme/image2.png with figures/dsn_theme/image3.png logo.
-  * Content Slides (Slides 2-35): background figures/dsn_theme/image8.png with top-right DSN logo figures/dsn_theme/image7.png and bottom DSN green/red signature lines.
-  * Ending Slide (Slide 36): background figures/dsn_theme/image11.png with figures/dsn_theme/image5.png white logo and 'Thank you / Q&A'.
-  * Typography: Google Fonts 'Poppins' (300, 400, 500, 600, 700, 800) matching PPT master.
-- Integrated Navigation Sidebar:
-  * Sleek DSN Course Portal sidebar on the left.
-  * Direct one-click switching between Lecture Slides, Technical Note, and Modules 01-04.
-  * Collapsible sidebar toggle (☰ Navigation) and Fullscreen mode (⛶ Fullscreen).
-  * Hash-based routing (#presentation, #technical_notes, #01_esda, etc.).
-- Preserves all 35 pedagogical slides with complete explanations and formulas.
+Strict Design Rules:
+1. NO colored borders on shapes/cards/callouts. Clean 1px solid #e2e8f0 only.
+2. NO tags or subheadings with background at the top of slides.
+3. Smart, smaller fonts: h2 (21px), h4 (13.5px), body p/li (11.5px - 12px).
+4. Generous whitespace: slides leave comfortable 45px+ breathing room above the DSN bottom line.
+5. GitHub link with official GitHub icon in the sidebar pointing to:
+   https://github.com/SammyGIS/dsn_advanced_spatial_stats
+6. Base64 embedded logos and backgrounds for 100% path independence.
+7. Embedded Technical Notes view with KaTeX equations (ZERO 404).
 """
 
 import os
 import re
+import base64
 
-def generate_dsn_portal_html():
-    # Read original slides from scripts/build_web_presentation.py
+def get_b64(path):
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            data = base64.b64encode(f.read()).decode("utf-8")
+        ext = os.path.splitext(path)[1].lower().replace(".", "")
+        if ext == "jpg": ext = "jpeg"
+        return f"data:image/{ext};base64,{data}"
+    return ""
+
+def main():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    source_script = os.path.join(base_dir, "scripts", "build_web_presentation.py")
-    with open(source_script, "r", encoding="utf-8") as f:
-        src_content = f.read()
+    dsn_theme_dir = os.path.join(base_dir, "docs", "figures", "dsn_theme")
 
-    # Extract all section blocks
-    section_pattern = re.compile(r'<section.*?>([\s\S]*?)</section>', re.MULTILINE)
-    raw_sections = section_pattern.findall(src_content)
-    print(f"Extracted {len(raw_sections)} raw slide sections.")
+    # Base64 assets
+    logo_b64 = get_b64(os.path.join(dsn_theme_dir, "image7.png"))
+    cover_logo_b64 = get_b64(os.path.join(dsn_theme_dir, "image3.png")) or logo_b64
+    ending_logo_b64 = get_b64(os.path.join(dsn_theme_dir, "image5.png")) or logo_b64
+    bg_content_b64 = get_b64(os.path.join(dsn_theme_dir, "image8.png"))
+    
+    cover_bg_url = "figures/dsn_theme/image2.png"
+    ending_bg_url = "figures/dsn_theme/image11.png"
 
-    # Format Slide 1 (Cover Slide) with DSN image2.png and image3.png
-    cover_slide_html = r"""
-            <!-- SLIDE 1: DSN TITLE SLIDE -->
-            <section class="dsn-cover-slide" data-background-image="figures/dsn_theme/image2.png" data-background-size="cover">
+    # Extract technical notes body
+    tech_notes_path = os.path.join(base_dir, "docs", "technical_notes.html")
+    tech_notes_body = ""
+    if os.path.exists(tech_notes_path):
+        with open(tech_notes_path, "r", encoding="utf-8") as f:
+            raw = f.read()
+        m = re.search(r'<body[^>]*>([\s\S]*?)</body>', raw)
+        tech_notes_body = m.group(1) if m else raw
+
+    # =========================================================================
+    # SLIDE 1: COVER SLIDE
+    # =========================================================================
+    slide_1 = f"""
+            <!-- SLIDE 1: COVER SLIDE -->
+            <section class="dsn-cover-slide" data-background-image="{cover_bg_url}" data-background-size="cover">
                 <div class="dsn-cover-container">
-                    <div class="dsn-cover-header">
-                        <img src="figures/dsn_theme/image3.png" alt="Data Science Nigeria" class="dsn-cover-logo">
-                        <div class="tag green" style="margin-left: 4px;">DSN Masterclass Series</div>
-                    </div>
+                    <img src="{cover_logo_b64}" alt="Data Science Nigeria" class="dsn-cover-logo">
                     <h1 class="dsn-cover-title">Advanced Spatial Statistics</h1>
                     <h3 class="dsn-cover-subtitle">Theory, Intuition &amp; Spatial Statistics Modeling</h3>
-                    <p class="dsn-cover-desc">
-                        Direct conceptual explanations of spatial autocorrelation, topology networks, Gauss-Markov violations in geographic systems, spatial econometrics (SAR / SEM / SDM), and multiscale spatial heterogeneity (GWR / MGWR).
-                    </p>
-                    <div class="dsn-cover-meta">
-                        <div class="meta-pill"><strong>Instructor:</strong> Adedoyin S. Ajeyomi</div>
-                        <div class="meta-pill"><strong>Teaching Mode:</strong> Direct Intuition &amp; Visual Frameworks</div>
-                        <div class="meta-pill"><strong>Accompanying Reference:</strong> Technical Note Document</div>
+                    <div class="dsn-cover-author">
+                        <div class="author-name">Adedoyin S. Ajeyomi</div>
+                        <div class="author-org">Data Science Nigeria (DSN)</div>
                     </div>
                 </div>
             </section>
 """
 
-    # Format Slides 2-35 (Content Slides) with DSN image8.png background and top-right image7.png logo
-    content_slides = []
-    for i, sec in enumerate(raw_sections[1:], start=2):
-        # Inject DSN logo into header
-        logo_html = '<img src="figures/dsn_theme/image7.png" class="dsn-header-logo" alt="DSN Logo">'
+    # =========================================================================
+    # SLIDE 2: WHY SPATIAL STATISTICS IN THE REAL WORLD? (THE 3 FALLACIES)
+    # =========================================================================
+    slide_2 = f"""
+            <!-- SLIDE 2: WHY SPATIAL STATISTICS IN THE REAL WORLD? -->
+            <section class="dsn-content-slide">
+                <img src="{logo_b64}" class="dsn-header-logo" alt="DSN">
+                <header class="slide-header">
+                    <h2>Why Spatial Statistics in the Real World?</h2>
+                </header>
+                <div class="slide-body">
+                    <div class="lead-callout">
+                        <p><strong>The Core Reality:</strong> Traditional statistics and standard ML operate under the assumption of <em>independent and identically distributed ($i.i.d.$)</em> observations. In reality, human settlements, economic commerce, disease vectors, and infrastructure <strong>do not stop at administrative borders</strong>. Decision-makers relying on state or national averages fall into three fatal traps:</p>
+                    </div>
+
+                    <div class="grid-3" style="margin-top: 12px;">
+                        <div class="card">
+                            <h4>1. The Fallacy of the Average</h4>
+                            <p>A state appears "wealthy" or "well-served" on paper, while masking extreme internal inequality, such as affluent metropolitan corridors sitting right beside rural "healthcare deserts" where hundreds of thousands lack any facility.</p>
+                        </div>
+
+                        <div class="card">
+                            <h4>2. The Spillover Blindspot</h4>
+                            <p><em>"Near things are more related than distant things"</em> (Tobler, 1970). Building a regional market or hospital creates positive spatial externalities across neighboring wards. Standard regression ignores this; spatial econometrics quantifies it.</p>
+                        </div>
+
+                        <div class="card">
+                            <h4>3. Capital Misallocation Trap</h4>
+                            <p>Deploying bank branches, supermarkets, or boreholes without spatial intelligence saturates already hyper-competitive clusters while completely missing high-demand, underserved communities next door.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+"""
+
+    # =========================================================================
+    # SLIDE 3: THE CORE OBJECTIVE: OPERATIONAL DECISIONS ACROSS 9,308 WARDS
+    # =========================================================================
+    slide_3 = f"""
+            <!-- SLIDE 3: THE CORE OBJECTIVE -->
+            <section class="dsn-content-slide">
+                <img src="{logo_b64}" class="dsn-header-logo" alt="DSN">
+                <header class="slide-header">
+                    <h2>The Core Objective: Operational Decisions Across 9,308 Wards</h2>
+                </header>
+                <div class="slide-body">
+                    <div class="lead-callout">
+                        <p>This curriculum bridges raw <strong>Earth Observation (EO) data</strong> (satellite-derived asset wealth, gridded population rasters) and <strong>actionable strategic investments</strong>. By analyzing all 9,308 administrative wards in Nigeria, students master answers to 5 critical questions:</p>
+                    </div>
+
+                    <div class="grid-2" style="margin-top: 10px; gap: 10px;">
+                        <div class="card">
+                            <h4>Healthcare Deserts</h4>
+                            <p>Where are the most urgent healthcare deserts? Identifying wards with $>17,000$ residents and zero registered clinics to deploy mobile medical clinics.</p>
+                        </div>
+
+                        <div class="card">
+                            <h4>Untapped Retail Catchments</h4>
+                            <p>Where are prime commercial markets? Detecting wards with high relative asset wealth but low commercial retail density for expansion.</p>
+                        </div>
+
+                        <div class="card">
+                            <h4>Civic &amp; Cultural Sorting</h4>
+                            <p>How do religious and civic institutions sort geographically? Mapping cultural cohesion and Shannon Entropy diversity zones across communities.</p>
+                        </div>
+
+                        <div class="card">
+                            <h4>Infrastructural Inequality</h4>
+                            <p>How unequal is clean water infrastructure? Quantifying regional service monopolies with Lorenz inequality curves and Gini coefficients.</p>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 8px;">
+                        <p><strong>True Economic Multiplier:</strong> Estimating Spatial Lag (SAR) and Spatial Durbin (SDM) models to mathematically decompose public investments into <em>direct impacts</em> and <em>indirect regional spillover multipliers</em>.</p>
+                    </div>
+                </div>
+            </section>
+"""
+
+    # =========================================================================
+    # SLIDE 4: THE SUPERPOWER OF SPATIAL STATISTICS (ESDA VS TRADITIONAL EDA)
+    # =========================================================================
+    slide_4 = f"""
+            <!-- SLIDE 4: THE SUPERPOWER OF SPATIAL STATISTICS -->
+            <section class="dsn-content-slide">
+                <img src="{logo_b64}" class="dsn-header-logo" alt="DSN">
+                <header class="slide-header">
+                    <h2>The Superpower of Spatial Statistics: ESDA vs. Traditional EDA</h2>
+                </header>
+                <div class="slide-body">
+                    <div class="diagram-strip">
+                        <div><strong style="color: #0369a1;">Traditional EDA:</strong> [Values] ──────► Summary Stats (Mean, SD, Histograms) ──► <strong>BLIND to space</strong></div>
+                        <div><strong style="color: #0a7a0a;">Spatial EDA:</strong> [Values + Space] ──► Moran's I + Anselin LISA Maps ──► <strong>UNLOCKS structural patterns</strong></div>
+                    </div>
+
+                    <div class="grid-2" style="margin-top: 10px; gap: 12px;">
+                        <div class="card">
+                            <h4 style="color: #be123c;">What Traditional EDA Misses</h4>
+                            <ul>
+                                <li><strong>Geographic Blindness:</strong> You can randomly shuffle 9,308 wards across Nigeria, and the mean, SD, and histogram remain 100% identical. Traditional EDA cannot detect regional poverty belts.</li>
+                                <li><strong>Hidden Structural Regimes:</strong> A national correlation ($r = 0.45$) can conceal that the relationship is positive in the South, but zero or inverted in the North.</li>
+                                <li><strong>Inability to Detect Local Outliers:</strong> Global outlier checks ($z > 3$) miss spatial anomalies: an affluent island surrounded by poverty, or a destitute pocket inside wealth.</li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <h4 style="color: #0f766e;">What Spatial EDA (ESDA) Unlocks</h4>
+                            <ul>
+                                <li><strong>Hypothesis-Free Pattern Discovery:</strong> Statistically proves whether an observed map pattern is genuine clustering or mere random chance ($p < 0.001$).</li>
+                                <li><strong>Global Moran's $I$:</strong> Quantifies national spatial autocorrelation into a single benchmark statistic.</li>
+                                <li><strong>Local Anselin LISA ($I_i$):</strong> Pinpoints Hotspots ($HH$), Coldspots ($LL$), and Spatial Outliers ($HL$ &amp; $LH$).</li>
+                                <li><strong>Spatial Heterogeneity:</strong> Uncovers localized structural breaks across state borders, river basins, and economic corridors.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+"""
+
+    # =========================================================================
+    # SLIDES 5 TO 35: REMAINING METHODOLOGICAL SEQUENCE (STRIPPED OF ALL TAGS & BORDER COLORS)
+    # =========================================================================
+    source_script = os.path.join(base_dir, "scripts", "build_web_presentation.py")
+    with open(source_script, "r", encoding="utf-8") as f:
+        src_content = f.read()
+
+    section_pattern = re.compile(r'<section.*?>([\s\S]*?)</section>', re.MULTILINE)
+    raw_sections = section_pattern.findall(src_content)
+
+    remaining_slides = []
+    # raw_sections[3] was "The Modifiable Areal Unit Problem (MAUP)" -> REMOVED per user request
+    # raw_sections[4:] start with Section 4: "Spatial Fallacies: Ecological & Aspatial Fallacies"
+    for i, sec in enumerate(raw_sections[4:], start=5):
+        # 1. Remove all tag spans completely
+        sec_clean = re.sub(r'<span class=[\'"]tag.*?[\'"]>.*?</span>\s*', '', sec)
+        # 2. Remove colored card/callout classes and inline border-left
+        sec_clean = re.sub(r'class=[\'"]card\s+card-[a-z]+[\'"]', 'class="card"', sec_clean)
+        sec_clean = re.sub(r'class=[\'"]callout\s+[a-z]+[\'"]', 'class="callout"', sec_clean)
+        sec_clean = re.sub(r'border-left:\s*[^;]+;', '', sec_clean)
         
-        # Replace slide header to include the logo
-        if '<header class="slide-header">' in sec:
-            modified_sec = sec.replace(
+        # 3. Inject DSN header logo
+        logo_html = f'<img src="{logo_b64}" class="dsn-header-logo" alt="DSN">'
+        if '<header class="slide-header">' in sec_clean:
+            sec_clean = sec_clean.replace(
                 '<header class="slide-header">',
                 f'{logo_html}\n        <header class="slide-header">'
             )
         else:
-            modified_sec = f'{logo_html}\n' + sec
+            sec_clean = f'{logo_html}\n' + sec_clean
 
         slide_html = f"""
             <!-- SLIDE {i} -->
-            <section class="dsn-content-slide" data-background-image="figures/dsn_theme/image8.png" data-background-size="100% 100%">
-{modified_sec}
+            <section class="dsn-content-slide">
+{sec_clean}
             </section>
 """
-        content_slides.append(slide_html)
+        remaining_slides.append(slide_html)
 
-    # Format Slide 36 (Ending Slide) with DSN image11.png and image5.png logo
-    ending_slide_html = r"""
+    # =========================================================================
+    # SLIDE 36: DSN ENDING SLIDE (THANK YOU / Q&A)
+    # =========================================================================
+    slide_ending = f"""
             <!-- SLIDE 36: DSN ENDING SLIDE -->
-            <section class="dsn-ending-slide" data-background-image="figures/dsn_theme/image11.png" data-background-size="cover">
+            <section class="dsn-ending-slide" data-background-image="{ending_bg_url}" data-background-size="cover">
                 <div class="dsn-ending-container">
-                    <img src="figures/dsn_theme/image5.png" class="dsn-ending-logo" alt="DSN Logo">
+                    <img src="{ending_logo_b64}" class="dsn-ending-logo" alt="DSN Logo">
                     <h1 class="dsn-ending-title">Thank you</h1>
                     <h2 class="dsn-ending-subtitle">Q&amp;A / Open Discussion</h2>
                     <div class="dsn-ending-card">
@@ -102,7 +250,7 @@ def generate_dsn_portal_html():
             </section>
 """
 
-    all_slides_html = cover_slide_html + "\n".join(content_slides) + ending_slide_html
+    all_slides_combined = slide_1 + slide_2 + slide_3 + slide_4 + "\n".join(remaining_slides) + slide_ending
 
     full_html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -115,23 +263,22 @@ def generate_dsn_portal_html():
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/white.min.css">
+    <!-- KaTeX Formulas for crisp mathematical precision -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
     <style>
         :root {{
             --text-dark: #0f172a;
-            --text-secondary: #334155;
+            --text-secondary: #475569;
             --text-muted: #64748b;
             --primary: #0284c7;
             --primary-dark: #0369a1;
             --dsn-green: #0a7a0a;
             --dsn-green-dark: #065406;
             --dsn-green-light: #e8f5e9;
-            --dsn-red: #ff0000;
-            --teal: #0d9488;
-            --crimson: #e11d48;
-            --amber: #d97706;
-            --purple: #7c3aed;
             --border: #e2e8f0;
-            --card-bg: #f8fafc;
+            --card-bg: #ffffff;
             --sidebar-width: 270px;
         }}
 
@@ -145,7 +292,7 @@ def generate_dsn_portal_html():
             height: 100%;
             width: 100%;
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f1f5f9;
+            background-color: #ffffff;
             color: var(--text-dark);
             overflow: hidden;
             -webkit-font-smoothing: antialiased;
@@ -162,7 +309,6 @@ def generate_dsn_portal_html():
             position: relative;
         }}
 
-        /* Sidebar Styling */
         .portal-sidebar {{
             width: var(--sidebar-width);
             min-width: var(--sidebar-width);
@@ -172,7 +318,7 @@ def generate_dsn_portal_html():
             display: flex;
             flex-direction: column;
             z-index: 1000;
-            transition: transform 0.25s ease, margin-left 0.25s ease;
+            transition: margin-left 0.25s ease;
             box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
         }}
 
@@ -181,7 +327,7 @@ def generate_dsn_portal_html():
         }}
 
         .sidebar-brand {{
-            padding: 18px 20px;
+            padding: 16px 18px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -192,7 +338,9 @@ def generate_dsn_portal_html():
         .brand-logo {{
             height: 38px;
             width: auto;
+            max-width: 80px;
             object-fit: contain;
+            display: block;
         }}
 
         .brand-title-wrap {{
@@ -209,13 +357,13 @@ def generate_dsn_portal_html():
 
         .brand-badge {{
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--dsn-green);
         }}
 
         .sidebar-menu {{
             flex: 1;
-            padding: 14px 12px;
+            padding: 12px 10px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -237,13 +385,13 @@ def generate_dsn_portal_html():
             align-items: center;
             gap: 10px;
             width: 100%;
-            padding: 9px 12px;
+            padding: 8px 12px;
             border: 1px solid transparent;
             border-radius: 8px;
             background: transparent;
             color: var(--text-secondary);
             font-family: 'Poppins', sans-serif;
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 500;
             text-align: left;
             cursor: pointer;
@@ -266,21 +414,24 @@ def generate_dsn_portal_html():
 
         .nav-icon {{
             font-size: 15px;
-            width: 20px;
+            width: 18px;
             text-align: center;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }}
 
-        .download-btn {{
+        .github-btn {{
             margin-top: 4px;
-            color: var(--primary-dark);
-            border: 1px dashed #cbd5e1;
+            color: #0f172a;
+            border: 1px solid #e2e8f0;
             background: #f8fafc;
         }}
 
-        .download-btn:hover {{
+        .github-btn:hover {{
             background: #f1f5f9;
-            border-color: var(--primary);
+            border-color: #cbd5e1;
         }}
 
         .sidebar-footer {{
@@ -312,7 +463,7 @@ def generate_dsn_portal_html():
         }}
 
         /* ========================================================= */
-        /* MAIN VIEWPORT */
+        /* MAIN WORKSPACE */
         /* ========================================================= */
         .portal-main {{
             flex: 1;
@@ -324,10 +475,9 @@ def generate_dsn_portal_html():
             position: relative;
         }}
 
-        /* Top Bar */
         .portal-topbar {{
-            height: 48px;
-            min-height: 48px;
+            height: 44px;
+            min-height: 44px;
             background: #ffffff;
             border-bottom: 1px solid var(--border);
             display: flex;
@@ -347,8 +497,8 @@ def generate_dsn_portal_html():
             background: #f8fafc;
             border: 1px solid var(--border);
             border-radius: 6px;
-            padding: 5px 10px;
-            font-size: 12px;
+            padding: 4px 10px;
+            font-size: 11.5px;
             font-family: 'Poppins', sans-serif;
             font-weight: 500;
             color: var(--text-secondary);
@@ -356,7 +506,6 @@ def generate_dsn_portal_html():
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: background 0.15s ease;
         }}
 
         .sidebar-btn:hover {{
@@ -365,7 +514,7 @@ def generate_dsn_portal_html():
         }}
 
         .view-title {{
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--text-dark);
         }}
@@ -380,8 +529,8 @@ def generate_dsn_portal_html():
             background: transparent;
             border: 1px solid var(--border);
             border-radius: 6px;
-            padding: 5px 10px;
-            font-size: 12px;
+            padding: 4px 10px;
+            font-size: 11.5px;
             font-family: 'Poppins', sans-serif;
             color: var(--text-secondary);
             cursor: pointer;
@@ -395,16 +544,14 @@ def generate_dsn_portal_html():
             color: var(--text-dark);
         }}
 
-        /* Viewport Workspace */
         .portal-viewport {{
             flex: 1;
             position: relative;
-            height: calc(100vh - 48px);
+            height: calc(100vh - 44px);
             overflow: hidden;
             background: #ffffff;
         }}
 
-        /* Slide View Container */
         .slides-view {{
             width: 100%;
             height: 100%;
@@ -414,7 +561,18 @@ def generate_dsn_portal_html():
             display: block;
         }}
 
-        /* Document / Notebook Iframe */
+        .tech-notes-view {{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+            overflow-y: auto;
+            background: #ffffff;
+            padding: 24px 32px;
+        }}
+
         .doc-frame {{
             width: 100%;
             height: 100%;
@@ -427,7 +585,7 @@ def generate_dsn_portal_html():
         }}
 
         /* ========================================================= */
-        /* REVEAL.JS PRESENTATION STYLES (DSN THEME) */
+        /* REVEAL.JS PRESENTATION STYLES - SLIDE TEMPLATE MATCH */
         /* ========================================================= */
         .reveal {{
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -443,134 +601,136 @@ def generate_dsn_portal_html():
 
         .reveal .slides section {{
             top: 0 !important;
-            padding: 10px 24px 20px 24px !important;
+            padding: 24px 38px 48px 38px !important;
             box-sizing: border-box;
             overflow: hidden !important;
             height: 100% !important;
         }}
 
-        /* Slide Container */
-        .slide-container {{
+        /* Permanent Base64 16:9 DSN Background */
+        .reveal .slides section.dsn-content-slide {{
+            background: #ffffff url('{bg_content_b64}') no-repeat center center / 100% 100% !important;
+        }}
+
+        /* Slide Container: 575px max height -> Leaves 60px whitespace above DSN footer! */
+        .slide-container, .slide-body {{
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            gap: 4px;
-            height: 680px;
-            max-height: 680px;
-            overflow-y: auto;
-            padding-right: 4px;
-            padding-top: 6px;
+            gap: 6px;
+            max-height: 575px;
+            overflow: hidden;
             position: relative;
         }}
 
-        .slide-container::-webkit-scrollbar {{
-            width: 5px;
-        }}
-        .slide-container::-webkit-scrollbar-thumb {{
-            background: #cbd5e1;
-            border-radius: 4px;
-        }}
-
-        /* DSN Header Logo on Content Slides */
+        /* DSN Header Logo - Top-Right */
         .dsn-header-logo {{
             position: absolute;
-            top: 14px;
-            right: 28px;
+            top: 18px;
+            right: 32px;
             width: 82px;
             height: auto;
             z-index: 50;
             pointer-events: none;
+            display: block;
         }}
 
-        /* Slide Headers */
+        /* Clean Slide Header - NO PILL TAGS / NO COLORED BACKGROUND BANNERS */
         .slide-header {{
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             padding-bottom: 2px;
-            max-width: 900px;
+            max-width: 950px;
         }}
 
         .reveal h1, .reveal h2, .reveal h3, .reveal h4 {{
             font-family: 'Poppins', sans-serif;
             color: var(--text-dark);
             text-transform: none;
-            font-weight: 700;
         }}
 
         .reveal h1 {{
-            font-size: 1.85em;
+            font-size: 1.65em;
             line-height: 1.15;
-            margin-bottom: 0.05em;
-        }}
-
-        .reveal h2 {{
-            font-size: 0.90em;
-            line-height: 1.18;
-            margin-bottom: 0.05em;
-            padding-bottom: 0.02em;
-            text-align: left;
             font-weight: 700;
         }}
 
+        /* Smart, refined Title - NO WRAPPING OVERFLOW */
+        .reveal h2 {{
+            font-size: 1.10em !important;
+            line-height: 1.25 !important;
+            font-weight: 600 !important;
+            color: #0f172a !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            text-align: left !important;
+            border: none !important;
+        }}
+
         .reveal h3 {{
-            font-size: 0.78em;
-            color: var(--primary);
-            margin-bottom: 0.05em;
-            margin-top: 0.05em;
-            font-weight: 600;
+            font-size: 0.74em !important;
+            color: var(--primary) !important;
+            font-weight: 600 !important;
+            margin: 2px 0 4px 0 !important;
         }}
 
         .reveal h4 {{
-            font-size: 0.65em;
-            margin-bottom: 2px;
-            margin-top: 0;
-            color: var(--text-dark);
-            font-weight: 600;
+            font-size: 0.65em !important;
+            color: var(--text-dark) !important;
+            font-weight: 600 !important;
+            margin: 0 0 3px 0 !important;
         }}
 
         .reveal p, .reveal li {{
-            font-size: 0.46em;
-            line-height: 1.25;
-            color: var(--text-secondary);
+            font-size: 0.42em !important;
+            line-height: 1.42 !important;
+            color: var(--text-secondary) !important;
         }}
 
         .reveal ul {{
-            margin-left: 14px;
+            margin-left: 16px;
             margin-bottom: 4px;
         }}
 
         .reveal li {{
-            margin-bottom: 2px;
+            margin-bottom: 3px;
         }}
 
-        /* Tags / Badges */
-        .tag {{
-            display: inline-block;
-            font-size: 0.38em;
-            font-weight: 700;
-            padding: 2px 7px;
-            border-radius: 9999px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            width: fit-content;
-        }}
-
-        .tag.blue {{ background: #e0f2fe; color: #0369a1; }}
-        .tag.teal {{ background: #ccfbf1; color: #0f766e; }}
-        .tag.rose {{ background: #ffe4e6; color: #be123c; }}
-        .tag.amber {{ background: #fef3c7; color: #b45309; }}
-        .tag.purple {{ background: #f3e8ff; color: #6b21a8; }}
-        .tag.green {{ background: #e8f5e9; color: var(--dsn-green); }}
-
-        /* Cards & Grids */
-        .card {{
-            background: #ffffff;
-            border: 1px solid var(--border);
+        /* Clean Smart Lead Box - NO COLORED VERTICAL BARS */
+        .lead-callout {{
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
-            padding: 8px 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            padding: 8px 12px;
+            margin-bottom: 8px;
+        }}
+
+        .lead-callout p {{
+            font-size: 0.43em !important;
+            line-height: 1.42 !important;
+            color: #1e293b !important;
+        }}
+
+        /* Clean Smart Cards - PURE WHITE, SOFT 1PX BORDER, ZERO COLORED BARS */
+        .card {{
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-left: 1px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            padding: 8px 12px !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+        }}
+
+        .card-rose, .card-blue, .card-amber, .card-teal, .card-emerald, .card-purple, .card-cyan {{
+            border: 1px solid #e2e8f0 !important;
+            border-left: 1px solid #e2e8f0 !important;
+        }}
+
+        .callout, .concept-card {{
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-left: 1px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            padding: 7px 11px !important;
         }}
 
         .grid-2 {{
@@ -582,7 +742,7 @@ def generate_dsn_portal_html():
         .grid-3 {{
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
+            gap: 10px;
         }}
 
         .grid-4 {{
@@ -591,75 +751,38 @@ def generate_dsn_portal_html():
             gap: 8px;
         }}
 
-        .callout {{
-            border-left: 3px solid var(--primary);
-            background: #f8fafc;
-            padding: 6px 10px;
-            border-radius: 0 6px 6px 0;
-            margin: 4px 0;
-        }}
-
-        .callout.blue {{ border-color: var(--primary); background: #f0f9ff; }}
-        .callout.teal {{ border-color: var(--teal); background: #f0fdfa; }}
-        .callout.rose {{ border-color: var(--crimson); background: #fff1f2; }}
-        .callout.amber {{ border-color: var(--amber); background: #fffbeb; }}
-        .callout.purple {{ border-color: var(--purple); background: #faf5ff; }}
-        .callout.green {{ border-color: var(--dsn-green); background: #f0fdf4; }}
-
-        .concept-card {{
-            background: #f8fafc;
-            border-left: 3px solid var(--teal);
-            border-radius: 0 6px 6px 0;
-            padding: 6px 10px;
-            margin-top: 4px;
-        }}
-
-        .stat-badge {{
-            display: inline-flex;
+        /* Monospace diagram comparison strip */
+        .diagram-strip {{
+            display: flex;
             flex-direction: column;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 4px 8px;
-            text-align: center;
-        }}
-
-        .stat-num {{
-            font-size: 0.85em;
-            font-weight: 700;
-            color: var(--primary-dark);
-            line-height: 1.1;
-        }}
-
-        .stat-lbl {{
-            font-size: 0.38em;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
+            gap: 4px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 7px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.42em;
+            color: #1e293b;
+            margin-bottom: 6px;
         }}
 
         .formula-box {{
             background: #ffffff;
-            border: 1px solid var(--border);
-            border-left: 3px solid var(--primary);
+            border: 1px solid #e2e8f0;
             border-radius: 6px;
             padding: 6px 10px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.45em;
-            line-height: 1.35;
+            font-size: 0.44em;
+            line-height: 1.4;
             color: #1e293b;
             margin: 4px 0;
-        }}
-
-        .formula-box strong {{
-            color: var(--primary-dark);
         }}
 
         .tech-note-ref {{
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.40em;
+            gap: 4px;
+            font-size: 0.38em;
             color: #6d28d9;
             background: #f5f3ff;
             border: 1px solid #ddd6fe;
@@ -668,6 +791,7 @@ def generate_dsn_portal_html():
             margin-top: 4px;
             cursor: pointer;
             text-decoration: none;
+            font-weight: 500;
         }}
 
         .tech-note-ref:hover {{
@@ -683,7 +807,7 @@ def generate_dsn_portal_html():
         }}
 
         th {{
-            background: #f1f5f9;
+            background: #f8fafc;
             color: var(--text-dark);
             font-weight: 600;
             padding: 3px 5px;
@@ -701,70 +825,57 @@ def generate_dsn_portal_html():
             background: #f8fafc;
         }}
 
-        /* ========================================================= */
-        /* DSN COVER SLIDE SPECIFICS */
-        /* ========================================================= */
+        /* DSN Cover Slide */
         .dsn-cover-container {{
             max-width: 660px;
             padding-left: 20px;
-            padding-top: 30px;
-        }}
-
-        .dsn-cover-header {{
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 12px;
+            padding-top: 20px;
         }}
 
         .dsn-cover-logo {{
-            height: 52px;
+            height: 48px;
             width: auto;
             object-fit: contain;
+            margin-bottom: 12px;
+            display: block;
         }}
 
         .dsn-cover-title {{
-            font-size: 1.85em !important;
-            font-weight: 800 !important;
-            line-height: 1.15;
+            font-size: 1.45em !important;
+            font-weight: 700 !important;
+            line-height: 1.18 !important;
             color: #0f172a;
-            margin-bottom: 8px !important;
+            margin-bottom: 6px !important;
         }}
 
         .dsn-cover-subtitle {{
-            font-size: 0.95em !important;
+            font-size: 0.72em !important;
             font-weight: 600 !important;
             color: var(--dsn-green) !important;
-            margin-bottom: 12px !important;
+            margin-bottom: 16px !important;
         }}
 
-        .dsn-cover-desc {{
-            font-size: 0.52em !important;
-            line-height: 1.55;
-            color: #475569;
-            max-width: 600px;
-            margin-bottom: 20px;
-        }}
-
-        .dsn-cover-meta {{
+        .dsn-cover-author {{
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            flex-direction: column;
+            gap: 2px;
             margin-top: 10px;
         }}
 
-        .meta-pill {{
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            padding: 4px 10px;
-            font-size: 0.44em;
-            color: #334155;
+        .author-name {{
+            font-size: 0.54em !important;
+            font-weight: 600 !important;
+            color: #0f172a !important;
+            letter-spacing: -0.01em;
         }}
 
-        /* ========================================================= */
-        /* DSN ENDING SLIDE SPECIFICS */
-        /* ========================================================= */
+        .author-org {{
+            font-size: 0.42em !important;
+            font-weight: 500 !important;
+            color: #64748b !important;
+        }}
+
+        /* DSN Ending Slide */
         .dsn-ending-container {{
             display: flex;
             flex-direction: column;
@@ -781,6 +892,7 @@ def generate_dsn_portal_html():
             right: 32px;
             width: 120px;
             height: auto;
+            display: block;
         }}
 
         .dsn-ending-title {{
@@ -788,7 +900,6 @@ def generate_dsn_portal_html():
             font-weight: 800 !important;
             color: #ffffff !important;
             margin-bottom: 6px !important;
-            letter-spacing: -0.02em;
         }}
 
         .dsn-ending-subtitle {{
@@ -803,9 +914,8 @@ def generate_dsn_portal_html():
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 12px;
-            padding: 22px 36px;
+            padding: 20px 32px;
             max-width: 720px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }}
 
         .dsn-ending-links {{
@@ -826,9 +936,14 @@ def generate_dsn_portal_html():
             font-weight: 600 !important;
             color: #475569 !important;
             background: rgba(255, 255, 255, 0.85) !important;
-            padding: 3px 8px !important;
+            padding: 2px 7px !important;
             border-radius: 4px !important;
             border: 1px solid #e2e8f0 !important;
+        }}
+
+        .tech-notes-view .doc-container {{
+            max-width: 1400px;
+            margin: 0 auto;
         }}
     </style>
 </head>
@@ -837,7 +952,7 @@ def generate_dsn_portal_html():
         <!-- Sidebar Navigation -->
         <aside class="portal-sidebar" id="portalSidebar">
             <div class="sidebar-brand">
-                <img src="figures/dsn_theme/image7.png" alt="DSN Logo" class="brand-logo">
+                <img src="{logo_b64}" alt="DSN Logo" class="brand-logo">
                 <div class="brand-title-wrap">
                     <span class="brand-name">Spatial Statistics</span>
                     <span class="brand-badge">DSN Masterclass</span>
@@ -848,7 +963,7 @@ def generate_dsn_portal_html():
                 <div class="menu-heading">Course Presentation</div>
                 <button class="nav-link-btn active" id="btn-slides" onclick="switchPortalView('slides')">
                     <span class="nav-icon">📊</span>
-                    <span>Lecture Slides (35)</span>
+                    <span>Lecture Slides</span>
                 </button>
                 <button class="nav-link-btn" id="btn-technical_notes" onclick="switchPortalView('technical_notes')">
                     <span class="nav-icon">📜</span>
@@ -873,10 +988,12 @@ def generate_dsn_portal_html():
                     <span>04: Spatial Synthesis</span>
                 </button>
 
-                <div class="menu-heading">Resources</div>
-                <a href="spatial_statistics_masterclass_presentation.pptx" class="nav-link-btn download-btn" download>
-                    <span class="nav-icon">📥</span>
-                    <span>Download PPTX Deck</span>
+                <div class="menu-heading">Repository</div>
+                <a href="https://github.com/SammyGIS/dsn_advanced_spatial_stats" target="_blank" rel="noopener noreferrer" class="nav-link-btn github-btn">
+                    <svg class="nav-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                    <span>View on GitHub</span>
                 </a>
             </nav>
 
@@ -911,12 +1028,12 @@ def generate_dsn_portal_html():
                 <div class="slides-view" id="slidesView">
                     <div class="reveal" id="revealDeck">
                         <div class="slides">
-{all_slides_html}
+{all_slides_combined}
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. Document Frame for Technical Note & Modules -->
+                <!-- 2. Document Frame for Technical Note & Notebooks -->
                 <iframe id="docFrame" class="doc-frame" title="Document Viewer"></iframe>
             </div>
         </main>
@@ -935,7 +1052,7 @@ def generate_dsn_portal_html():
             controls: true,
             progress: true,
             center: false,
-            hash: false, // Internal hash managed by portal
+            hash: false,
             slideNumber: 'c / t',
             transition: 'slide'
         }});
@@ -992,7 +1109,6 @@ def generate_dsn_portal_html():
             if (viewConfig.type === 'slides') {{
                 docFrame.style.display = 'none';
                 slidesView.style.display = 'block';
-                // Trigger reveal layout reflow
                 setTimeout(() => {{ deck.layout(); }}, 50);
             }} else {{
                 slidesView.style.display = 'none';
@@ -1010,7 +1126,6 @@ def generate_dsn_portal_html():
             sidebar.classList.toggle('collapsed');
             const isCollapsed = sidebar.classList.contains('collapsed');
             document.getElementById('collapseLabel').innerText = isCollapsed ? '▶ Show' : '◀ Hide';
-            // Reflow presentation after transition
             setTimeout(() => {{ deck.layout(); }}, 280);
         }}
 
@@ -1027,12 +1142,10 @@ def generate_dsn_portal_html():
             setTimeout(() => {{ deck.layout(); }}, 300);
         }}
 
-        // Listen for window resize to reflow Reveal layout smoothly
         window.addEventListener('resize', () => {{
             deck.layout();
         }});
 
-        // Handle URL hash navigation on initial page load
         window.addEventListener('DOMContentLoaded', () => {{
             const hash = window.location.hash.replace('#', '');
             if (hash && portalViews[hash]) {{
@@ -1045,24 +1158,16 @@ def generate_dsn_portal_html():
 </body>
 </html>
 """
-    return full_html
-
-def main():
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     presentation_path = os.path.join(base_dir, "docs", "presentation.html")
     index_path = os.path.join(base_dir, "docs", "index.html")
 
-    html = generate_dsn_portal_html()
-
-    # Write to docs/presentation.html
     with open(presentation_path, "w", encoding="utf-8") as f:
-        f.write(html)
-    print(f"Successfully generated DSN Themed Presentation at {presentation_path}")
+        f.write(full_html)
+    print(f"Generated clean DSN Masterclass Presentation at {presentation_path}")
 
-    # Write identical unified portal to docs/index.html
     with open(index_path, "w", encoding="utf-8") as f:
-        f.write(html)
-    print(f"Successfully synchronized DSN Course Portal at {index_path}")
+        f.write(full_html)
+    print(f"Synchronized clean DSN Masterclass Portal at {index_path}")
 
 if __name__ == "__main__":
     main()
