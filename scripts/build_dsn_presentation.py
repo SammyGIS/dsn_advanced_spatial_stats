@@ -34,25 +34,15 @@ def main():
     cover_logo_b64 = get_b64(os.path.join(dsn_theme_dir, "image3.png")) or logo_b64
     ending_logo_b64 = get_b64(os.path.join(dsn_theme_dir, "image5.png")) or logo_b64
     bg_content_b64 = get_b64(os.path.join(dsn_theme_dir, "image8.png"))
-    
-    cover_bg_url = "figures/dsn_theme/image2.png"
-    ending_bg_url = "figures/dsn_theme/image11.png"
-
-    # Extract technical notes body
-    tech_notes_path = os.path.join(base_dir, "docs", "technical_notes.html")
-    tech_notes_body = ""
-    if os.path.exists(tech_notes_path):
-        with open(tech_notes_path, "r", encoding="utf-8") as f:
-            raw = f.read()
-        m = re.search(r'<body[^>]*>([\s\S]*?)</body>', raw)
-        tech_notes_body = m.group(1) if m else raw
+    bg_cover_b64 = get_b64(os.path.join(dsn_theme_dir, "image2.png"))
+    bg_ending_b64 = get_b64(os.path.join(dsn_theme_dir, "image11.png"))
 
     # =========================================================================
     # SLIDE 1: COVER SLIDE
     # =========================================================================
     slide_1 = f"""
             <!-- SLIDE 1: COVER SLIDE -->
-            <section class="dsn-cover-slide" data-background-image="{cover_bg_url}" data-background-size="cover">
+            <section class="dsn-cover-slide">
                 <div class="dsn-cover-container">
                     <img src="{cover_logo_b64}" alt="Data Science Nigeria" class="dsn-cover-logo">
                     <h1 class="dsn-cover-title">Advanced Spatial Statistics</h1>
@@ -228,7 +218,7 @@ def main():
     # =========================================================================
     slide_ending = f"""
             <!-- SLIDE 36: DSN ENDING SLIDE -->
-            <section class="dsn-ending-slide" data-background-image="{ending_bg_url}" data-background-size="cover">
+            <section class="dsn-ending-slide">
                 <div class="dsn-ending-container">
                     <img src="{ending_logo_b64}" class="dsn-ending-logo" alt="DSN Logo">
                     <h1 class="dsn-ending-title">Thank you</h1>
@@ -549,7 +539,7 @@ def main():
             position: relative;
             height: calc(100vh - 44px);
             overflow: hidden;
-            background: #ffffff;
+            background: #f1f5f9;
         }}
 
         .slides-view {{
@@ -559,6 +549,7 @@ def main():
             top: 0;
             left: 0;
             display: block;
+            background: #f1f5f9;
         }}
 
         .tech-notes-view {{
@@ -589,7 +580,7 @@ def main():
         /* ========================================================= */
         .reveal {{
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #ffffff;
+            background-color: #f1f5f9;
             color: var(--text-dark);
             height: 100% !important;
             width: 100% !important;
@@ -601,24 +592,35 @@ def main():
 
         .reveal .slides section {{
             top: 0 !important;
-            padding: 24px 38px 48px 38px !important;
+            padding: 24px 40px 48px 40px !important;
             box-sizing: border-box;
             overflow: hidden !important;
             height: 100% !important;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: none !important;
         }}
 
-        /* Permanent Base64 16:9 DSN Background */
+        /* Permanent Base64 16:9 DSN Backgrounds */
+        .reveal .slides section.dsn-cover-slide {{
+            background: #ffffff url('{bg_cover_b64}') no-repeat center center / 100% 100% !important;
+        }}
+
         .reveal .slides section.dsn-content-slide {{
             background: #ffffff url('{bg_content_b64}') no-repeat center center / 100% 100% !important;
         }}
 
-        /* Slide Container: 575px max height -> Leaves 60px whitespace above DSN footer! */
+        .reveal .slides section.dsn-ending-slide {{
+            background: #ffffff url('{bg_ending_b64}') no-repeat center center / 100% 100% !important;
+        }}
+
+        /* Slide Container: 540px max height -> Leaves 75px+ whitespace above DSN footer! */
         .slide-container, .slide-body {{
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             gap: 6px;
-            max-height: 575px;
+            max-height: 540px;
             overflow: hidden;
             position: relative;
         }}
@@ -628,7 +630,7 @@ def main():
             position: absolute;
             top: 18px;
             right: 32px;
-            width: 82px;
+            width: 80px;
             height: auto;
             z-index: 50;
             pointer-events: none;
@@ -637,7 +639,7 @@ def main():
 
         /* Clean Slide Header - NO PILL TAGS / NO COLORED BACKGROUND BANNERS */
         .slide-header {{
-            margin-bottom: 8px;
+            margin-bottom: 7px;
             padding-bottom: 2px;
             max-width: 950px;
         }}
@@ -649,14 +651,14 @@ def main():
         }}
 
         .reveal h1 {{
-            font-size: 1.65em;
+            font-size: 1.50em;
             line-height: 1.15;
             font-weight: 700;
         }}
 
         /* Smart, refined Title - NO WRAPPING OVERFLOW */
         .reveal h2 {{
-            font-size: 1.10em !important;
+            font-size: 0.95em !important;
             line-height: 1.25 !important;
             font-weight: 600 !important;
             color: #0f172a !important;
@@ -667,22 +669,22 @@ def main():
         }}
 
         .reveal h3 {{
-            font-size: 0.74em !important;
+            font-size: 0.68em !important;
             color: var(--primary) !important;
             font-weight: 600 !important;
             margin: 2px 0 4px 0 !important;
         }}
 
         .reveal h4 {{
-            font-size: 0.65em !important;
+            font-size: 0.54em !important;
             color: var(--text-dark) !important;
             font-weight: 600 !important;
             margin: 0 0 3px 0 !important;
         }}
 
         .reveal p, .reveal li {{
-            font-size: 0.42em !important;
-            line-height: 1.42 !important;
+            font-size: 0.36em !important;
+            line-height: 1.38 !important;
             color: var(--text-secondary) !important;
         }}
 
@@ -700,13 +702,13 @@ def main():
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
-            padding: 8px 12px;
-            margin-bottom: 8px;
+            padding: 7px 11px;
+            margin-bottom: 7px;
         }}
 
         .lead-callout p {{
-            font-size: 0.43em !important;
-            line-height: 1.42 !important;
+            font-size: 0.37em !important;
+            line-height: 1.38 !important;
             color: #1e293b !important;
         }}
 
@@ -714,23 +716,20 @@ def main():
         .card {{
             background: #ffffff !important;
             border: 1px solid #e2e8f0 !important;
-            border-left: 1px solid #e2e8f0 !important;
             border-radius: 8px !important;
-            padding: 8px 12px !important;
+            padding: 7px 11px !important;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
         }}
 
         .card-rose, .card-blue, .card-amber, .card-teal, .card-emerald, .card-purple, .card-cyan {{
             border: 1px solid #e2e8f0 !important;
-            border-left: 1px solid #e2e8f0 !important;
         }}
 
         .callout, .concept-card {{
             background: #f8fafc !important;
             border: 1px solid #e2e8f0 !important;
-            border-left: 1px solid #e2e8f0 !important;
             border-radius: 8px !important;
-            padding: 7px 11px !important;
+            padding: 6px 10px !important;
         }}
 
         .grid-2 {{
@@ -841,7 +840,7 @@ def main():
         }}
 
         .dsn-cover-title {{
-            font-size: 1.45em !important;
+            font-size: 1.30em !important;
             font-weight: 700 !important;
             line-height: 1.18 !important;
             color: #0f172a;
@@ -849,10 +848,10 @@ def main():
         }}
 
         .dsn-cover-subtitle {{
-            font-size: 0.72em !important;
+            font-size: 0.65em !important;
             font-weight: 600 !important;
             color: var(--dsn-green) !important;
-            margin-bottom: 16px !important;
+            margin-bottom: 14px !important;
         }}
 
         .dsn-cover-author {{
@@ -863,14 +862,14 @@ def main():
         }}
 
         .author-name {{
-            font-size: 0.54em !important;
+            font-size: 0.48em !important;
             font-weight: 600 !important;
             color: #0f172a !important;
             letter-spacing: -0.01em;
         }}
 
         .author-org {{
-            font-size: 0.42em !important;
+            font-size: 0.38em !important;
             font-weight: 500 !important;
             color: #64748b !important;
         }}
@@ -1042,13 +1041,13 @@ def main():
     <!-- Reveal.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
     <script>
-        // Initialize Reveal.js with 16:9 widescreen dimensions matching PPT template
+        // Initialize Reveal.js with 16:9 widescreen dimensions and generous gaps/margins
         let deck = new Reveal(document.getElementById('revealDeck'), {{
             width: 1280,
             height: 720,
-            margin: 0.02,
+            margin: 0.06,
             minScale: 0.2,
-            maxScale: 2.0,
+            maxScale: 1.2,
             controls: true,
             progress: true,
             center: false,
