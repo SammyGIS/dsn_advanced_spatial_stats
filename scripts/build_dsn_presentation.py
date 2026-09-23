@@ -35,6 +35,7 @@ def main():
     ending_logo_b64 = get_b64(os.path.join(dsn_theme_dir, "image5.png")) or logo_b64
     bg_content_b64 = get_b64(os.path.join(dsn_theme_dir, "image8.png"))
     bg_cover_b64 = get_b64(os.path.join(dsn_theme_dir, "image2.png"))
+    bg_agenda_b64 = get_b64(os.path.join(dsn_theme_dir, "bg_agenda.png"))
     bg_ending_b64 = get_b64(os.path.join(dsn_theme_dir, "image11.png"))
 
     # =========================================================================
@@ -56,10 +57,43 @@ def main():
 """
 
     # =========================================================================
-    # SLIDE 2: WHY SPATIAL STATISTICS IN THE REAL WORLD? (THE 3 FALLACIES)
+    # SLIDE 2: AGENDA SLIDE (MATCHING DSN NEW PRESENTATION SLIDES PPTX)
+    # =========================================================================
+    slide_agenda = f"""
+            <!-- SLIDE 2: AGENDA -->
+            <section class="dsn-agenda-slide">
+                <div class="agenda-items-wrap">
+                    <div class="agenda-item-row">
+                        <div class="agenda-num-box">01</div>
+                        <div class="agenda-text-box">My Journey into Geospatial</div>
+                    </div>
+                    <div class="agenda-row-divider"></div>
+
+                    <div class="agenda-item-row">
+                        <div class="agenda-num-box">02</div>
+                        <div class="agenda-text-box">Career Pathways &amp; Opportunities in Geospatial</div>
+                    </div>
+                    <div class="agenda-row-divider"></div>
+
+                    <div class="agenda-item-row">
+                        <div class="agenda-num-box">03</div>
+                        <div class="agenda-text-box">Skills, Tools &amp; Staying Relevant</div>
+                    </div>
+                    <div class="agenda-row-divider"></div>
+
+                    <div class="agenda-item-row">
+                        <div class="agenda-num-box">04</div>
+                        <div class="agenda-text-box">Q&amp;A / Open Discussion</div>
+                    </div>
+                </div>
+            </section>
+"""
+
+    # =========================================================================
+    # SLIDE 3: WHY SPATIAL STATISTICS IN THE REAL WORLD? (THE 3 FALLACIES)
     # =========================================================================
     slide_2 = f"""
-            <!-- SLIDE 2: WHY SPATIAL STATISTICS IN THE REAL WORLD? -->
+            <!-- SLIDE 3: WHY SPATIAL STATISTICS IN THE REAL WORLD? -->
             <section class="dsn-content-slide">
                 <img src="{logo_b64}" class="dsn-header-logo" alt="DSN">
                 <header class="slide-header">
@@ -70,20 +104,56 @@ def main():
                         <p><strong>The Core Reality:</strong> Traditional statistics and standard ML operate under the assumption of <em>independent and identically distributed ($i.i.d.$)</em> observations. In reality, human settlements, economic commerce, disease vectors, and infrastructure <strong>do not stop at administrative borders</strong>. Decision-makers relying on state or national averages fall into three fatal traps:</p>
                     </div>
 
-                    <div class="grid-3" style="margin-top: 12px;">
-                        <div class="card">
-                            <h4>1. The Fallacy of the Average</h4>
-                            <p>A state appears "wealthy" or "well-served" on paper, while masking extreme internal inequality, such as affluent metropolitan corridors sitting right beside rural "healthcare deserts" where hundreds of thousands lack any facility.</p>
+                    <div class="grid-3" style="margin-top: 6px; gap: 10px;">
+                        <div class="card trap-card">
+                            <div class="trap-pill">TRAP 01</div>
+                            <h4 class="trap-title">1. The Fallacy of the Average</h4>
+                            <div class="trap-subtitle">Masked Within-Unit Inequality</div>
+                            <div class="trap-points">
+                                <div class="trap-point"><strong>The Blindspot:</strong> Aggregating to LGA or State hides acute localized deprivation beneath a single deceptive average score.</div>
+                                <div class="trap-point"><strong>Ground Reality:</strong> Affluent urban corridors sit directly adjacent to rural "healthcare deserts" where hundreds of thousands lack any facility.</div>
+                                <div class="trap-point"><strong>Spatial Remedy:</strong> Local Anselin LISA ($I_i$) maps expose isolated micro-pockets of acute deprivation hidden inside high averages.</div>
+                            </div>
                         </div>
 
-                        <div class="card">
-                            <h4>2. The Spillover Blindspot</h4>
-                            <p><em>"Near things are more related than distant things"</em> (Tobler, 1970). Building a regional market or hospital creates positive spatial externalities across neighboring wards. Standard regression ignores this; spatial econometrics quantifies it.</p>
+                        <div class="card trap-card">
+                            <div class="trap-pill">TRAP 02</div>
+                            <h4 class="trap-title">2. The Spillover Blindspot</h4>
+                            <div class="trap-subtitle">Ignoring Tobler's First Law</div>
+                            <div class="trap-points">
+                                <div class="trap-point"><strong>The Blindspot:</strong> Standard regression (OLS) treats every ward as an isolated, independent island ($cov(\\epsilon_i, \\epsilon_j) = 0$).</div>
+                                <div class="trap-point"><strong>Ground Reality:</strong> <em>"Near things are more related than distant things"</em>. Building a regional hub creates positive economic externalities across neighbor borders.</div>
+                                <div class="trap-point"><strong>Spatial Remedy:</strong> Spatial Lag (SAR) &amp; Spatial Durbin (SDM) models quantify cross-border spillover multipliers.</div>
+                            </div>
                         </div>
 
-                        <div class="card">
-                            <h4>3. Capital Misallocation Trap</h4>
-                            <p>Deploying bank branches, supermarkets, or boreholes without spatial intelligence saturates already hyper-competitive clusters while completely missing high-demand, underserved communities next door.</p>
+                        <div class="card trap-card">
+                            <div class="trap-pill">TRAP 03</div>
+                            <h4 class="trap-title">3. Capital Misallocation Trap</h4>
+                            <div class="trap-subtitle">Cluster Saturation vs. Deserts</div>
+                            <div class="trap-points">
+                                <div class="trap-point"><strong>The Blindspot:</strong> Deploying bank branches, retail outlets, or boreholes based solely on aggregate population tables.</div>
+                                <div class="trap-point"><strong>Ground Reality:</strong> Saturates already hyper-competitive, over-served urban clusters while completely missing high-demand, underserved wards next door.</div>
+                                <div class="trap-point"><strong>Spatial Remedy:</strong> Catchment distance buffers and Lorenz spatial inequality curves reveal exact unserved frontiers.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="strategic-takeaway-banner" style="margin-top: 8px;">
+                        <div class="banner-label">STRATEGIC PARADIGM SHIFT ACROSS 9,308 WARDS</div>
+                        <div class="banner-grid">
+                            <div class="banner-step">
+                                <span class="step-badge">1</span>
+                                <div><strong>Acknowledge Spatial Dependence:</strong> Replace flawed $i.i.d.$ independence with spatial connectivity weight matrices ($W$).</div>
+                            </div>
+                            <div class="banner-step">
+                                <span class="step-badge">2</span>
+                                <div><strong>Expose Local Heterogeneity:</strong> Disaggregate national and state summaries into micro-ward administrative boundaries.</div>
+                            </div>
+                            <div class="banner-step">
+                                <span class="step-badge">3</span>
+                                <div><strong>Optimize Capital Allocation:</strong> Target public and private investments where spatial return and social equity are maximized.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -187,7 +257,7 @@ def main():
     remaining_slides = []
     # raw_sections[3] was "The Modifiable Areal Unit Problem (MAUP)" -> REMOVED per user request
     # raw_sections[4:] start with Section 4: "Spatial Fallacies: Ecological & Aspatial Fallacies"
-    for i, sec in enumerate(raw_sections[4:], start=5):
+    for i, sec in enumerate(raw_sections[4:], start=6):
         # 1. Remove all tag spans completely
         sec_clean = re.sub(r'<span class=[\'"]tag.*?[\'"]>.*?</span>\s*', '', sec)
         # 2. Remove colored card/callout classes and inline border-left
@@ -214,10 +284,10 @@ def main():
         remaining_slides.append(slide_html)
 
     # =========================================================================
-    # SLIDE 36: DSN ENDING SLIDE (THANK YOU / Q&A)
+    # SLIDE 37: DSN ENDING SLIDE (THANK YOU / Q&A)
     # =========================================================================
     slide_ending = f"""
-            <!-- SLIDE 36: DSN ENDING SLIDE -->
+            <!-- SLIDE 37: DSN ENDING SLIDE -->
             <section class="dsn-ending-slide">
                 <div class="dsn-ending-container">
                     <img src="{ending_logo_b64}" class="dsn-ending-logo" alt="DSN Logo">
@@ -240,7 +310,7 @@ def main():
             </section>
 """
 
-    all_slides_combined = slide_1 + slide_2 + slide_3 + slide_4 + "\n".join(remaining_slides) + slide_ending
+    all_slides_combined = slide_1 + slide_agenda + slide_2 + slide_3 + slide_4 + "\n".join(remaining_slides) + slide_ending
 
     full_html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -606,6 +676,63 @@ def main():
             background: #ffffff url('{bg_cover_b64}') no-repeat center center / 100% 100% !important;
         }}
 
+        .reveal .slides section.dsn-agenda-slide {{
+            background: #ffffff url('{bg_agenda_b64}') no-repeat center center / 100% 100% !important;
+            padding: 0 !important;
+            position: relative !important;
+        }}
+
+        /* Agenda Slide Elements - Matching DSN New Presentation Slides PPTX */
+        .agenda-items-wrap {{
+            position: absolute;
+            top: 13.5%;
+            left: 43.6%;
+            width: 52%;
+            height: 73%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }}
+
+        .agenda-item-row {{
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }}
+
+        .agenda-num-box {{
+            width: 64px;
+            height: 60px;
+            background: #ff0000;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.60em;
+            font-weight: 700;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(255, 0, 0, 0.28);
+            letter-spacing: -0.01em;
+        }}
+
+        .agenda-text-box {{
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.58em;
+            font-weight: 500;
+            color: #0f172a;
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+        }}
+
+        .agenda-row-divider {{
+            width: 96%;
+            height: 1px;
+            background: #e2e8f0;
+            margin-left: 88px;
+        }}
+
         .reveal .slides section.dsn-content-slide {{
             background: #ffffff url('{bg_content_b64}') no-repeat center center / 100% 100% !important;
         }}
@@ -925,19 +1052,197 @@ def main():
             color: #e2e8f0;
         }}
 
-        /* Slide Number Placement matching PPT template */
-        .reveal .slide-number {{
-            right: 28px !important;
+        /* ========================================================= */
+        /* REVEAL NAVIGATION CONTROLS - SEPARATED (LEFT & RIGHT)     */
+        /* ========================================================= */
+        .reveal .controls {{
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            pointer-events: none !important;
+            z-index: 999 !important;
+            display: block !important;
+        }}
+
+        .reveal .controls button {{
+            pointer-events: auto !important;
+            opacity: 0.65 !important;
+            transition: all 0.2s ease !important;
+            cursor: pointer !important;
+            background: rgba(255, 255, 255, 0.90) !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 6px !important;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }}
+
+        .reveal .controls button.enabled {{
+            opacity: 0.95 !important;
+        }}
+
+        .reveal .controls button:hover {{
+            opacity: 1 !important;
+            background: #ffffff !important;
+            border-color: #0284c7 !important;
+            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25) !important;
+        }}
+
+        /* Left-facing arrow moved to bottom-left corner */
+        .reveal .controls .navigate-left {{
+            position: absolute !important;
+            bottom: 14px !important;
+            left: 24px !important;
+            top: auto !important;
+            right: auto !important;
+            width: 36px !important;
+            height: 36px !important;
+            transform: none !important;
+        }}
+
+        /* Right-facing arrow in bottom-right corner */
+        .reveal .controls .navigate-right {{
+            position: absolute !important;
+            bottom: 14px !important;
+            right: 24px !important;
+            top: auto !important;
             left: auto !important;
-            bottom: 12px !important;
+            width: 36px !important;
+            height: 36px !important;
+            transform: none !important;
+        }}
+
+        /* Hide vertical controls */
+        .reveal .controls .navigate-up,
+        .reveal .controls .navigate-down {{
+            display: none !important;
+        }}
+
+        /* Slide Number placement: bottom-right, just inside right arrow */
+        .reveal .slide-number {{
+            right: 68px !important;
+            left: auto !important;
+            bottom: 18px !important;
             font-family: 'Poppins', sans-serif !important;
             font-size: 11px !important;
             font-weight: 600 !important;
             color: #475569 !important;
-            background: rgba(255, 255, 255, 0.85) !important;
+            background: rgba(255, 255, 255, 0.90) !important;
             padding: 2px 7px !important;
             border-radius: 4px !important;
             border: 1px solid #e2e8f0 !important;
+            z-index: 998 !important;
+        }}
+
+        /* ========================================================= */
+        /* SLIDE 2 ENHANCED CREATIVE ARRANGEMENT                     */
+        /* ========================================================= */
+        .trap-card {{
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 4px !important;
+            padding: 8px 10px !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+        }}
+
+        .trap-pill {{
+            align-self: flex-start;
+            font-size: 0.31em !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.06em;
+            color: #475569;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-bottom: 1px;
+        }}
+
+        .trap-title {{
+            font-size: 0.48em !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            margin: 0 !important;
+            line-height: 1.22 !important;
+        }}
+
+        .trap-subtitle {{
+            font-size: 0.34em !important;
+            font-weight: 600 !important;
+            color: #0284c7 !important;
+            margin-bottom: 2px !important;
+        }}
+
+        .trap-points {{
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }}
+
+        .trap-point {{
+            font-size: 0.31em !important;
+            line-height: 1.34 !important;
+            color: #334155 !important;
+            background: #f8fafc;
+            padding: 4px 6px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }}
+
+        .strategic-takeaway-banner {{
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 7px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }}
+
+        .banner-label {{
+            font-size: 0.31em !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.08em;
+            color: #0a7a0a;
+            text-transform: uppercase;
+        }}
+
+        .banner-grid {{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }}
+
+        .banner-step {{
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            font-size: 0.31em !important;
+            line-height: 1.32 !important;
+            color: #1e293b !important;
+        }}
+
+        .step-badge {{
+            background: #0284c7;
+            color: #ffffff;
+            font-size: 0.85em;
+            font-weight: 700;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
         }}
 
         .tech-notes-view .doc-container {{
@@ -1145,6 +1450,18 @@ def main():
             deck.layout();
         }});
 
+        function triggerMathRender() {{
+            if (typeof renderMathInElement === 'function') {{
+                renderMathInElement(document.getElementById('slidesView'), {{
+                    delimiters: [
+                        {{ left: '$$', right: '$$', display: true }},
+                        {{ left: '$', right: '$', display: false }}
+                    ],
+                    throwOnError: false
+                }});
+            }}
+        }}
+
         window.addEventListener('DOMContentLoaded', () => {{
             const hash = window.location.hash.replace('#', '');
             if (hash && portalViews[hash]) {{
@@ -1152,7 +1469,9 @@ def main():
             }} else {{
                 switchPortalView('slides');
             }}
+            setTimeout(triggerMathRender, 200);
         }});
+        deck.on('ready', () => {{ setTimeout(triggerMathRender, 100); }});
     </script>
 </body>
 </html>
