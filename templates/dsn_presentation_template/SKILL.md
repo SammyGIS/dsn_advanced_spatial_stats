@@ -100,10 +100,39 @@ To prevent mistakes, always review this list of explicit prohibitions before gen
 - **The Correct Rule:**
   - Always render the official GitHub SVG icon with a clean link button pointing to the repository.
 
-### 10. ❌ NEVER Put Template Skill Instructions on the `main` Branch
-- **User feedback:** *"ensure all my correction and every instruction are being used to build a template skills for future use, create a template folder where you put those instruction they should not be put in main branch but template branch"*
+### 11. ❌ NEVER Clump Navigation Arrows Together in the Bottom-Right Corner
+- **User feedback:** *"move the let facing arrow to the other side pleae"*
+- **Prohibition:** Do not leave Reveal.js's default controls clustered together in the bottom-right corner.
 - **The Correct Rule:**
-  - The `templates/` folder and `SKILL.md` must live exclusively on the dedicated `template` git branch. The `main` branch must only contain the production course materials.
+  - Separate `.navigate-left` and `.navigate-right`:
+    - Move `.reveal .controls .navigate-left` to the **bottom-left** corner (`bottom: 14px; left: 24px;`).
+    - Keep `.reveal .controls .navigate-right` in the **bottom-right** corner (`bottom: 14px; right: 24px;`).
+    - Position the slide number (`.reveal .slide-number`) cleanly inside the bottom-right corner (`right: 68px; bottom: 18px;`) so it never collides with the arrow.
+
+### 12. ❌ Slide 2 MUST Always Be the Agenda Slide (from Master Template)
+- **User feedback:** *"the seocnd appge on mys ldie shoudl be my agneda page please"*
+- **The Correct Rule:**
+  - Slide 1 is the Cover Slide.
+  - Slide 2 is the **Agenda Slide** (`dsn-agenda-slide`) matching `DSN New Presentation Slides .pptx`:
+    - Left ~45%: Dark green tech background with tablet icon and bold white "Agenda" title.
+    - Right ~55%: DSN color logo at top-right, with 4 structured agenda rows:
+      - `01` | My Journey into Geospatial
+      - `02` | Career Pathways & Opportunities in Geospatial
+      - `03` | Skills, Tools & Staying Relevant
+      - `04` | Q&A / Open Discussion
+    - Red numbered badge blocks (`#ff0000`, 64x60px, rounded corners) straddling the seam.
+    - Subtle horizontal divider lines between items.
+  - Core curriculum slides follow starting from Slide 3.
+
+### 13. ❌ NEVER Leave Large Dead Voids or Unstructured Text Dumps
+- **User feedback:** *"laooki at this page the ragnement and the wya we are not cratie it is not maaking it looks smart"*
+- **Prohibition:** Avoid dumping 3 plain text boxes that only fill 50% of the vertical canvas, leaving 40% empty white space.
+- **The Correct Rule:**
+  - Structure each concept card with visual hierarchy:
+    - Counter pill / badge: e.g. `TRAP 01`, `TRAP 02`.
+    - Main heading & conceptual subtitle.
+    - 3-point structured breakdown: **The Blindspot** $\to$ **Ground Reality** $\to$ **Spatial Remedy**.
+  - Add an executive anchor across the bottom (e.g. **Strategic Paradigm Shift Banner**) connecting the concepts together and providing perfect vertical balance.
 
 ---
 
@@ -133,6 +162,7 @@ To prevent mistakes, always review this list of explicit prohibitions before gen
 ### 2. DSN Brand Media Assets
 All media extracted from official DSN slide decks located in `docs/figures/dsn_theme/`:
 - `image2.png`: Cover slide network globe background.
+- `bg_agenda.png`: Slide 2 master template Agenda background.
 - `image3.png`: Cover slide DSN color logo (top-left).
 - `image7.png`: Content slide DSN color logo (top-right, `width: 80px; top: 18px; right: 32px;`).
 - `image8.png`: Content slide 16:9 canvas with signature bottom green/red line.
@@ -147,11 +177,14 @@ All images must be Base64-encoded in the build script to guarantee path independ
 
 Before committing or pushing any new presentation updates, verify:
 - [ ] Are slides framed on a `#f1f5f9` stage with `margin: 0.06` (no edge-to-edge "full full")?
+- [ ] Is the left navigation arrow (`<`) at the bottom-left corner and the right arrow (`>`) at the bottom-right corner?
+- [ ] Is Slide 2 the Agenda page matching `DSN New Presentation Slides .pptx`?
 - [ ] Are all colored left border stripes (`card-rose`, `card-blue`, `card-amber`, etc.) completely absent?
 - [ ] Are all top subheading pill tags (`<span class="tag">`) completely removed?
 - [ ] Does Slide 1 feature only Title, Subtitle, and Author in 2 lines, with zero bulky descriptions?
 - [ ] Are titles scaled to `0.95em` and body text to `0.36em`?
-- [ ] Is there at least `75px` of whitespace above the bottom red/green line?
+- [ ] Is there at least `75px` of whitespace above the bottom red/green line without awkward empty dead space?
 - [ ] Does clicking "Technical Note" load `technical_notes.html` in an iframe with sticky TOC and KaTeX math intact?
 - [ ] Does the sidebar link to GitHub with an SVG icon?
 - [ ] Is the template folder committed only on `template` branch, keeping `main` clean?
+
