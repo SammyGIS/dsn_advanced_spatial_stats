@@ -1518,4 +1518,6 @@ def main():
     print(f"Successfully generated direct intuitive 35-slide presentation at {target_path}")
 
 if __name__ == "__main__":
-    main()
+    from build_dsn_presentation import main as build_dsn_main
+    build_dsn_main()
+
