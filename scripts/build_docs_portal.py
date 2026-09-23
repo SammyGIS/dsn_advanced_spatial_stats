@@ -252,6 +252,12 @@ PORTAL_HTML = r"""<!DOCTYPE html>
                     <span>Lecture Slides</span>
                 </div>
 
+                <!-- 2. Technical Note (Mathematical Reference & Deep Formulations) -->
+                <div class="nav-item" id="nav-technical_notes" onclick="switchView('technical_notes', 'technical_notes.html', 'Technical Note: Formulations &amp; Mechanics')">
+                    <span class="nav-icon">📜</span>
+                    <span>Technical Note</span>
+                </div>
+
                 <div class="nav-category">Curriculum Modules</div>
 
                 <!-- 2. Module 01: ESDA -->
@@ -272,10 +278,10 @@ PORTAL_HTML = r"""<!DOCTYPE html>
                     <span>03: Spatial Heterogeneity (GWR)</span>
                 </div>
 
-                <!-- 5. Module 04: Sectoral Decision Intelligence -->
-                <div class="nav-item" id="nav-04_sectoral" onclick="switchView('04_sectoral', 'notebooks_html/04_sectoral_decision_intelligence.html', 'Module 04: Decision Intelligence')">
+                <!-- 5. Module 04: Sectoral Spatial Synthesis & Prioritization -->
+                <div class="nav-item" id="nav-04_sectoral" onclick="switchView('04_sectoral', 'notebooks_html/04_sectoral_decision_intelligence.html', 'Module 04: Spatial Synthesis &amp; Prioritization')">
                     <span class="nav-icon">🎯</span>
-                    <span>04: Decision Engines</span>
+                    <span>04: Spatial Synthesis</span>
                 </div>
             </nav>
         </aside>

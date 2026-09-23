@@ -6,6 +6,7 @@
 [![PySAL](https://img.shields.io/badge/PySAL-libpysal%20%7C%20esda%20%7C%20spreg-orange.svg)](https://pysal.org/)
 [![Documentation](https://img.shields.io/badge/Documentation-GitHub%20Pages-teal.svg)](https://sammygis.github.io/dsn_advanced_spatial_stats/)
 [![Slide Deck](https://img.shields.io/badge/Slide%20Deck-Reveal.js%20Presentation-coral.svg)](https://sammygis.github.io/dsn_advanced_spatial_stats/presentation.html)
+[![Technical Note](https://img.shields.io/badge/Technical%20Note-Formulations%20%26%20Mechanics-purple.svg)](https://sammygis.github.io/dsn_advanced_spatial_stats/technical_notes.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -14,6 +15,7 @@
 
 - 🌐 **[Live Documentation & Master Handbook Portal](https://sammygis.github.io/dsn_advanced_spatial_stats/)**
 - 📊 **[Interactive Slide Deck (Reveal.js Web Presentation)](https://sammygis.github.io/dsn_advanced_spatial_stats/presentation.html)**
+- 📜 **[Technical Note: Mathematical Formulations & Statistical Mechanics](https://sammygis.github.io/dsn_advanced_spatial_stats/technical_notes.html)**
 - 📥 **[Download Masterclass Presentation (.pptx)](docs/spatial_statistics_masterclass_presentation.pptx)**
 - 🔬 **Notebook Modules:**
   - [Module 0: Master Spatial Decision Handbook](notebooks/00_master_spatial_decision_handbook.ipynb)
