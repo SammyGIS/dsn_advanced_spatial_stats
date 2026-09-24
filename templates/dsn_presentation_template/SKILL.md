@@ -27,7 +27,8 @@ To prevent mistakes, always review this list of explicit prohibitions before gen
 - **User feedback:** *"all left border on all shapes is not allowed remove them all across the slides"*, *"remove the border colour arrange better and demarcate across all slides please"*
 - **Prohibition:** Never apply colored left borders (`border-left: 3px solid ...`, `border-left: 4px solid ...`) or accent classes (`card-rose`, `card-blue`, `card-amber`, `callout rose`, `callout teal`, etc.).
 - **The Correct Rule:**
-  - Every card, callout, and shape must have a uniform, soft, neutral 1px border:
+  - A soft 1px border all the way round is fine, tinted to match the card (DSN green or red tint, see Rule 14). Never a thick or one-sided accent bar.
+  - Baseline card:
     ```css
     .card {
         background: #ffffff !important;
@@ -52,19 +53,19 @@ To prevent mistakes, always review this list of explicit prohibitions before gen
   - Do not use pill badges (`Instructor: ... Platform: ... Curriculum: ...`) that crowd the bottom.
 - **The Correct Rule:**
   - Title (*Advanced Spatial Statistics*) and Subtitle (*Theory, Intuition & Spatial Statistics Modeling*) must be compact and positioned high up in the upper white curve.
-  - Instructor name and organization must appear in **two distinct, clean lines** directly beneath the title/subtitle:
+  - Only the instructor name sits beneath the title/subtitle. **No "Data Science Nigeria (DSN)" line under the name** (user: *"remove this Data Science Nigeria (DSN) that is under my name"*):
     ```html
     <div class="dsn-cover-author">
         <div class="author-name">Adedoyin S. Ajeyomi</div>
-        <div class="author-org">Data Science Nigeria (DSN)</div>
     </div>
     ```
+  - The subtitle must render in DSN green. `.reveal h3` sets a blue colour with higher specificity, so target it as `.reveal h3.dsn-cover-subtitle { color: var(--dsn-green) !important; }`.
 
 ### 5. ❌ NEVER Use Large, Overcrowded, or Awkwardly Wrapping Fonts
 - **User feedback:** *"reduce font size"*, *"reduce font if need be please"*
 - **Prohibition:** Never use large headings (`1.85em`+) or long body text that wraps into multiple unnecessary lines or cramps the slide.
 - **The Correct Rule (Font Scale):**
-  - **Slide Title (`<h2>`):** `0.95em` (~`17.5px` at base 1280 scale), `line-height: 1.25`, `font-weight: 600`.
+  - **Slide Title (`<h2>`):** `0.86em`, `line-height: 1.25`, `font-weight: 600`, header `max-width: 1060px` so most titles fit on one line.
   - **Subtitle (`<h3>`):** `0.68em` (~`14px`), `font-weight: 600`.
   - **Card Title (`<h4>`):** `0.54em` (~`11.5px`), `font-weight: 600`.
   - **Body Text (`<p>`, `<li>`):** `0.36em` (~`9.5px`), `line-height: 1.38`.
@@ -81,7 +82,8 @@ To prevent mistakes, always review this list of explicit prohibitions before gen
         overflow: hidden;
     }
     ```
-  - This guarantees **at least 75px of clean white breathing space** above the footer signature line.
+  - Per-slide body heights (`.why-body` 540px, `.body-2line` for two-line titles, dense slides up to 560px) are fine, as long as every card ends **clearly above** the green/red footer line and nothing is clipped.
+  - Always verify with a headless-browser screenshot of every changed slide (Playwright, `deck.slide(n)`) before reporting done.
 
 ### 7. ❌ NEVER Create Artificial Inner Border Boxes That Cut Through Slide Backgrounds
 - **Prohibition:** Do not place borders on `.reveal .slides section` if Reveal's `data-background-image` separates the background from the section, creating a visible rectangular outline cutting across the background art (e.g. cutting into the green globe).
@@ -124,15 +126,33 @@ To prevent mistakes, always review this list of explicit prohibitions before gen
     - Subtle horizontal divider lines between items.
   - Core curriculum slides follow starting from Slide 3.
 
-### 13. ❌ NEVER Leave Large Dead Voids or Unstructured Text Dumps
-- **User feedback:** *"laooki at this page the ragnement and the wya we are not cratie it is not maaking it looks smart"*
-- **Prohibition:** Avoid dumping 3 plain text boxes that only fill 50% of the vertical canvas, leaving 40% empty white space.
+### 13. ❌ NEVER Add Extra Words; Fill Space With Visuals Instead
+- **User feedback:** *"the current slide is too busy ... i only said we should make the styling and arrangement fitted to the page, not add more words"*, *"dont add those words or content but design them well with diagrams or images"*
+- **Prohibition:** Never pad cards with extra text such as `TRAP 01` pills, sub-subtitles, "Blindspot / Ground Reality / Spatial Remedy" boxes or summary banners the user did not write.
 - **The Correct Rule:**
-  - Structure each concept card with visual hierarchy:
-    - Counter pill / badge: e.g. `TRAP 01`, `TRAP 02`.
-    - Main heading & conceptual subtitle.
-    - 3-point structured breakdown: **The Blindspot** $\to$ **Ground Reality** $\to$ **Spatial Remedy**.
-  - Add an executive anchor across the bottom (e.g. **Strategic Paradigm Shift Banner**) connecting the concepts together and providing perfect vertical balance.
+  - When the user supplies slide text, use it **verbatim**, with no additions and no paraphrase.
+  - Fill empty space with **visuals**: an inline SVG diagram panel at the top of each card, then a numbered badge + title row, a thin divider, then the text.
+  - Enlarge fonts and let cards stretch (`flex: 1`) so the slide looks fitted, never half empty.
+
+### 14. ✅ Use the Exact DSN Logo Colours, Never Grey Backgrounds
+- **User feedback:** *"i dont like those grey background the red and green colour from the dsn logo can be used to beautify the slides"*, *"the colour of red and green in the logo, maintain it"*
+- **The Correct Rule:**
+  - Sampled from the logo: green `#00a859`, red `#ed3237`. Tints: green `#eef9f3` / line `#c4e9d5`; red `#fdf0f0` / line `#f8cfd0`; dark green text `#007f43`.
+  - Replace every grey slide background (`#f8fafc`, `#f1f5f9`) with these tints. Alternate green / red / green across sibling cards (`:nth-child(2)` red).
+  - Number badges: solid green or red circles with white numerals.
+
+### 15. ✅ Visual Assets: Diagrams, Real Project Maps, Official Logos
+- Diagrams are inline SVG built by `svg_*()` helpers in `scripts/build_dsn_presentation.py` (hex grids, ripples, shuffle grids, bar charts), all in the DSN palette.
+- Real maps are cropped from the project's own analysis figures into `docs/figures/dsn_theme/slides/` (healthcare deserts, retail tiers, religious geography, Lorenz curves, Moran scatterplot, LISA clusters).
+- Tool logos are downloaded from official sources (Wikimedia Commons, project GitHub repos) into `docs/figures/dsn_theme/logos/`. `get_b64()` must emit `image/svg+xml` for `.svg`.
+
+### 16. ✅ Ending Slide Is Minimal
+- **User feedback:** *"remove the content in the red part region"*
+- Only the white DSN logo, "Thank you" and "Q&A / Open Discussion". No info card, no course summary, no name/organisation row.
+
+### 17. ✅ Current Deck Structure
+1. Cover · 2. Agenda · 3–8. Use case: Why Spatial Statistics (three fallacies), The Core Objective (five questions with real maps), ESDA Superpower (two-lane flow), What Traditional EDA Misses, What ESDA Unlocks (Moran scatterplot; LISA map + "In short" banner) · 9. Workflow (W → Moran's I → LISA → OLS → SAR/SEM/SDM → GWR/MGWR → spatio-temporal) · 10. Problem → Model picker · 11–14. SAR, SEM, SDM, GWR & MGWR (When to use + equation on top, diagram + real-world examples below) · 15. Tools, Software & Libraries (Python/PySAL, R, GeoDa/QGIS) · demo slide(s) · Ending.
+- "Course Overview" must never appear in a slide heading.
 
 ---
 
@@ -181,9 +201,12 @@ Before committing or pushing any new presentation updates, verify:
 - [ ] Is Slide 2 the Agenda page matching `DSN New Presentation Slides .pptx`?
 - [ ] Are all colored left border stripes (`card-rose`, `card-blue`, `card-amber`, etc.) completely absent?
 - [ ] Are all top subheading pill tags (`<span class="tag">`) completely removed?
-- [ ] Does Slide 1 feature only Title, Subtitle, and Author in 2 lines, with zero bulky descriptions?
-- [ ] Are titles scaled to `0.95em` and body text to `0.36em`?
-- [ ] Is there at least `75px` of whitespace above the bottom red/green line without awkward empty dead space?
+- [ ] Does Slide 1 show only Title, green Subtitle and the author name (no organisation line)?
+- [ ] Are titles `0.86em` and does every slide fit above the green/red footer line (screenshot-verified)?
+- [ ] Is user-supplied text verbatim, with no added pills, subtitles or banners?
+- [ ] Are backgrounds DSN green/red tints (`#00a859` / `#ed3237`), with no grey boxes?
+- [ ] Does every content card carry a diagram or real map rather than extra words?
+- [ ] Is the ending slide only logo + "Thank you" + "Q&A / Open Discussion"?
 - [ ] Does clicking "Technical Note" load `technical_notes.html` in an iframe with sticky TOC and KaTeX math intact?
 - [ ] Does the sidebar link to GitHub with an SVG icon?
 - [ ] Is the template folder committed only on `template` branch, keeping `main` clean?
