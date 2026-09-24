@@ -151,8 +151,10 @@ To prevent mistakes, always review this list of explicit prohibitions before gen
 - Only the white DSN logo, "Thank you" and "Q&A / Open Discussion". No info card, no course summary, no name/organisation row.
 
 ### 17. ✅ Current Deck Structure
-1. Cover · 2. Agenda · 3–8. Use case: Why Spatial Statistics (three fallacies), The Core Objective (five questions with real maps), ESDA Superpower (two-lane flow), What Traditional EDA Misses, What ESDA Unlocks (Moran scatterplot; LISA map + "In short" banner) · 9. Workflow (W → Moran's I → LISA → OLS → SAR/SEM/SDM → GWR/MGWR → spatio-temporal) · 10. Problem → Model picker · 11–14. SAR, SEM, SDM, GWR & MGWR (When to use + equation on top, diagram + real-world examples below) · 15. Tools, Software & Libraries (Python/PySAL, R, GeoDa/QGIS) · demo slide(s) · Ending.
+1. Cover · 2. Agenda · 3–8. Use case: Why Spatial Statistics (three fallacies), The Core Objective (five questions with real maps), ESDA Superpower (two-lane flow), What Traditional EDA Misses, What ESDA Unlocks (Moran scatterplot; LISA map + "In short" banner) · 9. Workflow (W → Moran's I → LISA → OLS → SAR/SEM/SDM → GWR/MGWR → spatio-temporal) · 10. Problem → Model picker · 11–14. SAR, SEM, SDM, GWR & MGWR (When to use + equation on top, diagram + real-world examples below) · 15. Tools, Software & Libraries (Python/PySAL, R, ArcGIS Pro with `arcpy.stats` & `arcgis`, GeoDa; no QGIS) · demo slide(s) · Ending.
 - "Course Overview" must never appear in a slide heading.
+- Treat Nigeria's wards as a **worked example**, never as an absolute claim (write "e.g. areas with...", "using Nigeria's administrative wards as a worked example").
+- Say **"purchasing power"**, not "relative wealth" / "Relative Wealth Index", on slides.
 
 ---
 
