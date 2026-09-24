@@ -151,11 +151,12 @@ To prevent mistakes, always review this list of explicit prohibitions before gen
 - Only the white DSN logo, "Thank you" and "Q&A / Open Discussion". No info card, no course summary, no name/organisation row.
 
 ### 17. ✅ Current Deck Structure
-1. Cover · 2. Agenda (8 items: My Journey; Why Spatial Statistics; ESDA, Moran's I & LISA; Testing & Modelling Spatial Dependence; Space-Time Pattern Mining; Tools & Notebook Use Cases; Career Pathways & Skills; Q&A) · 3–8. Why Spatial Statistics, Core Objective, ESDA Superpower, What EDA Misses, What ESDA Unlocks ×2 · 9. Workflow · 10. **Spatial Dependence Testing Toolkit** (Global: Moran's I, Geary's C, General G, Join Counts; Local: LISA, Gi*, Bivariate LISA, Local Geary; Model diagnostics: residual Moran's I + LM tests) · 11–14. SAR, SEM, SDM, GWR & MGWR · 15. Space-Time Pattern Mining · 16. Tools · Ending.
+1. Cover · 2. Agenda (6 items: Why Spatial Statistics; ESDA, Moran's I & LISA; Testing & Modelling Spatial Dependence; Space-Time Pattern Mining; Tools & Notebook Use Cases; Q&A. No "My Journey" or "Career Pathways" items) · 3–8. Why Spatial Statistics, Core Objective, ESDA Superpower, What EDA Misses, What ESDA Unlocks ×2 · 9. Workflow · 10. **Spatial Dependence Testing Toolkit** (Global: Moran's I, Geary's C, General G, Join Counts; Local: LISA, Gi*, Bivariate LISA, Local Geary; Model diagnostics: residual Moran's I + LM tests) · 11–14. SAR, SEM, SDM, then GWR vs OLS side by side with the real LGA local-slope map · 15. Space-Time Pattern Mining · 16. Tools · Ending.
 - "Course Overview" must never appear in a slide heading.
 - Treat Nigeria's wards as a **worked example**, never as an absolute claim (write "e.g. areas with...", "using Nigeria's administrative wards as a worked example").
 - Say **"purchasing power"**, not "relative wealth" / "Relative Wealth Index", on slides.
-- Agenda badges use the DSN logo red; eight compact rows (50×44 badges) fit the template.
+- Agenda badges use the DSN logo red (50×44 badges).
+- Maps: boundaries at linewidth 0.2 with a semi-transparent edge so outlines never hide cluster colours; legends always outside the map frame.
 
 ### 18. ✅ Examples Must Be Honest and Instantly Readable
 - **User feedback:** *"the values are examples, not actually done, state it that way, and let it be explainable so one reads and understands instantly"*
@@ -176,7 +177,7 @@ To prevent mistakes, always review this list of explicit prohibitions before gen
 ### 21. ✅ Technical Note & Class Notebook
 - The Technical Note keeps its style but carries a diagram in every section (shared SVG helpers in `scripts/technical_note_diagrams.py`), full Moran's I / LISA / Gi* interpretation, a Space-Time Pattern Mining section, and no "Model Selection Protocol" section.
 - The portal sidebar shows **one** class notebook (`notebooks_html/spatial_statistics_use_cases.html`) under "Class Notebook"; the old four module notebooks are not linked. The sidebar heading reads "Class Presentation", not "Course Presentation".
-- The notebook opens with a use-case table of contents; each use case follows: problem → hypothesis → the usual aspatial/ML approach → the spatial statistics method → code that runs → a markdown interpretation of the actual outputs.
+- The notebook opens with a **clickable contents list** (anchor links, not a table) and has no data-caveat section or "What we learned" section; the exported HTML is paged, one use case per page with Previous/Next; each use case follows: problem → hypothesis → the usual aspatial/ML approach → the spatial statistics method → code that runs → a markdown interpretation of the actual outputs.
 
 ---
 
