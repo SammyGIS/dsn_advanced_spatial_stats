@@ -151,10 +151,32 @@ To prevent mistakes, always review this list of explicit prohibitions before gen
 - Only the white DSN logo, "Thank you" and "Q&A / Open Discussion". No info card, no course summary, no name/organisation row.
 
 ### 17. ✅ Current Deck Structure
-1. Cover · 2. Agenda · 3–8. Use case: Why Spatial Statistics (three fallacies), The Core Objective (five questions with real maps), ESDA Superpower (two-lane flow), What Traditional EDA Misses, What ESDA Unlocks (Moran scatterplot; LISA map + "In short" banner) · 9. Workflow (W → Moran's I → LISA → OLS → SAR/SEM/SDM → GWR/MGWR → spatio-temporal) · 10. Problem → Model picker · 11–14. SAR, SEM, SDM, GWR & MGWR (When to use + equation on top, diagram + real-world examples below) · 15. Tools, Software & Libraries (Python/PySAL, R, ArcGIS Pro with `arcpy.stats` & `arcgis`, GeoDa; no QGIS) · demo slide(s) · Ending.
+1. Cover · 2. Agenda (8 items: My Journey; Why Spatial Statistics; ESDA, Moran's I & LISA; Testing & Modelling Spatial Dependence; Space-Time Pattern Mining; Tools & Notebook Use Cases; Career Pathways & Skills; Q&A) · 3–8. Why Spatial Statistics, Core Objective, ESDA Superpower, What EDA Misses, What ESDA Unlocks ×2 · 9. Workflow · 10. **Spatial Dependence Testing Toolkit** (Global: Moran's I, Geary's C, General G, Join Counts; Local: LISA, Gi*, Bivariate LISA, Local Geary; Model diagnostics: residual Moran's I + LM tests) · 11–14. SAR, SEM, SDM, GWR & MGWR · 15. Space-Time Pattern Mining · 16. Tools · Ending.
 - "Course Overview" must never appear in a slide heading.
 - Treat Nigeria's wards as a **worked example**, never as an absolute claim (write "e.g. areas with...", "using Nigeria's administrative wards as a worked example").
 - Say **"purchasing power"**, not "relative wealth" / "Relative Wealth Index", on slides.
+- Agenda badges use the DSN logo red; eight compact rows (50×44 badges) fit the template.
+
+### 18. ✅ Examples Must Be Honest and Instantly Readable
+- **User feedback:** *"the values are examples, not actually done, state it that way, and let it be explainable so one reads and understands instantly"*
+- Hypothetical numbers are labelled **"Illustrative examples (numbers are hypothetical)"** on slides and **"Illustrative Example"** in the Technical Note. Real outputs from the class data are labelled **"Course Result"**.
+- Write examples in plain words ("a campaign at one store also lifts sales at nearby stores"), with at most one number per sentence.
+- Simulated data (the malaria columns from `enrich_malaria_epidemiology.py`) must always be declared as simulated.
+
+### 19. ✅ Diagrams: Prefer Real Map Boundaries
+- **User feedback:** *"using a map boundary to show this would have been better"*
+- Where a concept can be shown on real geography, draw it from the ward polygons (e.g. `scripts/export_lisa_neighbourhoods.py` renders one significant ward per LISA category with its actual queen neighbours).
+- Use abstract grids only when no real example exists.
+
+### 20. ✅ Space-Time Slide Pattern
+- Rebuild reference visuals cleanly; never paste screenshots (user: *"don't show that it was a screenshot, clean it up, rebuild it well"*).
+- Layout: a 3-step strip (Create Space Time Cube → Gi* per bin → Mann-Kendall), then the 8 hot + 8 cold + "No Pattern Detected" legend in conventional ArcGIS styles (glow = intensifying, pale centre = diminishing, speckle = sporadic/oscillating), next to an isometric bin map, then a "Reading the map" banner.
+- Wrap small labels in their own class (e.g. `.st-sub`), never style bare `span` elements, or KaTeX output breaks.
+
+### 21. ✅ Technical Note & Class Notebook
+- The Technical Note keeps its style but carries a diagram in every section (shared SVG helpers in `scripts/technical_note_diagrams.py`), full Moran's I / LISA / Gi* interpretation, a Space-Time Pattern Mining section, and no "Model Selection Protocol" section.
+- The portal sidebar shows **one** class notebook (`notebooks_html/spatial_statistics_use_cases.html`) under "Class Notebook"; the old four module notebooks are not linked. The sidebar heading reads "Class Presentation", not "Course Presentation".
+- The notebook opens with a use-case table of contents; each use case follows: problem → hypothesis → the usual aspatial/ML approach → the spatial statistics method → code that runs → a markdown interpretation of the actual outputs.
 
 ---
 
@@ -209,6 +231,8 @@ Before committing or pushing any new presentation updates, verify:
 - [ ] Are backgrounds DSN green/red tints (`#00a859` / `#ed3237`), with no grey boxes?
 - [ ] Does every content card carry a diagram or real map rather than extra words?
 - [ ] Is the ending slide only logo + "Thank you" + "Q&A / Open Discussion"?
+- [ ] Are hypothetical numbers labelled illustrative and simulated data declared?
+- [ ] Does the sidebar link only the single class notebook?
 - [ ] Does clicking "Technical Note" load `technical_notes.html` in an iframe with sticky TOC and KaTeX math intact?
 - [ ] Does the sidebar link to GitHub with an SVG icon?
 - [ ] Is the template folder committed only on `template` branch, keeping `main` clean?
