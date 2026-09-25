@@ -186,6 +186,12 @@ Open `notebooks/spatial_statistics_use_cases.ipynb`. Each use case states a prob
 
 ### 5.3 Rebuilding the Slides, Technical Note & Figures
 
+The site in `docs/` is prebuilt. The build scripts live on the **`template`** branch; fetch them into a local `scripts/` folder first (it is git-ignored on `main`):
+
+```bash
+git checkout template -- scripts && git restore --staged scripts
+```
+
 ```bash
 # Regenerate publication figures
 python scripts/export_publication_figures.py

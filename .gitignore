@@ -36,3 +36,6 @@ data/staging/
 # OS artifacts
 .DS_Store
 Thumbs.db
+
+# Build scripts live on the template branch; keep them local on main
+scripts/
