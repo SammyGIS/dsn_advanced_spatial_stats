@@ -1,7 +1,7 @@
 """
 Build the single class notebook: notebooks/spatial_statistics_use_cases.ipynb
 
-Ten use cases on the class ward data. Each one follows the same rhythm:
+Eleven use cases on the class ward data, each defined in the same stages:
 problem -> hypothesis -> the usual (aspatial / ML) approach -> run it -> what it tells us
 -> the spatial statistics method -> run it -> interpretation of the actual results.
 
@@ -44,7 +44,7 @@ md(r"""
 
 **Advanced Spatial Statistics · Class Notebook · Data Science Nigeria**
 
-Every use case in this notebook follows the same rhythm:
+All problems in this notebook are well defined in stages:
 
 1. **The problem**: a real decision someone has to make.
 2. **The hypothesis**: what we expect, stated so the data can prove us wrong.
@@ -712,6 +712,15 @@ nb["cells"] = cells
 nb["metadata"] = {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
                   "language_info": {"name": "python"}}
 os.makedirs(os.path.dirname(NB_PATH), exist_ok=True)
+if "--text-only" in sys.argv:
+    # Refresh markdown only: keep the executed code cells and their outputs.
+    executed = nbf.read(NB_PATH, as_version=4)
+    fresh_md = [c for c in cells if c.cell_type == "markdown"]
+    old_md = [c for c in executed.cells if c.cell_type == "markdown"]
+    assert len(fresh_md) == len(old_md), "Cell structure changed: run with --execute instead"
+    for old, new in zip(old_md, fresh_md):
+        old.source = new.source
+    nb = executed
 nbf.write(nb, NB_PATH)
 print(f"Wrote {NB_PATH}")
 
@@ -782,9 +791,10 @@ def paginate_html(path):
         f.write(html)
 
 
-if "--execute" in sys.argv:
-    subprocess.run([sys.executable, "-m", "nbconvert", "--to", "notebook", "--execute", "--inplace",
-                    "--ExecutePreprocessor.timeout=1800", NB_PATH], check=True)
+if "--execute" in sys.argv or "--text-only" in sys.argv:
+    if "--execute" in sys.argv:
+        subprocess.run([sys.executable, "-m", "nbconvert", "--to", "notebook", "--execute", "--inplace",
+                        "--ExecutePreprocessor.timeout=1800", NB_PATH], check=True)
     subprocess.run([sys.executable, "-m", "nbconvert", "--to", "html", "--output-dir", HTML_DIR, NB_PATH],
                    check=True)
     paginate_html(os.path.join(HTML_DIR, "spatial_statistics_use_cases.html"))

@@ -181,10 +181,10 @@ def svg_multiplier():
             body += _hex(x, y, r, [R, G, GL][d])
     body += _arrow(128, 55, 160)
     body += (f'<rect x="172" y="22" width="70" height="24" rx="4" fill="{MUTE}"/>'
-             f'<text x="248" y="39" font-family="Poppins, sans-serif" font-size="13" font-weight="700" fill="{INK}">&#8358;1M</text>'
+             f'<text x="248" y="39" font-family="Poppins, sans-serif" font-size="13" font-weight="700" fill="{INK}">&#215;1 local change</text>'
              f'<rect x="172" y="62" width="128" height="24" rx="4" fill="{G}"/>'
-             f'<text x="306" y="79" font-family="Poppins, sans-serif" font-size="13" font-weight="700" fill="{GD}">&#8358;1.82M</text>')
-    return _svg(360, 110, body)
+             f'<text x="306" y="79" font-family="Poppins, sans-serif" font-size="13" font-weight="700" fill="{GD}">&#215;1.82 total</text>')
+    return _svg(420, 110, body)
 
 
 def svg_shock():
@@ -608,11 +608,11 @@ def main():
             <section class="dsn-content-slide">
                 <img src="{logo_b64}" class="dsn-header-logo" alt="DSN">
                 <header class="slide-header">
-                    <h2>The Core Objective</h2>
+                    <h2>What Spatial Statistics Can Do</h2>
                 </header>
                 <div class="slide-body why-body">
                     <div class="lead-callout why-lead">
-                        <p>This curriculum bridges the gap between raw <strong>Earth Observation (EO) data</strong> (high-resolution satellite-derived purchasing power, gridded population rasters) and <strong>on-the-ground operational decisions</strong>. Using Nigeria's administrative wards as a worked example, students see how spatial statistics answers critical questions across diverse spheres of national life:</p>
+                        <p>Spatial statistics goes <strong>beyond guesswork and what the eye sees on a map</strong>. It uses <strong>science, data and measurable metrics</strong> to test whether a spatial pattern is real, measure how strong it is, and show exactly where it matters. Using Nigeria's administrative wards as a worked example, it answers questions such as:</p>
                     </div>
 
                     <div class="grid-5 why-grid q-grid">
@@ -632,7 +632,7 @@ def main():
                             <div class="q-img"><img src="{img_religious}" alt="Religious geography map"></div>
                             <div class="why-num">3</div>
                             <h5>How do religious and civic institutions sort geographically?</h5>
-                            <p>(Mapping cultural cohesion and Shannon Entropy diversity zones).</p>
+                            <p>(Mapping cultural cohesion and diversity zones).</p>
                         </div>
                         <div class="card why-card q-card">
                             <div class="q-img"><img src="{img_lorenz}" alt="Lorenz inequality curves"></div>
@@ -709,7 +709,7 @@ def main():
                         <div class="card why-card">
                             <div class="viz">{svg_heterogeneous()}</div>
                             <div class="why-head"><div class="why-num">2</div><h4>Hidden Structural Regimes</h4></div>
-                            <p>A single national correlation coefficient ($r = 0.45$) can conceal that the relationship between healthcare facilities and population is strongly positive in the South, but non-existent or reversed in remote Sahelian border areas.</p>
+                            <p>A single national correlation coefficient ($r = 0.80$) can conceal that the relationship between healthcare facilities and population is strongly positive in the South, but non-existent or reversed in remote Sahelian border areas.</p>
                         </div>
                         <div class="card why-card">
                             <div class="viz">{svg_local_outlier()}</div>
@@ -833,7 +833,7 @@ def main():
                         <div class="wf-step">
                             <div class="why-num">5</div>
                             <h5>SAR / SEM / SDM</h5>
-                            <p>Diagnostics pick the model: contagion, hidden shocks or both.</p>
+                            <p>The tests tell us why neighbours look alike: the problem spreads, they share a hidden cause, or both.</p>
                             <code>spreg</code>
                         </div>
                         <div class="wf-arrow"></div>
@@ -926,109 +926,123 @@ def main():
 """
 
     # =========================================================================
-    # SLIDE 10: SPATIAL LAG MODEL (SAR): MODELING CONTAGION & PEER EFFECTS
+    # SLIDE 11: SPATIAL LAG MODEL (SAR): WHEN THE PROBLEM SPREADS
     # =========================================================================
     slide_sar = f"""
-            <!-- SLIDE 10: Spatial Lag Model (SAR): Modeling Contagion &amp; Peer Effects -->
+            <!-- SLIDE 11: Spatial Lag Model (SAR): When the Problem Spreads -->
             <section class="dsn-content-slide">
                 <img src="{logo_b64}" class="dsn-header-logo" alt="DSN">
                 <header class="slide-header">
-                    <h2>Spatial Lag Model (SAR): Modeling Contagion &amp; Peer Effects</h2>
+                    <h2>Spatial Lag Model (SAR): When the Problem Spreads</h2>
                 </header>
-                <div class="slide-body why-body model-body">
-                    <div class="model-top">
-                        <div class="model-when">
-                            <div class="fallacy-label">When to use</div>
-                            <p>The outcome in each location is <em>directly caused</em> by outcomes in neighbouring locations: contagion, diffusion, peer pressure, or market competition.</p>
+                <div class="slide-body why-body mc-body">
+                    <div class="mc-top">
+                        <div class="mc-plain">
+                            <div class="fallacy-label">In plain words</div>
+                            <p>A ward's outcome is pushed up or down by its <strong>neighbours' outcomes</strong>. The problem itself spreads from place to place.</p>
+                            <p class="mc-ask"><strong>Ask yourself:</strong> Does a change in one ward <strong>cause</strong> a change in the next ward?</p>
                         </div>
                         <div class="model-eq">
                             <div class="fallacy-label">The model</div>
                             <div class="eq">$$y = \\rho W y + X\\beta + \\varepsilon$$</div>
                         </div>
                     </div>
-                    <div class="model-bottom">
-                        <div class="card why-card model-viz">
+                    <div class="mc-bottom">
+                        <div class="card why-card mc-card">
                             <div class="viz viz-model">{svg_multiplier()}</div>
-                            <p><strong>How it solves it:</strong> SAR adds the neighbours' outcome ($Wy$) to the model and measures its pull with $\\rho$. If $\\rho = 0.45$, every local change is multiplied by $\\frac{{1}}{{1-\\rho}} = 1.82$ once the ripple through neighbours is counted.</p>
+                            <p><span class="mc-tag">What it gives you</span><strong>$\\rho$</strong>: how strongly outcomes spread, and the <strong>ripple multiplier</strong> $\\frac{{1}}{{1-\\rho}}$. If $\\rho = 0.45$, every local change grows about 1.8&times; across the area.</p>
                         </div>
-                        <div class="card why-card model-ex">
-                            <div class="fallacy-label">Illustrative examples (numbers are hypothetical)</div>
-                            <div class="ex-row"><div class="why-num">1</div><p><strong>Retail:</strong> a campaign at one store also lifts sales at nearby stores. With $\\rho = 0.45$, &#8358;1M of direct sales would become about &#8358;1.82M across the area.</p></div>
-                            <div class="ex-row"><div class="why-num">2</div><p><strong>Disease spread:</strong> more malaria in one district raises malaria next door, because people share markets and travel routes.</p></div>
-                            <div class="ex-row"><div class="why-num">3</div><p><strong>Crime:</strong> a police crackdown in one area pushes crime into the neighbouring areas.</p></div>
+                        <div class="card why-card mc-card mc-story">
+                            <div class="fallacy-label">Same example, this model: malaria in neighbouring wards</div>
+                            <p>Malaria in one ward raises malaria in the next ward, because infected people and mosquitoes move between them. <strong>Treating one ward also lowers malaria next door.</strong></p>
                         </div>
+                    </div>
+                    <div class="mc-strip">
+                        <div class="mc-pill mc-on"><strong>SAR</strong><span>the problem spreads</span></div>
+                        <div class="mc-pill"><strong>SEM</strong><span>a shared hidden cause</span></div>
+                        <div class="mc-pill"><strong>SDM</strong><span>both, plus neighbours' resources</span></div>
                     </div>
                 </div>
             </section>
 """
 
     # =========================================================================
-    # SLIDE 11: SPATIAL ERROR MODEL (SEM): CORRECTING FOR INVISIBLE REGIONAL SHOCKS
+    # SLIDE 12: SPATIAL ERROR MODEL (SEM): WHEN NEIGHBOURS SHARE A HIDDEN CAUSE
     # =========================================================================
     slide_sem = f"""
-            <!-- SLIDE 11: Spatial Error Model (SEM): Correcting for Invisible Regional Shocks -->
+            <!-- SLIDE 12: Spatial Error Model (SEM): When Neighbours Share a Hidden Cause -->
             <section class="dsn-content-slide">
                 <img src="{logo_b64}" class="dsn-header-logo" alt="DSN">
                 <header class="slide-header">
-                    <h2>Spatial Error Model (SEM): Correcting for Invisible Regional Shocks</h2>
+                    <h2>Spatial Error Model (SEM): When Neighbours Share a Hidden Cause</h2>
                 </header>
-                <div class="slide-body why-body model-body">
-                    <div class="model-top">
-                        <div class="model-when">
-                            <div class="fallacy-label">When to use</div>
-                            <p>The outcome is <em>not</em> contagious, but unmeasured regional forces (climate, soil, governance) hit clusters of adjacent units at once, making their errors correlated.</p>
+                <div class="slide-body why-body mc-body">
+                    <div class="mc-top">
+                        <div class="mc-plain">
+                            <div class="fallacy-label">In plain words</div>
+                            <p>Neighbouring wards look alike because they <strong>share something the data left out</strong>, not because they affect each other.</p>
+                            <p class="mc-ask"><strong>Ask yourself:</strong> Is there a <strong>hidden shared cause</strong> (rainfall, soil, state policy) that my data does not include?</p>
                         </div>
                         <div class="model-eq">
                             <div class="fallacy-label">The model</div>
                             <div class="eq">$$y = X\\beta + u, \\quad u = \\lambda W u + \\varepsilon$$</div>
                         </div>
                     </div>
-                    <div class="model-bottom">
-                        <div class="card why-card model-viz">
+                    <div class="mc-bottom">
+                        <div class="card why-card mc-card">
                             <div class="viz viz-model">{svg_shock()}</div>
-                            <p><strong>How it solves it:</strong> SEM lets the model's errors move together across neighbours ($\\lambda$). If $\\lambda = 0.6$, most of what the model misses is shared with neighbours; SEM separates it out, so the $p$-values become honest again.</p>
+                            <p><span class="mc-tag">What it gives you</span><strong>Honest $p$-values</strong>, so you do not claim an effect that is not real. <strong>$\\lambda$</strong> shows how strong the shared hidden cause is.</p>
                         </div>
-                        <div class="card why-card model-ex">
-                            <div class="fallacy-label">Illustrative examples (numbers are hypothetical)</div>
-                            <div class="ex-row"><div class="why-num">1</div><p><strong>Farming:</strong> the model leaves out soil quality, and good soil comes in patches, so neighbouring farms are all over- or under-predicted together.</p></div>
-                            <div class="ex-row"><div class="why-num">2</div><p><strong>Health:</strong> OLS says clinic distance is highly significant, but its errors are clustered (e.g. residual Moran\'s $I = 0.42$). Once SEM accounts for the shared regional factor, the effect may no longer be significant.</p></div>
+                        <div class="card why-card mc-card mc-story">
+                            <div class="fallacy-label">Same example, this model: malaria in neighbouring wards</div>
+                            <p>Neighbouring wards all have high malaria because they sit in the <strong>same swampy, rainy zone</strong>. One ward is not infecting the next; they share the same environment.</p>
                         </div>
+                    </div>
+                    <div class="mc-strip">
+                        <div class="mc-pill"><strong>SAR</strong><span>the problem spreads</span></div>
+                        <div class="mc-pill mc-on"><strong>SEM</strong><span>a shared hidden cause</span></div>
+                        <div class="mc-pill"><strong>SDM</strong><span>both, plus neighbours' resources</span></div>
                     </div>
                 </div>
             </section>
 """
 
     # =========================================================================
-    # SLIDE 12: SPATIAL DURBIN MODEL (SDM): CAPTURING BOTH OUTCOME & CONTEXT SPILLOVERS
+    # SLIDE 13: SPATIAL DURBIN MODEL (SDM): BOTH AT ONCE
     # =========================================================================
     slide_sdm = f"""
-            <!-- SLIDE 12: Spatial Durbin Model (SDM): Capturing Both Outcome &amp; Context Spillovers -->
+            <!-- SLIDE 13: Spatial Durbin Model (SDM): Both at Once -->
             <section class="dsn-content-slide">
                 <img src="{logo_b64}" class="dsn-header-logo" alt="DSN">
                 <header class="slide-header">
-                    <h2>Spatial Durbin Model (SDM): Capturing Both Outcome &amp; Context Spillovers</h2>
+                    <h2>Spatial Durbin Model (SDM): Both at Once</h2>
                 </header>
-                <div class="slide-body why-body model-body">
-                    <div class="model-top">
-                        <div class="model-when">
-                            <div class="fallacy-label">When to use</div>
-                            <p>The outcome spreads to neighbours (like SAR) <em>and</em> your neighbours' own characteristics (investment, wealth, education) directly affect your outcome.</p>
+                <div class="slide-body why-body mc-body">
+                    <div class="mc-top">
+                        <div class="mc-plain">
+                            <div class="fallacy-label">In plain words</div>
+                            <p>Outcomes spread between wards <strong>and</strong> your <strong>neighbours' characteristics</strong> (their clinics, roads, wealth) also affect you.</p>
+                            <p class="mc-ask"><strong>Ask yourself:</strong> Do my <strong>neighbours' resources</strong> change my outcome, not just my own?</p>
                         </div>
                         <div class="model-eq">
                             <div class="fallacy-label">The model</div>
                             <div class="eq">$$y = \\rho W y + X\\beta + W X\\theta + \\varepsilon$$</div>
                         </div>
                     </div>
-                    <div class="model-bottom">
-                        <div class="card why-card model-viz">
+                    <div class="mc-bottom">
+                        <div class="card why-card mc-card">
                             <div class="viz viz-model">{svg_effects()}</div>
-                            <p><strong>How it solves it:</strong> SDM reports the effect in <strong>your</strong> area (direct) and in the <strong>neighbouring</strong> areas (indirect); together they give the <strong>total</strong> effect. The bars show example values.</p>
+                            <p><span class="mc-tag">What it gives you</span><strong>Direct</strong> effect (in your ward) + <strong>indirect</strong> effect (spillover to neighbours) = <strong>total</strong> effect. The safe choice when unsure between SAR and SEM.</p>
                         </div>
-                        <div class="card why-card model-ex">
-                            <div class="fallacy-label">Illustrative examples (numbers are hypothetical)</div>
-                            <div class="ex-row"><div class="why-num">1</div><p><strong>Hospitals:</strong> a new hospital lowers child deaths in its own district (direct, e.g. 0.42) and in nearby districts whose families travel there (spillover, e.g. 0.31). OLS would show only about 0.39, about half the total.</p></div>
-                            <div class="ex-row"><div class="why-num">2</div><p><strong>Safe default:</strong> if you are unsure whether SAR or SEM fits, start with SDM. It contains both and stays reliable when some spatial factors are missing (LeSage &amp; Pace, 2009).</p></div>
+                        <div class="card why-card mc-card mc-story">
+                            <div class="fallacy-label">Same example, this model: malaria in neighbouring wards</div>
+                            <p>A new clinic with bed nets lowers malaria in its <strong>own ward</strong> (direct) and in <strong>neighbouring wards</strong> whose families use it (spillover). OLS only sees the first part.</p>
                         </div>
+                    </div>
+                    <div class="mc-strip">
+                        <div class="mc-pill"><strong>SAR</strong><span>the problem spreads</span></div>
+                        <div class="mc-pill"><strong>SEM</strong><span>a shared hidden cause</span></div>
+                        <div class="mc-pill mc-on"><strong>SDM</strong><span>both, plus neighbours' resources</span></div>
                     </div>
                 </div>
             </section>
@@ -1926,10 +1940,12 @@ def main():
             margin-bottom: 6px !important;
         }}
 
+        .reveal h2.dsn-ending-subtitle,
         .dsn-ending-subtitle {{
             font-size: 1.25em !important;
             font-weight: 600 !important;
-            color: #86efac !important;
+            color: #ffffff !important;
+            text-align: center !important;
             margin-bottom: 24px !important;
         }}
 
@@ -3306,6 +3322,112 @@ def main():
         .gwr2-legend i.gwr2-outline {{
             background: #ffffff;
             border: 2px solid #0f172a;
+        }}
+
+        /* SAR / SEM / SDM: plain-words slides with one running example */
+        .mc-body {{
+            gap: 12px !important;
+        }}
+
+        .mc-top {{
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 14px;
+        }}
+
+        .mc-plain {{
+            border-radius: 8px;
+            padding: 12px 18px;
+            background: var(--dsn-green-tint);
+            border: 1px solid var(--dsn-green-line);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }}
+
+        .mc-plain p {{
+            font-size: 0.40em !important;
+            line-height: 1.45 !important;
+            color: #1e293b !important;
+            margin: 0 !important;
+        }}
+
+        .reveal .mc-plain .mc-ask {{
+            color: #b91c1c !important;
+        }}
+
+        .mc-bottom {{
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            min-height: 0;
+        }}
+
+        .mc-card {{
+            justify-content: center;
+            gap: 10px !important;
+            padding: 14px 18px !important;
+        }}
+
+        .mc-card p {{
+            font-size: 0.39em !important;
+            line-height: 1.5 !important;
+            margin: 0 !important;
+        }}
+
+        .mc-tag {{
+            display: block;
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--dsn-green-dark);
+            margin-bottom: 4px;
+        }}
+
+        .mc-story p {{
+            font-size: 0.46em !important;
+            line-height: 1.55 !important;
+        }}
+
+        .mc-strip {{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }}
+
+        .mc-pill {{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            font-family: 'Poppins', sans-serif;
+            opacity: 0.55;
+        }}
+
+        .mc-pill strong {{
+            font-size: 16px;
+            color: #0f172a;
+        }}
+
+        .mc-pill span {{
+            font-size: 13px;
+            color: #475569;
+        }}
+
+        .mc-pill.mc-on {{
+            opacity: 1;
+            background: var(--dsn-red);
+            border-color: var(--dsn-red);
+        }}
+
+        .mc-pill.mc-on strong, .mc-pill.mc-on span {{
+            color: #ffffff;
         }}
 
         .why-card h4 {{
