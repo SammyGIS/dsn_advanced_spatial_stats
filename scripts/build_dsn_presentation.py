@@ -485,7 +485,7 @@ def main():
     img_deserts = get_b64(os.path.join(slides_img_dir, "q1_health_deserts.jpg"))
     img_retail = get_b64(os.path.join(slides_img_dir, "q2_retail.jpg"))
     img_religious = get_b64(os.path.join(slides_img_dir, "q3_religious.jpg"))
-    img_lorenz = get_b64(os.path.join(slides_img_dir, "q4_lorenz.jpg"))
+    img_water = get_b64(os.path.join(slides_img_dir, "q4_water_deserts.png"))
     img_lisa = get_b64(os.path.join(slides_img_dir, "lisa_clusters.jpg"))
     img_moran = get_b64(os.path.join(slides_img_dir, "moran_scatter.jpg"))
     img_gwr_map = get_b64(os.path.join(dsn_theme_dir, "..", "gwr_slope_map.svg"))
@@ -632,19 +632,19 @@ def main():
                             <div class="q-img"><img src="{img_religious}" alt="Religious geography map"></div>
                             <div class="why-num">3</div>
                             <h5>How do religious and civic institutions sort geographically?</h5>
-                            <p>(Mapping cultural cohesion and diversity zones).</p>
+                            <p>(e.g. areas where churches and mosques sit side by side).</p>
                         </div>
                         <div class="card why-card q-card">
-                            <div class="q-img"><img src="{img_lorenz}" alt="Lorenz inequality curves"></div>
+                            <div class="q-img"><img src="{img_water}" alt="Map of water-desert clusters across Nigerian wards"></div>
                             <div class="why-num">4</div>
                             <h5>How unequal is clean water infrastructure?</h5>
-                            <p>(Lorenz inequality curves and Gini coefficients).</p>
+                            <p>(e.g. 759 neighbouring wards in the north with almost no water points, home to about 21 million people).</p>
                         </div>
                         <div class="card why-card q-card">
                             <div class="q-img q-svg">{svg_spillover()}</div>
                             <div class="why-num">5</div>
                             <h5>What is the true economic multiplier of public investments?</h5>
-                            <p>(Spatial Lag SAR models decomposing direct vs. indirect spillover effects).</p>
+                            <p>(e.g. a new clinic that also helps the wards next door).</p>
                         </div>
                     </div>
                 </div>
